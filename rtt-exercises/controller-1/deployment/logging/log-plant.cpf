@@ -10,4 +10,5 @@
 
   <simple name="Port" type="string"><description></description><value>Automatic.output</value></simple>
   
+  <simple name="Port" type="string"><description></description><value>Joystick.output</value></simple>
 </properties>
