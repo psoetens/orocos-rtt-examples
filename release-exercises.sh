@@ -31,4 +31,19 @@ cd ../..
 
 tar -cvzf rtt-exercises-$VERSION.tar.gz rtt-exercises-$VERSION
 cd ..
-echo "All done."
+echo "Packaging done."
+
+echo "Press a key to copy files to server, Ctrl-C to abort..."
+read -s -n1
+
+  USER=orocos
+  SERVER=ftp.mech.kuleuven.be
+  SPREFIX=pub_html/pub
+  BRANCH=stable
+
+# Orocos Examples
+ssh -l$USER $SERVER "mkdir -p $SPREFIX/$BRANCH/examples/rtt/tutorial" || exit 1
+scp rtt-exercises-$VERSION.tar.gz $USER@$SERVER:$SPREFIX/$BRANCH/examples/rtt/tutorial || exit 1
+scp rtt-exercises-$VERSION/README $USER@$SERVER:$SPREFIX/$BRANCH/examples/rtt/tutorial/README.txt || exit 1
+
+echo "Copied files to $SERVER. Done!"
