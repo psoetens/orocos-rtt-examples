@@ -1,0 +1,23 @@
+                      OROCOS RTT Tutorial
+
+This directory contains exercises for exploring the Orocos Real-Time
+Toolkit in order to learn how to create Orocos components.
+
+Each exercise compiles out of the box. It is your task to extend it
+such that it becomes more functional.
+
+Start with the hello-1-task-execution directory and work your way down
+until you have done all hello-* examples.  The assignment can be found
+at the top of each HelloWorld.cpp file.
+
+When you're done with the hello-* examples, proceed with the
+controller-1 example, which has instructions in its Exercise.txt file.
+
+Requirements: Orocos Real-Time Toolkit and the Orocos Component
+Library's DeploymentComponent and TaskBrowser component are installed
+in /usr/local for the 'gnulinux' target. Edit the Makefile and change
+the OROPATH value if this is not the case in your setup.
+
+Feel free to contribute other examples on Orocos.org.
+
+Have fun!
