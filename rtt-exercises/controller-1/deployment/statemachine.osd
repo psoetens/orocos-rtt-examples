@@ -7,6 +7,9 @@
  */
 StateMachine OurStateMachineType
 {
+	const int TIMER_ID = 1;
+	var int received_id;
+	var string new_mode;
 
     /*
      * Exercise: (complete first the other exercises in this file)
@@ -19,8 +22,13 @@ StateMachine OurStateMachineType
      * When it happens (and it was our timer id that expired),
      * go to the Automatic state.
      */
-    initial state INIT {
-        transition select Automatic;
+	initial state INIT {
+		entry {
+			do Timer.arm(TIMER_ID, 5.0);
+		}
+		transition Timer.timeout(received_id)
+			if (received_id == TIMER_ID) then select Automatic;
+        //transition select Automatic;
     }
 
     state Automatic {
@@ -39,6 +47,8 @@ StateMachine OurStateMachineType
          * when ModeSwitch signals this with a
          * switchMode event.
          */
+        transition ModeSwitch.switchMode(new_mode)
+			if (new_mode == "manual") select Manual;
     }
 
     state Manual {
@@ -53,6 +63,13 @@ StateMachine OurStateMachineType
          * to the run time 'warning' state, if the value is between
          * 10.0 and -10.0 again, 'recover' from the warning state.
          */
+        run {
+        	if (Joystick.output.Get() > 10.0 || Joystick.output.Get() < -10.0 ) then {
+        		do Joystick.warning();
+        	} else
+        		do Joystick.recover();
+        }
+
 
         exit {
             try Joystick.stop();
@@ -63,11 +80,17 @@ StateMachine OurStateMachineType
          * when ModeSwitch signals this with a
          * switchMode event.
          */
+        transition ModeSwitch.switchMode(new_mode)
+			if (new_mode == "automatic" && ModeSwitch.safetySwitch == true ) then
+				select Automatic;
 
         /*
          * Exercise: go to automatic mode when
          * the joystick component is in a run-time error state.
          */
+        transition
+			if Joystick.inError() && ModeSwitch.safetySwitch == true then
+				select Automatic;
 
         /*
          * Exercise: If the safety switch attribute of the ModeSwitch

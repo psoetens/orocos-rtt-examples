@@ -29,6 +29,24 @@
     Then, automatically load statemachine.osd into this component using this XML file.
     Finally, activate and start the statemachine in the ModeSwitch component's startHook().
   --> 
+  <struct name="ModeSwitch" type="UseCase::ModeSwitch">
+    <struct name="Activity" type="PeriodicActivity">
+      <simple name="Period" type="double"><value>0.02</value></simple>
+      <simple name="Priority" type="short"><value>0</value></simple>
+      <simple name="Scheduler" type="string"><value>ORO_SCHED_RT</value></simple>
+    </struct>
+    
+    <simple name="AutoConf" type="boolean"><value>1</value></simple>
+    <simple name="AutoStart" type="boolean"><value>1</value></simple>
+
+    <!-- List all peers (uni-directional) -->
+    <struct name="Peers" type="PropertyBag">
+      <simple type="string"><value>Joystick</value></simple>
+      <simple type="string"><value>Automatic</value></simple>
+      <simple type="string"><value>Controller</value></simple>
+      <simple type="string"><value>Timer</value></simple>
+    </struct>
+  </struct>
   
   <struct name="Controller" type="UseCase::Controller">
     <struct name="Activity" type="Activity">
@@ -56,6 +74,7 @@
 	 You can do so by using the marshalling interface of the Controller
 	 component (write a property file) or by hand coding it.
       -->
+    <simple name="PropertyFile" type="string"><value>Controller.cpf</value></simple>
 
   </struct>
 
