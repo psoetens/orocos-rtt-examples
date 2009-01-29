@@ -11,6 +11,9 @@ fi;
 
 VERSION=$1 
 
+#Make sure we start from right branch.
+git checkout master || exit 1
+
 #cleanup
 rm -rf export/rtt-exercises-$VERSION
 rm -f rtt-exercises-$VERSION.tar.gz 
