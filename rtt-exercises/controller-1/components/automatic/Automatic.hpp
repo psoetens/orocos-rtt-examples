@@ -38,7 +38,7 @@ namespace UseCase
 
 			if ( d < step ) {
 				output.Set(target);
-				log(Info) << "Did instant move to target "<< target <<endlo();
+				log(Info) << "Did instant move to target "<< target <<endlog();
 				return true;
 			}
 
