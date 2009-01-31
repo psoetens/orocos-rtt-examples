@@ -126,10 +126,11 @@
     <simple name="AutoStart" type="boolean"><value>0</value></simple>
   </struct>
 
-  <!-- This OCL component can be used to log data port values to files. 
+  <!-- This OCL component can be used to log data port values to files.
   	   Exercise: The reporting component is setup allright to log
   	   the data flow ports of the Plant and the Automatic Component.
-       Extend it such that it also logs the values of Joystick. 
+       Extend it such that it also logs the ports of Joystick. Note:
+       another file in addition to this file must be edited to do so.
   -->
   <struct name="Reporting" type="OCL::FileReporting">
     <struct name="Activity" type="PeriodicActivity">
@@ -144,7 +145,6 @@
     <struct name="Peers" type="PropertyBag">
       <simple type="string"><value>Plant</value></simple>
       <simple type="string"><value>Automatic</value></simple>
-      <simple type="string"><value>Joystick</value></simple>
     </struct>
   </struct>
 
