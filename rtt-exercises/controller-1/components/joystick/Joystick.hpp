@@ -56,6 +56,11 @@ namespace UseCase
 
 		void updateHook() {
 			output.Set( scale.value() * jog_value );
+
+			if ( this->inRunTimeWarning() && (output.Get() < 10.0 && output.Get() > -10.0 ) ) {
+			     this->recovered();
+			}
+
 		}
 
 		void stopHook() {

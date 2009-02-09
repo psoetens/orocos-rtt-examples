@@ -29,8 +29,8 @@ namespace UseCase
     public:
         ModeSwitch(const std::string& name)
             : TaskContext(name),
-            switchMode("switchMode"),
-            safetySwitch("safetySwitch")
+              switchMode("switchMode"),
+              safetySwitch("safetySwitch",true )
         {
         	this->events()->addEvent(&switchMode, "Signals a mode switch.",
 									 "mode", "The mode to which the application should switch.");
@@ -59,7 +59,7 @@ namespace UseCase
         	StateMachinePtr sm = this->engine()->states()->getStateMachine("the_statemachine");
         	if (!sm) {
         		log(Error) << "State Machine the_statemachine not loaded in ModeSwitch."<< endlog();
-        		return false;
+        		return;
         	}
         	sm->stop();
         	sm->deactivate();
@@ -72,7 +72,7 @@ namespace UseCase
          */
         void updateHook() {
         	if (safetySwitch.get() != true) {
-        		modeSwitch("manual");
+        		switchMode("manual");
         	}
         }
 };
