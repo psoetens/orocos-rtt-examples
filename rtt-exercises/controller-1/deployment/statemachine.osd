@@ -47,7 +47,7 @@ StateMachine OurStateMachineType
          * when ModeSwitch signals this with a
          * switchMode event.
          */
-        transition ModeSwitch.switchMode(new_mode)
+        transition switchMode(new_mode)
 			if (new_mode == "manual") select Manual;
     }
 
@@ -80,8 +80,8 @@ StateMachine OurStateMachineType
          * when ModeSwitch signals this with a
          * switchMode event.
          */
-        transition ModeSwitch.switchMode(new_mode)
-			if (new_mode == "automatic" && ModeSwitch.safetySwitch == true ) then
+        transition switchMode(new_mode)
+			if (new_mode == "automatic" && safetySwitch == true ) then
 				select Automatic;
 
         /*
@@ -89,7 +89,7 @@ StateMachine OurStateMachineType
          * the joystick component is in a run-time error state.
          */
         transition
-			if Joystick.inError() && ModeSwitch.safetySwitch == true then
+			if Joystick.inError() && safetySwitch == true then
 				select Automatic;
 
         /*
