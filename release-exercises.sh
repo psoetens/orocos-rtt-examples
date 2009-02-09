@@ -29,7 +29,7 @@ rm -rf controller-1/build
 #hacky, need to improve this
 cp -a controller-1 controller-1-solution
 cd controller-1-solution
-git diff master..orocos-examples/solution | patch -p3 | exit 1
+git diff master..orocos-examples/solution | patch -p3 || exit 1
 cd ../..
 
 tar -cvzf rtt-exercises-$VERSION.tar.gz rtt-exercises-$VERSION
@@ -46,7 +46,7 @@ read -s -n1
 
 # Orocos Examples
 ssh -l$USER $SERVER "mkdir -p $SPREFIX/$BRANCH/examples/rtt/tutorial" || exit 1
-scp rtt-exercises-$VERSION.tar.gz $USER@$SERVER:$SPREFIX/$BRANCH/examples/rtt/tutorial || exit 1
-scp rtt-exercises-$VERSION/README $USER@$SERVER:$SPREFIX/$BRANCH/examples/rtt/tutorial/README.txt || exit 1
+scp export/rtt-exercises-$VERSION.tar.gz $USER@$SERVER:$SPREFIX/$BRANCH/examples/rtt/tutorial || exit 1
+scp export/rtt-exercises-$VERSION/README $USER@$SERVER:$SPREFIX/$BRANCH/examples/rtt/tutorial/README.txt || exit 1
 
 echo "Copied files to $SERVER. Done!"
