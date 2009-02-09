@@ -56,7 +56,10 @@
     </struct>
     
     <!-- Exercise: Read the properties of this component from a file
-         'Controller.cpf'.  
+         'Controller.cpf'. 
+	 You need to create this file yourself.
+	 You can do so by using the marshalling interface of the Controller
+	 component (write a property file) or by hand coding it.
       -->
 
   </struct>
