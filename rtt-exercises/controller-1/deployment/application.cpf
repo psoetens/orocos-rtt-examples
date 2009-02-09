@@ -51,6 +51,8 @@
       <simple type="string"><value>Controller</value></simple>
       <simple type="string"><value>Timer</value></simple>
     </struct>
+
+    <simple name="StateMachineScript" type="string"><value>deployment/statemachine.osd</value></simple>
   </struct>
   
   <struct name="Controller" type="UseCase::Controller">
@@ -79,7 +81,7 @@
 	 You can do so by using the marshalling interface of the Controller
 	 component (write a property file) or by hand coding it.
       -->
-    <simple name="PropertyFile" type="string"><value>Controller.cpf</value></simple>
+    <simple name="PropertyFile" type="string"><value>deployment/Controller.cpf</value></simple>
 
   </struct>
 
@@ -168,6 +170,7 @@
     <struct name="Peers" type="PropertyBag">
       <simple type="string"><value>Plant</value></simple>
       <simple type="string"><value>Automatic</value></simple>
+      <simple type="string"><value>Joystick</value></simple>
     </struct>
   </struct>
 
