@@ -48,7 +48,7 @@ StateMachine OurStateMachineType
          * switchMode event.
          */
         transition switchMode(new_mode)
-			if (new_mode == "manual") select Manual;
+			if (new_mode == "manual") then select Manual;
     }
 
     state Manual {
@@ -66,8 +66,8 @@ StateMachine OurStateMachineType
         run {
         	if (Joystick.output.Get() > 10.0 || Joystick.output.Get() < -10.0 ) then {
         		do Joystick.warning();
-        	} else
-        		do Joystick.recover();
+        	}
+		/** See Joystick.hpp for the use of recovered() */
         }
 
 
@@ -89,7 +89,7 @@ StateMachine OurStateMachineType
          * the joystick component is in a run-time error state.
          */
         transition
-			if Joystick.inError() && safetySwitch == true then
+			if Joystick.inRunTimeError() && safetySwitch == true then
 				select Automatic;
 
         /*
