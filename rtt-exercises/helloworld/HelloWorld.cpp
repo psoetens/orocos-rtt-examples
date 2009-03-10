@@ -224,7 +224,7 @@ int ORO_main(int argc, char** argv)
     // 1: Priority
     // 0.5: Period (2Hz)
     // hello.engine(): is being executed.
-    PeriodicActivity act(1, 0.5, hello.engine() );
+    hello.setActivity( new PeriodicActivity(1, 0.5, hello.engine() ) );
 
     log(Info) << "**** Starting the 'Hello' component ****" <<endlog();
     // Start the component:
