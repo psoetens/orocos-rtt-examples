@@ -143,7 +143,8 @@
     </struct>
     <simple name="AutoConf" type="boolean"><value>1</value></simple>
     <simple name="AutoStart" type="boolean"><value>0</value></simple>
-    <simple name="PropertyFile" type="string"><value>deployment/Reporting.cpf</value></simple>
+    <simple name="AutoSave" type="boolean"><value>1</value></simple>
+    <simple name="LoadProperties" type="string"><value>deployment/Reporting.cpf</value></simple>
     <!-- List all peers (uni-directional) -->
     <struct name="Peers" type="PropertyBag">
       <simple type="string"><value>Plant</value></simple>

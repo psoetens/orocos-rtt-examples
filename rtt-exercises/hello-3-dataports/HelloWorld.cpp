@@ -147,7 +147,7 @@ int ORO_main(int argc, char** argv)
     // 1: Priority
     // 0.5: Period (2Hz)
     // hello.engine(): is being executed.
-    PeriodicActivity h_act(1, 0.5, hello.engine() );
+    hello.setActivity( new PeriodicActivity(1, 0.5, hello.engine() ) );
 
     log(Info) << "**** Starting the 'Hello' component ****" <<endlog();
     // Start the component:
@@ -158,8 +158,8 @@ int ORO_main(int argc, char** argv)
     // Create the activity which runs the task's engine:
     // 1: Priority
     // 0.5: Period (2Hz)
-    // hello.engine(): is being executed.
-    PeriodicActivity w_act(1, 0.5, world.engine() );
+    // world.engine(): is being executed.
+    world.setActivity( new PeriodicActivity(1, 0.5, world.engine() ) );
 
     log(Info) << "**** Creating the 'Peer' connection ****" <<endlog();
     // This is a bidirectional connection.
