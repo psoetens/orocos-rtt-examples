@@ -30,6 +30,8 @@ rm -rf controller-1/build
 cp -a controller-1 controller-1-solution
 cd controller-1-solution
 git diff master..solution | patch -p3 || exit 1
+#clean out Eclipse project files.
+rm -rf .project .cproject
 cd ../..
 
 tar -cvzf rtt-exercises-$VERSION.tar.gz rtt-exercises-$VERSION
