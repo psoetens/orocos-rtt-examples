@@ -13,10 +13,23 @@ at the top of each HelloWorld.cpp file.
 When you're done with the hello-* examples, proceed with the
 controller-1 example, which has instructions in its Exercise.txt file.
 
-Requirements: Orocos Real-Time Toolkit and the Orocos Component
-Library's DeploymentComponent and TaskBrowser component are installed
-in /usr/local for the 'gnulinux' target. Edit the Makefile and change
-the OROPATH value if this is not the case in your setup.
+Requirements: 
+
+Orocos Real-Time Toolkit and the Orocos Component Library's
+DeploymentComponent and TaskBrowser component are installed in
+/usr/local for the 'gnulinux' target. Edit the Makefile and change the
+OROPATH value if this is not the case in your setup.
+
+Eclipse users:
+
+IMPORTANT: see http://www.orocos.org/wiki/rtt/eclipse for correctly setting up Eclipse.
+
+You need Eclipse Ganymede (3.4) or better with the C/C++ toolkit support.
+
+Start Eclipse, select the C/C++ perspective (right top) Use
+'File'->'Import...'->'Existing projects into Workspace' and point it
+to this directory or this archive. It will see that all examples are
+Eclipse projects.  Select them all and press Finish.
 
 Feel free to contribute other examples on Orocos.org.
 
