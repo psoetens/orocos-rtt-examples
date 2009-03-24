@@ -114,7 +114,7 @@ namespace Example
              * of the component.
              */
             World(std::string name)
-                : TaskContext(name)
+                : TaskContext(name, PreOperational)
             {
             }
 
@@ -180,8 +180,9 @@ int ORO_main(int argc, char** argv)
     // This is a bidirectional connection.
     connectPeers(&world, &hello );
 
-    log(Info) << "**** Starting the 'World' component ****" <<endlog();
-    // Start the component:
+    log(Info) << "**** Configuring & starting the 'World' component ****" <<endlog();
+    // Let World lookup Hello's event.
+    world.configure();
     world.start();
 
     log(Info) << "**** Using the 'Hello' component    ****" <<endlog();
