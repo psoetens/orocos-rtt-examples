@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>hello-1</name>
+	<name>hello-1-task-execution</name>
 	<comment></comment>
 	<projects>
-		<project>rtt</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
