@@ -32,7 +32,7 @@ using namespace Orocos;
  * Start the World component ('World.start()') and see
  * how it uses the_method.
  *
- * Next, add to Hello a second method void 'sayIt(const std::string& word)'
+ * Next, add to Hello a second method 'void sayIt(string word)'
  * which uses log(Info) to display a sentence.
  * Add this function to the method interface of this class.
  */
@@ -57,13 +57,13 @@ namespace Example
          * return a value. The are executed in the
          * thread of the caller.
          */
-        Method< std::string(void) > method;
+        Method< string(void) > method;
 
         /**
          * The method function is executed by
          * the method object:
          */
-        std::string mymethod() {
+        string mymethod() {
             return "Hello World";
         }
         /** @} */
@@ -100,7 +100,7 @@ namespace Example
     	 * It is best practice to have this object as
     	 * a member variable of your class.
     	 */
-    	Method< std::string(void) > hello_method;
+    	Method< string(void) > hello_method;
 
     	/** @} */
 
@@ -121,7 +121,7 @@ namespace Example
 
     	    // It is best practice to lookup methods of peers in
     	    // your configureHook.
-    	    hello_method = peer->methods()->getMethod<std::string(void)>("the_method");
+    	    hello_method = peer->methods()->getMethod<string(void)>("the_method");
     	    if ( !hello_method.ready() ) {
     	    	log(Error) << "Could not find Hello.hello_method Method!"<<endlog();
     	    	return false;
