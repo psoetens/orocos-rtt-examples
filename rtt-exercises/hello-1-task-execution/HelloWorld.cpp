@@ -43,6 +43,7 @@ using namespace Orocos;
  * 'trigger' updateHook() to be executed in this case ?
  *
  * Optional: Let the Hello component be created in the 'PreOperational' mode.
+ * What effect does this have on the acceptance of the start() method ?
  * Optional: Replace the NonPeriodicActivity with a SlaveActivity. What are
  * the effects of trigger and update in comparison with the other activity types ?
  */
