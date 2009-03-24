@@ -10,6 +10,7 @@
 #include <rtt/Logger.hpp>
 #include <rtt/TaskContext.hpp>
 #include <rtt/PeriodicActivity.hpp>
+#include <rtt/Attribute.hpp>
 
 /**
  * Include this header in order to use data ports.
@@ -28,21 +29,23 @@ using namespace Orocos;
  *
  * First, compile and run this application and use
  * 'the_data_port' and 'the_buffer_port' of the Hello component.
+ * Use the 'pop_helper' attribute to store a Pop'ed value.
  *
- * Connect to these ports using the TaskBrowser console and use them from
- * the TaskBrowser's perspective ('leave' command)
- * Next, write a configureHook() in Hello which checks if these ports are
- * connected and fails if they are not.
- * Attention: is configureHook() called in the current flow ?
+ * Next, write a configureHook() in Hello which checks if the buffer port is
+ * connected and fails if it is not.
+ * Question: how did we force configureHook() to be called in the current flow ?
+ *
  * Next, write an updateHook() which reads the_buffer_port and
- * writes the data to 'the_data_port'.
+ * writes the data to 'the_data_port'. Be careful only to write data
+ * when a Pop from the buffer was succesful.
  *
  * Finally start the World component ('World.start()'). See how it uses the
  * buffer port in C++. Start and stop the Hello component. See how this
  * influences the buffer's size.
  *
- * Optionally 1: let the TaskContext start as 'PreOperational' in
- * order to force a configure() before start() of Hello.
+ * Optionally 1: Remove the code from updateHook and write a propram script
+ * that does exactly the same, i.e., read data from the buffer port and,
+ * if any, write it to the data port. Do this in a while loop.
  *
  */
 namespace Example
@@ -63,9 +66,8 @@ namespace Example
          */
         /**
          * DataPorts share data among readers and writers.
-         * A reader always reads the most recent data.
          */
-        ReadDataPort<double> dataport;
+        WriteDataPort<double> dataport;
         /**
          * BufferPorts buffer data among readers and writers.
          * A reader reads the data in a FIFO way.
@@ -73,31 +75,39 @@ namespace Example
         ReadBufferPort< double > bufferport;
         /** @} */
 
+        /**
+         * Since Pop requires an argument, we provide this
+         * attribute to hold the pop'ed value.
+         */
+        Attribute<double> pop_helper;
     public:
         /**
          * This example sets the interface up in the Constructor
          * of the component.
          */
         Hello(std::string name)
-            : TaskContext(name),
+            : TaskContext(name, PreOperational),
               // Name, initial value
-              dataport("the_data_port"),
-              // Name, buffer size, initial value
-              bufferport("the_buffer_port")
+              dataport("the_data_port", 0.0),
+              // Name
+              bufferport("the_buffer_port"),
+              pop_helper("pop_helper")
         {
+            this->attributes()->addAttribute(&pop_helper);
             this->ports()->addPort(&dataport, "Shared Data Port");
             this->ports()->addPort(&bufferport, "Buffered Data Port");
         }
 
         void updateHook()
         {
-
         }
     };
 
 	/**
 	 * World is the component that shows how to use the interface
 	 * of the Hello component.
+	 *
+	 * This component is a pure producer of buffered values.
 	 */
 	class World
 	: public TaskContext
@@ -150,6 +160,7 @@ int ORO_main(int argc, char** argv)
     hello.setActivity( new PeriodicActivity(1, 0.5, hello.engine() ) );
 
     log(Info) << "**** Starting the 'Hello' component ****" <<endlog();
+    hello.configure();
     // Start the component:
     hello.start();
 
