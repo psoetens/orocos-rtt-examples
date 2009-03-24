@@ -29,7 +29,7 @@ rm -rf controller-1/build
 #hacky, need to improve this
 cp -a controller-1 controller-1-solution
 cd controller-1-solution
-git diff master..orocos-examples/solution | patch -p3 || exit 1
+git diff master..solution | patch -p3 || exit 1
 cd ../..
 
 tar -cvzf rtt-exercises-$VERSION.tar.gz rtt-exercises-$VERSION
