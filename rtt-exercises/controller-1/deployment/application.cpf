@@ -124,7 +124,7 @@
       <simple name="output" type="string"><value>PlantSetPoint</value></simple>
     </struct>
     <simple name="AutoConf" type="boolean"><value>1</value></simple>
-    <simple name="AutoStart" type="boolean"><value>1</value></simple>
+    <simple name="AutoStart" type="boolean"><value>0</value></simple>
   </struct>
 
   <!-- The Automatic component interpolates positions 
