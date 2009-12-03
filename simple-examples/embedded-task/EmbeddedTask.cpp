@@ -106,7 +106,8 @@ public:
     }
 
     void update() {
-        posport.Get();
+        double pos;
+        posport.read( pos );
 
         turnEvent(8);
 
@@ -144,7 +145,7 @@ int ORO_main(int argc, char** argv)
     et.setActivity( new Activity( 10 ) );
     et2.setActivity( new Activity( 11, 0.001 ) );
 
-    et.turn_outport.connectTo( &et2.turn_inport );
+    et.turn_outport.connectTo( et2.turn_inport );
 
     return 0;
 }

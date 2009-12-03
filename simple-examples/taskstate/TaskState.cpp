@@ -21,13 +21,13 @@ class MyTask
     /**
      * Task's Data Ports.
      */
-    // Read-Write buffer port:
-    OutputPort<double> rwbufPort;
+
+    InputPort<double> inPort;
+    OutputPort<double> outPort;
 
     /**
      * Task's Properties.
      */
-    Property<int> bufSize;
     Property<double> initial_value;
     Property<bool> read_propfile;
     Attribute<double> runtime;
@@ -38,9 +38,9 @@ public:
      */
     MyTask(std::string name) 
         : RTT::TaskContext(name, PreOperational),
-          rwbufPort("Packets", 30),
-          bufSize("BufSize","Configurable buffer size of Packets",30),
-          initial_value("InitialValue","Value used to write into Packet base::Buffer", 1.23 ),
+          inPort("Packets", ConnPolicy::buffer(30) ),
+          outPort("Results" ),
+          initial_value("InitialValue","Value used to write into Packet Buffer", 1.23 ),
           read_propfile("ReadPropFile","Set to true if properties must be read from disk upon configure().", true),
           runtime("RunTime", 0.0 )
     {
@@ -48,12 +48,12 @@ public:
          * Export ports to interface:
          * See also the 'dataflow-task' example !
          */
-        this->ports()->addPort( &rwbufPort );
+        this->ports()->addPort( &inPort );
+        this->ports()->addPort( &outPort );
 
         /**
          * Attribute/Property Interface
          */
-        this->properties()->addProperty( &bufSize );
         this->properties()->addProperty( &initial_value );
         this->properties()->addProperty( &read_propfile );
         this->attributes()->addAttribute( &runtime );
@@ -69,26 +69,14 @@ public:
     bool configureHook()
     {
 
+	// For demonstration purposes, we roundtrip our output to our input:
+	outPort.connectTo( inPort );
+
         if ( read_propfile.get() == true ) {
             if ( this->marshalling()->updateProperties("TaskState.cpf") == false )
                 return false;
         } else
             log(Info) << "Skipping TaskState.cpf -- change ReadPropFile to true for reading XML file."<<endlog();
-        
-        if ( bufSize.get() < 0 ) {
-            log(Error) << "A negative buffer size is not accepted."<<endlog();
-            return false;
-        }
-
-        if ( rwbufPort.connected() == false ) {
-            log(Info) << "Setting base::Buffer size to "<< bufSize.get() <<endlog();
-            rwbufPort.setBufferSize( bufSize.get() ); // setup unconnected port
-        } else {
-            log(Warning) << rwbufPort.getName() << " port already connected, can not change buffer size without breaking up connection."<<endlog();
-            log(Warning) << "Call cleanup() in order to disconnect."<<endlog();
-            //rwbufPort.connection()->disconnect(); 
-            //rwbufPort.setBufferSize( bufSize.get() );
-        }
         
         return true;
     }
@@ -99,7 +87,7 @@ public:
      */
     bool startHook() {
         // ...
-        if ( rwbufPort.ready() == false ) {
+        if ( inPort.connected() == false ) {
             log(Warning)<<"Packet port not connected !"<<endlog();
         }
         // start recording runtime.
@@ -115,14 +103,12 @@ public:
         // gradually fill and empty at once if full.
 
         double value = 0;
-        if ( rwbufPort.full() )
-            while ( !rwbufPort.empty() )
-                rwbufPort.Pop( value );
+	while ( inPort.read(value) ); // empty port
 
         // set the attribute with the elapsed time since startHook()
         runtime.set( os::TimeService::Instance()->secondsSince( stamp ) );
 
-        rwbufPort.Push( initial_value.get() + runtime.get() );
+        outPort.write( initial_value.get() + runtime.get() );
     }
 
     /**
@@ -133,8 +119,7 @@ public:
 
         // empty remaining items.
         double value;
-        while ( rwbufPort.ready() && !rwbufPort.empty() )
-            rwbufPort.Pop( value );
+        while ( inPort.read( value ) );
 
         stamp = 0;
         runtime.set( 0.0 );
@@ -149,11 +134,12 @@ public:
         this->marshalling()->writeProperties("TaskState.cpf");
 
         // Disconnect this port, this may confuse the TaskBrowser slightly.
-        if ( rwbufPort.connected() ) {
-            log(Info) << "Disconnecting base::Buffer port."<<endlog();
-            rwbufPort.disconnect();
+        if ( inPort.connected() ) {
+            log(Info) << "Disconnecting Ports."<<endlog();
+            inPort.disconnect();
+            outPort.disconnect();
         }
-        assert( rwbufPort.connected() == false );
+        assert( inPort.connected() == false );
     }
 };
 

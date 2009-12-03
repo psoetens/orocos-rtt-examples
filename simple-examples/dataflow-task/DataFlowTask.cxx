@@ -1,10 +1,6 @@
 #include <rtt/TaskContext.hpp>
 #include <rtt/Activity.hpp>
-#include <rtt/internal/MethodC.hpp>
-#include <rtt/internal/CommandC.hpp>
-#include <rtt/internal/EventC.hpp>
-#include <rtt/internal/ConnectionC.hpp>
-#include <rtt/internal/ConnPolicy.hpp>
+#include <rtt/ConnPolicy.hpp>
 #include <rtt/Port.hpp>
 #include <iostream>
 #include <rtt/os/main.h>
@@ -40,7 +36,7 @@ public:
      */
     MyTask_1(std::string name) 
         : RTT::TaskContext(name),
-          bufPort("BufferData", internal::ConnPolicy::buffer(10) ),
+          bufPort("BufferData", ConnPolicy::buffer(10) ),
           inpPort("X_Data"),
           outPort("Y_Data")
     {

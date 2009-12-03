@@ -39,7 +39,7 @@ class PeriodicTaskContext
     Property<double>      item2;
     Property< std::vector<double> >      vect;
 
-    StateMachinePtr countmachine;
+    scripting::StateMachinePtr countmachine;
 public:
     /**
      * Create a TaskContext with periodic executing Processor,

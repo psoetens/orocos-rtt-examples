@@ -70,7 +70,7 @@ public:
      */
     virtual bool startHook()
     {
-        StateMachinePtr sm = this->engine()->states()->getStateMachine("reactiveMachine");
+      scripting::StateMachinePtr sm = this->engine()->states()->getStateMachine("reactiveMachine");
         if (sm) {
             sm->activate();
             sm->start();
@@ -94,7 +94,7 @@ public:
 
     virtual void stopHook()
     {
-        StateMachinePtr sm = this->engine()->states()->getStateMachine("reactiveMachine");
+        scripting::StateMachinePtr sm = this->engine()->states()->getStateMachine("reactiveMachine");
         if (sm)
             sm->deactivate();
 
