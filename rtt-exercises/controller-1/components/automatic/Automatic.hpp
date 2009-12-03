@@ -31,12 +31,14 @@ namespace UseCase
 		InputPort<double> input;
 
 		bool move_impl(double d) {
-            double input_sample;
-            if ( input.read( input_sample) ) {
+
+            if ( input.read( current) ) {
                 step = baseStep;
-                target = input_sample + d;
-            } else
+                target = current + d;
+            } else {
+                log(Error) <<"Move not accepted: input port has no data."<<endlog();
                 return false;
+            }
 
 			// step and d must have same sign.
 			if ( d * step < 0)
@@ -44,6 +46,7 @@ namespace UseCase
 
             if ( fabs(d) < fabs(step) ) {
 				output.write( target );
+                current = target;
 				log(Info) << "Did instant move to target "<< target <<endlog();
 				return true;
 			}
@@ -54,6 +57,7 @@ namespace UseCase
 		}
 
 		bool atpos_impl(double d) {
+            /** d is ignored */
             if ( fabs(current - target) < baseStep )
 				return true;
 			return false;
@@ -62,8 +66,8 @@ namespace UseCase
 	public:
 		Automatic(const std::string& name) :
 			TaskContext(name, PreOperational),
-                        target(0.0), step(0.0)
-                        , baseStep(0.0), target_reached(true),
+            target(0.0), step(0.0), current(0.0),
+            baseStep(0.0), target_reached(true),
 			move("move",&Automatic::move_impl, &Automatic::atpos_impl, this),
 			atposition("atposition"),
 			output("output"),
@@ -104,9 +108,11 @@ namespace UseCase
 		}
 
 		void updateHook() {
-			output.write( current + step );
+            current += step;
+			output.write( current );
 			if ( atpos_impl(target) && !target_reached) {
 				output.write( target );
+                current = target;
 				log(Info) << "Position reached at " << target <<endlog();
 				atposition(target);
 				step = 0.0;

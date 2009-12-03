@@ -52,8 +52,8 @@ namespace UseCase
             double input_sample;
             if ( input.read(input_sample) ) {
                 current += this->engine()->getActivity()->getPeriod()*input_sample /inertia.value();
-                output.write( current );
             }
+            output.write( current );
 		}
 
 		void stopHook() {

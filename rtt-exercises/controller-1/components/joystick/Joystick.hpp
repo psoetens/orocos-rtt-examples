@@ -40,6 +40,7 @@ namespace UseCase
 			this->properties()->addProperty(&scale);
 			this->methods()->addMethod(&setPosition, "Method Description", "d", "Argument");
 			this->ports()->addPort(&output);
+            output.keepLastWrittenValue(true);
 		}
 
 		bool configureHook() {
@@ -55,7 +56,8 @@ namespace UseCase
 		}
 
 		void updateHook() {
-			output.write( scale.value() * jog_value );
+            double steer = scale.value() * jog_value ;
+			output.write( steer );
 		}
 
 		void stopHook() {
