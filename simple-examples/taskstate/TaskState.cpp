@@ -1,9 +1,9 @@
 #include <rtt/TaskContext.hpp>
-#include <rtt/PeriodicActivity.hpp>
+#include <rtt/Activity.hpp>
 #include <rtt/Property.hpp>
-#include <rtt/Ports.hpp>
+#include <rtt/Port.hpp>
 #include <rtt/os/main.h>
-#include <rtt/TimeService.hpp>
+#include <rtt/os/TimeService.hpp>
 
 #include <ocl/TaskBrowser.hpp>
 
@@ -22,7 +22,7 @@ class MyTask
      * Task's Data Ports.
      */
     // Read-Write buffer port:
-    BufferPort<double> rwbufPort;
+    OutputPort<double> rwbufPort;
 
     /**
      * Task's Properties.
@@ -31,7 +31,7 @@ class MyTask
     Property<double> initial_value;
     Property<bool> read_propfile;
     Attribute<double> runtime;
-    TimeService::ticks stamp;
+    os::TimeService::ticks stamp;
 public:
     /**
      * Constructor. Sets up the interface of this TaskContext.
@@ -40,7 +40,7 @@ public:
         : RTT::TaskContext(name, PreOperational),
           rwbufPort("Packets", 30),
           bufSize("BufSize","Configurable buffer size of Packets",30),
-          initial_value("InitialValue","Value used to write into Packet Buffer", 1.23 ),
+          initial_value("InitialValue","Value used to write into Packet base::Buffer", 1.23 ),
           read_propfile("ReadPropFile","Set to true if properties must be read from disk upon configure().", true),
           runtime("RunTime", 0.0 )
     {
@@ -81,7 +81,7 @@ public:
         }
 
         if ( rwbufPort.connected() == false ) {
-            log(Info) << "Setting Buffer size to "<< bufSize.get() <<endlog();
+            log(Info) << "Setting base::Buffer size to "<< bufSize.get() <<endlog();
             rwbufPort.setBufferSize( bufSize.get() ); // setup unconnected port
         } else {
             log(Warning) << rwbufPort.getName() << " port already connected, can not change buffer size without breaking up connection."<<endlog();
@@ -103,7 +103,7 @@ public:
             log(Warning)<<"Packet port not connected !"<<endlog();
         }
         // start recording runtime.
-        stamp = TimeService::Instance()->getTicks();
+        stamp = os::TimeService::Instance()->getTicks();
         return true;
     }
 
@@ -120,7 +120,7 @@ public:
                 rwbufPort.Pop( value );
 
         // set the attribute with the elapsed time since startHook()
-        runtime.set( TimeService::Instance()->secondsSince( stamp ) );
+        runtime.set( os::TimeService::Instance()->secondsSince( stamp ) );
 
         rwbufPort.Push( initial_value.get() + runtime.get() );
     }
@@ -150,7 +150,7 @@ public:
 
         // Disconnect this port, this may confuse the TaskBrowser slightly.
         if ( rwbufPort.connected() ) {
-            log(Info) << "Disconnecting Buffer port."<<endlog();
+            log(Info) << "Disconnecting base::Buffer port."<<endlog();
             rwbufPort.disconnect();
         }
         assert( rwbufPort.connected() == false );
@@ -173,7 +173,7 @@ int ORO_main(int arc, char* argv[])
     MyTask a_task("ATask");
 
     // ... make task periodic
-    a_task.setActivity( new PeriodicActivity(OS::HighestPriority, 0.01 ) );
+    a_task.setActivity( new Activity(os::HighestPriority, 0.01 ) );
 
     a_task.configure();
 

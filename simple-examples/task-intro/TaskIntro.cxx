@@ -17,7 +17,7 @@
 #include <rtt/RTT.hpp>
 #ifdef OROPKG_CORBA
 #define USE_CORBA
-#include <rtt/corba/ControlTaskServer.hpp>
+#include <rtt/transports/corba/ControlTaskServer.hpp>
 using namespace RTT::Corba;
 #endif
 

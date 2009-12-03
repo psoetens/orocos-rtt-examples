@@ -1,17 +1,17 @@
 #include <rtt/os/main.h>
 #include <rtt/RTT.hpp>
-#include <rtt/Activities.hpp>
+#include <rtt/extras/Activities.hpp>
 
 #ifdef TCORE
-#include <rtt/TaskCore.hpp>
+#include <rtt/base/TaskCore.hpp>
 #else
 #include <rtt/TaskContext.hpp>
 #endif
 
 #include <rtt/Method.hpp>
 #include <rtt/Command.hpp>
-#include <rtt/DispatchInterface.hpp>
-#include <rtt/Ports.hpp>
+#include <rtt/base/DispatchInterface.hpp>
+#include <rtt/Port.hpp>
 
 using namespace RTT;
 using namespace std;
@@ -21,7 +21,7 @@ using namespace std;
 class MyTask2 
   :
 #ifdef TCORE
-  public TaskCore
+  public base::TaskCore
 #else
   public TaskContext
 #endif
@@ -41,7 +41,7 @@ protected:
 public:
     MyTask2(std::string name)
 #ifdef TCORE
-        : TaskCore(name),
+        : base::TaskCore(name),
 #else
 	  : TaskContext(name),
 #endif
@@ -59,15 +59,15 @@ public:
 
 class MyTask
 #ifdef TCORE
-    : public TaskCore
+    : public base::TaskCore
 #else
       : public TaskContext
 #endif
 {
 public:
-    ReadDataPort<double>    posport;
-    WriteDataPort<int>  turn_outport;
-    ReadDataPort<int>  turn_inport;
+    InputPort<double>    posport;
+    OutputPort<int>  turn_outport;
+    InputPort<int>  turn_inport;
 
     Event<void(int)>    turnEvent;
     Event<void(double)> posEvent;
@@ -80,7 +80,7 @@ public:
 
     MyTask(string name)
 #ifdef TCORE
-        : TaskCore(name),
+        : base::TaskCore(name),
 #else
 	  : TaskContext(name),
 #endif
@@ -119,7 +119,7 @@ public:
 
         // SYN + ASYN
         posEvent.connect( boost::bind(&MyTask::reactS, this, _1) );
-        posEvent.connect( boost::bind(&MyTask::reactAS, this, _1), this->engine()->events(), EventProcessor::OnlyLast );
+        posEvent.connect( boost::bind(&MyTask::reactAS, this, _1), this->engine()->events(), internal::EventProcessor::OnlyLast );
     }
     
     void reactS( double d ) {
@@ -141,8 +141,8 @@ int ORO_main(int argc, char** argv)
     MyTask et("PhoneHome");
     MyTask et2("PhoneHome2");
 
-    et.setActivity( new NonPeriodicActivity( 10 ) );
-    et2.setActivity( new PeriodicActivity( 11, 0.001 ) );
+    et.setActivity( new Activity( 10 ) );
+    et2.setActivity( new Activity( 11, 0.001 ) );
 
     et.turn_outport.connectTo( &et2.turn_inport );
 

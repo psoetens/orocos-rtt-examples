@@ -1,9 +1,9 @@
 #include <rtt/TaskContext.hpp>
-#include <rtt/PeriodicActivity.hpp>
+#include <rtt/Activity.hpp>
 #include <rtt/Attribute.hpp>
 #include <rtt/Method.hpp>
 #include <rtt/Command.hpp>
-#include <rtt/Ports.hpp>
+#include <rtt/Port.hpp>
 #include <iostream>
 #include <rtt/os/main.h>
 
@@ -36,15 +36,15 @@ class MyTask
      * See also the 'dataflow-task' example !
      */
     // Read-only data port:
-    ReadDataPort<double> indatPort;
+    InputPort<double> indatPort;
     // Read-Write data port:
-    WriteDataPort<double> outdatPort;
+    OutputPort<double> outdatPort;
     // Read-only buffer port:
-    ReadBufferPort<double> inbufPort;
+    InputPort<double> inbufPort;
     // Write-only buffer port:
-    WriteBufferPort<double> outbufPort;
+    OutputPort<double> outbufPort;
     // Read-Write buffer port:
-    BufferPort<double> rwbufPort;
+    OutputPort<double> rwbufPort;
 
     /**
      * Task's Properties.
@@ -223,7 +223,7 @@ int ORO_main(int arc, char* argv[])
     MyTask a_task("ATask");
 
     // ... make task periodic
-    a_task.setActivity( new PeriodicActivity(OS::HighestPriority, 0.01 ) );
+    a_task.setActivity( new Activity(os::HighestPriority, 0.01 ) );
 
     a_task.configure();
 

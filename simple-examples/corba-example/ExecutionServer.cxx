@@ -1,14 +1,14 @@
 
-#include <rtt/corba/ControlTaskServer.hpp>
+#include <rtt/transports/corba/ControlTaskServer.hpp>
 
-#include <rtt/PeriodicActivity.hpp>
+#include <rtt/Activity.hpp>
 #include <rtt/Logger.hpp>
 #include <rtt/os/main.h>
 
 #include "ExecutionServer.hpp"
 
 using namespace std;
-using namespace RTT::Corba;
+using namespace RTT::corba;
 using namespace Orocos;
 
 int ORO_main(int argc, char** argv)
@@ -21,7 +21,7 @@ int ORO_main(int argc, char** argv)
     ExecutionServer server("ExecutionDemo");
 
     // ... make task periodic
-    server.setActivity( new PeriodicActivity( OS::HighestPriority, 0.01 ) );
+    server.setActivity( new Activity( os::HighestPriority, 0.01 ) );
 
     ControlTaskServer::InitOrb(argc, argv);
 

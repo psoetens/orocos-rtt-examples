@@ -1,7 +1,7 @@
 
 #include <rtt/TaskContext.hpp>
-#include <rtt/StateMachine.hpp>
-#include <rtt/PeriodicActivity.hpp>
+#include <rtt/scripting/StateMachine.hpp>
+#include <rtt/Activity.hpp>
 #include <rtt/Event.hpp>
 #include <rtt/Logger.hpp>
 
@@ -16,7 +16,7 @@ using namespace RTT;
 class ReactiveTaskContext
     : public TaskContext
 {
-    PeriodicActivity mytask;
+    Activity mytask;
     Attribute<int> last_prime;
     /**
      * Stores the Event Connection.
@@ -26,7 +26,7 @@ class ReactiveTaskContext
 public:
     ReactiveTaskContext(const std::string& name)
         : TaskContext(name),
-          mytask(RTT::OS::HighestPriority + RTT::OS::IncreasePriority, 0.1, this->engine() ),
+          mytask(RTT::os::HighestPriority + RTT::os::IncreasePriority, 0.1, this->engine() ),
           last_prime("last_prime")
     {
         this->attributes()->addAttribute( &last_prime );

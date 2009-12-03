@@ -21,10 +21,10 @@
 #include <kdl/kinfam/kuka361.hpp>
 #include <kdl/toolkit.hpp>
 
-//#include <rtt/Activities.hpp>
+//#include <rtt/extras/Activities.hpp>
 #include <rtt/TaskContext.hpp>
 #include <rtt/Attribute.hpp>
-#include <rtt/Activities.hpp>
+#include <rtt/extras/Activities.hpp>
 
 #include <rtt/os/main.h>
 
@@ -37,7 +37,7 @@ using namespace KDL;
 
 int ORO_main(int argc, char* argv[])
 {
-    Toolkit::Import( KDLToolkit );
+    types::Toolkit::Import( KDLToolkit );
 
     KinematicFamily* kukakf = new Kuka361();
     TaskContext* my_robot = new Kuka361nAxesVelocityController("Robot");
@@ -134,7 +134,7 @@ int ORO_main(int argc, char* argv[])
     super.scripting()->loadPrograms("programs/program_calibrate_offsets.ops");
     super.scripting()->loadPrograms("programs/program_moveto.ops");
     
-    // Load StateMachine in supervisor
+    // Load scripting::StateMachine in supervisor
     vector<double> temp = vector<double>(6,0);
     Attribute<vector<double> > joints = Attribute<vector<double> >("joints",temp);
     Attribute<Frame> f = Attribute<Frame>("f",Frame::Identity());
@@ -146,27 +146,27 @@ int ORO_main(int argc, char* argv[])
     // Creating Tasks
 #if defined(OROPKG_OS_LXRT)
 #warning building for lxrt
-    PeriodicActivity _kukaTask(0,0.002, my_robot->engine() ); 
-    PeriodicActivity superTask(0,0.002,super.engine());
+    Activity _kukaTask(0,0.002, my_robot->engine() ); 
+    Activity superTask(0,0.002,super.engine());
 #else
-    PeriodicActivity _kukaTask(0,0.01, my_robot->engine() ); 
-    PeriodicActivity superTask(0,0.01,super.engine());
+    Activity _kukaTask(0,0.01, my_robot->engine() ); 
+    Activity superTask(0,0.01,super.engine());
 #endif
-    PeriodicActivity _sensorTask(0,0.01, sensor.engine() ); 
-    PeriodicActivity _refsensorTask(0,0.01, refsensor.engine() ); 
-    PeriodicActivity _generatorPosTask(0,0.01, generatorPos.engine() ); 
-    PeriodicActivity _generatorVelTask(0,0.01, generatorVel.engine() ); 
-    PeriodicActivity _controllerPosTask(0,0.01, controllerPos.engine() ); 
-    PeriodicActivity _controllerPosVelTask(0,0.01, controllerPosVel.engine() ); 
-    PeriodicActivity _controllerVelTask(0,0.01, controllerVel.engine() ); 
-    PeriodicActivity _effectorTask(0,0.01, effector.engine() ); 
-    PeriodicActivity _cartsensorTask(0,0.01, cartsensor.engine() ); 
-    PeriodicActivity _cartgeneratorTask(0,0.01, cartgenerator.engine() ); 
-    PeriodicActivity _cartcontrollerTask(0,0.01, cartcontroller.engine() ); 
-    PeriodicActivity _carteffectorTask(0,0.01, carteffector.engine() ); 
+    Activity _sensorTask(0,0.01, sensor.engine() ); 
+    Activity _refsensorTask(0,0.01, refsensor.engine() ); 
+    Activity _generatorPosTask(0,0.01, generatorPos.engine() ); 
+    Activity _generatorVelTask(0,0.01, generatorVel.engine() ); 
+    Activity _controllerPosTask(0,0.01, controllerPos.engine() ); 
+    Activity _controllerPosVelTask(0,0.01, controllerPosVel.engine() ); 
+    Activity _controllerVelTask(0,0.01, controllerVel.engine() ); 
+    Activity _effectorTask(0,0.01, effector.engine() ); 
+    Activity _cartsensorTask(0,0.01, cartsensor.engine() ); 
+    Activity _cartgeneratorTask(0,0.01, cartgenerator.engine() ); 
+    Activity _cartcontrollerTask(0,0.01, cartcontroller.engine() ); 
+    Activity _carteffectorTask(0,0.01, carteffector.engine() ); 
 
-    PeriodicActivity reportingTask(2,0.1,reporter.engine());
-    PeriodicActivity _viewerTask(1,0.01,viewer.engine());
+    Activity reportingTask(2,0.1,reporter.engine());
+    Activity _viewerTask(1,0.01,viewer.engine());
   
     TaskBrowser browser(&super);
     browser.setColorTheme( TaskBrowser::whitebg );

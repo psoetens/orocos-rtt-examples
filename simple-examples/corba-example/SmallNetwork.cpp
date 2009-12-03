@@ -1,14 +1,14 @@
 
-#include <rtt/corba/ControlTaskServer.hpp>
+#include <rtt/transports/corba/ControlTaskServer.hpp>
 
-#include <rtt/PeriodicActivity.hpp>
+#include <rtt/Activity.hpp>
 #include <rtt/Logger.hpp>
 #include <rtt/os/main.h>
 
 #include "ExecutionServer.hpp"
 
 using namespace std;
-using namespace RTT::Corba;
+using namespace RTT::corba;
 using namespace Orocos;
 
 /**
@@ -38,7 +38,7 @@ int ORO_main(int argc, char** argv)
     connectPorts(&servera, &serverb);
     connectPeers(&servera, &serverc);
 
-    PeriodicActivity serveract(1, 0.01, servera.engine() );
+    Activity serveract(1, 0.01, servera.engine() );
 
     // Setup Corba environment
     ControlTaskServer::InitOrb(argc, argv);

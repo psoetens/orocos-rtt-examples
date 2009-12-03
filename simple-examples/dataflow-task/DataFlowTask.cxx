@@ -1,12 +1,11 @@
 #include <rtt/TaskContext.hpp>
-#include <rtt/PeriodicActivity.hpp>
-#include <rtt/MethodC.hpp>
-#include <rtt/CommandC.hpp>
-#include <rtt/EventC.hpp>
-#include <rtt/ConnectionC.hpp>
-#include <rtt/ConnectionFactory.hpp>
-#include <rtt/BufferPort.hpp>
-#include <rtt/DataPort.hpp>
+#include <rtt/Activity.hpp>
+#include <rtt/internal/MethodC.hpp>
+#include <rtt/internal/CommandC.hpp>
+#include <rtt/internal/EventC.hpp>
+#include <rtt/internal/ConnectionC.hpp>
+#include <rtt/internal/ConnPolicy.hpp>
+#include <rtt/Port.hpp>
 #include <iostream>
 #include <rtt/os/main.h>
 
@@ -32,21 +31,21 @@ struct MyDataStruct
 class MyTask_1 
     : public RTT::TaskContext
 {
-    BufferPort<double> bufPort;
-    ReadDataPort<double> inpPort;
-    WriteDataPort<MyDataStruct> outPort;
+    InputPort<double> bufPort;
+    InputPort<double> inpPort;
+    OutputPort<MyDataStruct> outPort;
 public:
     /**
      * Constructor. Sets up the interface of this TaskContext.
      */
     MyTask_1(std::string name) 
         : RTT::TaskContext(name),
-          bufPort("BufferData", 10, 0.0),
+          bufPort("BufferData", internal::ConnPolicy::buffer(10) ),
           inpPort("X_Data"),
           outPort("Y_Data")
     {
         // Setup a read-write buffer port.
-        this->ports()->addPort( &bufPort, "Buffered read/write port." ); 
+        this->ports()->addPort( &bufPort, "Buffered read port."); 
         // Setup a read-only data port.
         this->ports()->addPort( &inpPort, "This component reads X data." );
         // Setup a read-write data port.
@@ -77,7 +76,7 @@ public:
         mds.Y = 2.0;
         mds.Z = mds.X * mds.Y;
 
-        outPort.data()->Set( mds );
+        outPort.write( mds );
 
         return true;
     }
@@ -90,8 +89,9 @@ public:
         double bufval;
         // only write result if a value could be found
         // in the buffer.
-        if ( bufPort.buffer()->Pop(bufval) ) {
-            double inval = inpPort.data()->Get();
+        if ( bufPort.read(bufval) ) {
+            double inval = 0;
+            inpPort.read(inval);
 
             // Do a 'calculation' :
             MyDataStruct mds;
@@ -100,7 +100,8 @@ public:
             mds.Z = bufval * inval;
 
             // write the result:
-            outPort.data()->Set( mds );
+            //log(Info) << "Sending ("<< mds.Z << " == " << bufval <<"*"<< inval <<")" << endlog();
+            outPort.write( mds );
         }
     }
 
@@ -119,21 +120,21 @@ public:
 class MyTask_2
     : public RTT::TaskContext
 {
-    BufferPort<double> bufPort;
-    WriteDataPort<double> outPort;
-    ReadDataPort<MyDataStruct> inpPort;
+    OutputPort<double> bufPort;
+    OutputPort<double> outPort;
+    InputPort<MyDataStruct> inpPort;
 public:
     /**
      * Constructor. Sets up the interface of this TaskContext.
      */
     MyTask_2(std::string name) 
         : RTT::TaskContext(name),
-          bufPort("BufferData",10),
+          bufPort("BufferData"),
           outPort("X_Data"),
           inpPort("Y_Data")
     {
         // Setup a read-write buffer port.
-        this->ports()->addPort( &bufPort, "Buffered read/write port." ); 
+        this->ports()->addPort( &bufPort, "Buffered write port." ); 
         // Setup a read-only data port.
         this->ports()->addPort( &inpPort, "This component writes X data." );
         // Setup a read-write data port.
@@ -157,7 +158,8 @@ public:
             return false;
         }
         // Write initial values.
-        outPort.data()->Set( 3.0 );
+        outPort.write( 3.0 );
+        bufPort.write( -3.0 );
         return true;
     }
 
@@ -167,20 +169,21 @@ public:
     void updateHook() {
         // Read the inbound ports:
         MyDataStruct mds;
-        mds = inpPort.data()->Get();
+        if ( inpPort.read(mds) ) {
 
-        // Do a 'calculation' :
-        double bufval = mds.X;
-        double outval = mds.Y;
+            // Do a 'calculation' :
+            double bufval = mds.X;
+            double outval = mds.Y;
+            
+            if ( mds.Z != bufval * outval ) {
+                log(Error) << "Corrupt data detected ! ("<< mds.Z << " != " << bufval <<"*"<< outval <<")" << endlog();
+            }
 
-        if ( mds.Z != bufval * outval ) {
-            Logger::log() << Logger::Error << "Corrupt data detected !" << Logger::endl;
+            // write the result:
+            // if buffer not full, also write the outPort.
+            bufPort.write( bufval+1 );
+            outPort.write( outval-1 );
         }
-
-        // write the result:
-        // if buffer not full, also write the outPort.
-        while ( bufPort.buffer()->Push( bufval+1 ) )
-            outPort.data()->Set( outval-1 );
     }
 
     /**
@@ -210,8 +213,8 @@ int ORO_main(int arc, char* argv[])
     a_task.connectPorts( &b_task );
 
     // ... make both tasks periodic
-    a_task.setActivity( new PeriodicActivity(OS::HighestPriority, 0.01 ) );
-    b_task.setActivity( new PeriodicActivity(OS::HighestPriority, 0.1 ) );
+    a_task.setActivity( new Activity(os::HighestPriority, 0.01 ) );
+    b_task.setActivity( new Activity(os::HighestPriority, 0.1 ) );
 
     a_task.start(); 
     b_task.start(); 

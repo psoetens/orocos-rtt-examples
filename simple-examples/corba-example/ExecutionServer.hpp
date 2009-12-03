@@ -2,14 +2,14 @@
 #include <rtt/Command.hpp>
 #include <rtt/Method.hpp>
 #include <rtt/Attribute.hpp>
-#include <rtt/Ports.hpp>
+#include <rtt/Port.hpp>
 #include <rtt/RTT.hpp>
 
 #include <cmath>
 #include <iostream>
 
 using namespace Orocos;
-using namespace RTT::Corba;
+using namespace RTT::corba;
 using namespace std;
 
 
@@ -30,8 +30,8 @@ struct ExecutionServer
     Attribute<int> i1;
     Attribute<std::vector<double> > vattr;
 
-    DataPort<int> xport;
-    BufferPort<double> yport;
+    OutputPort<int> xport;
+    OutputPort<double> yport;
 
     ExecutionServer(std::string n)
         : TaskContext(n),
@@ -41,8 +41,8 @@ struct ExecutionServer
           vprop("Array","Sequence of numbers."),
           truth("Truth",false),
           word("Word","silence"),
-          pi("pi", M_PI), d1("d1", 0.0), i1("i1", 0),
-          vattr("List"),
+          pi("pi", M_PI), d1("d1", 100.0), i1("i1", 33),
+          vattr("internal::List"),
           xport("XP"),
           yport("YP",24)
     {
@@ -76,6 +76,12 @@ struct ExecutionServer
         vprop.set(v);
         v.resize(12, 1.1);
         vattr.set(v);
+    }
+
+    void updateHook() {
+        // just output the attribute values on the ports.
+        xport.write( i1.get() );
+        yport.write( d1.get() );
     }
 
     bool escommand( int a, int b, int c)

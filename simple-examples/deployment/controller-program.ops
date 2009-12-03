@@ -11,8 +11,8 @@ program ControllerAction
    // This program never quits.
    while( true ) {
 
-        // Read the SensorValues DataPort, connected to the Plant.
-	set input = SensorValues.Get();
+        // Read the SensorValues OutputPort, connected to the Plant.
+	do SensorValues.read( input );
 
         // Calculate the output signal
         // nextPosition is a method, Gain is a property
@@ -20,11 +20,11 @@ program ControllerAction
 
         // Send the signal into a buffer, connected to the Plant.
 	// ignore buffer full 
-        try SteeringSignals.Push( output );
+        try SteeringSignals.write( output );
 	// The Plant will wake-up using this value.
 
 	// Forced synchronisation point. Because we did not use
-	// any commands, we need to force the ProgramProcessor to
+	// any commands, we need to force the scripting::ProgramProcessor to
 	// stop processing temporarily here:
 	do nothing;
    }

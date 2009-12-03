@@ -2,8 +2,8 @@
 #include <ocl/ComponentLoader.hpp>
 #include <rtt/TaskContext.hpp>
 #include <rtt/Property.hpp>
-#include <rtt/DataPort.hpp>
-#include <rtt/BufferPort.hpp>
+#include <rtt/OutputPort.hpp>
+#include <rtt/OutputPort.hpp>
 #include <rtt/Method.hpp>
 #include <rtt/RTT.hpp>
 
@@ -16,8 +16,8 @@ using namespace Orocos;
 class ControllerType
     : public TaskContext
 {
-    ReadDataPort<double> sensorValues;
-    WriteBufferPort<double> steeringSignals;
+    InputPort<double> sensorValues;
+    OutputPort<double> steeringSignals;
     Property<double> gain;
 
     // Generates a sine, used in the controller-program.ops script
@@ -46,7 +46,7 @@ public:
     // The implementation of this component is completely in the controller-program.ops script
     bool startHook()
     {
-        ProgramInterfacePtr pi = this->engine()->programs()->getProgram("ControllerAction");
+        base::ProgramInterfacePtr pi = this->engine()->programs()->getProgram("ControllerAction");
         if (pi)
             return pi->start();
         return false;
@@ -54,7 +54,7 @@ public:
 
     void stopHook()
     {
-        ProgramInterfacePtr pi = this->engine()->programs()->getProgram("ControllerAction");
+        base::ProgramInterfacePtr pi = this->engine()->programs()->getProgram("ControllerAction");
         if (pi)
             pi->stop();
     }

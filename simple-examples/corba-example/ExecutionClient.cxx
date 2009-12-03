@@ -1,13 +1,14 @@
 
 #include <rtt/Logger.hpp>
-#include <rtt/corba/ControlTaskProxy.hpp>
+#include <rtt/transports/corba/ControlTaskProxy.hpp>
 #include <rtt/os/main.h>
 #include <iostream>
+#include <exception>
 
 #include <ocl/TaskBrowser.hpp>
 
 using namespace std;
-using namespace RTT::Corba;
+using namespace RTT::corba;
 using namespace Orocos;
 
 int ORO_main(int argc, char** argv)

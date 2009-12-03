@@ -1,8 +1,8 @@
 
-#include <rtt/corba/ControlTaskServer.hpp>
-#include <rtt/corba/ControlTaskProxy.hpp>
+#include <rtt/transports/corba/ControlTaskServer.hpp>
+#include <rtt/transports/corba/ControlTaskProxy.hpp>
 
-#include <rtt/PeriodicActivity.hpp>
+#include <rtt/Activity.hpp>
 #include <rtt/Logger.hpp>
 #include <cmath>
 #include <rtt/os/main.h>
@@ -12,7 +12,7 @@
 
 using namespace std;
 using namespace RTT;
-using namespace RTT::Corba;
+using namespace RTT::corba;
 using namespace Orocos;
 
 int ORO_main(int argc, char** argv)
@@ -26,8 +26,8 @@ int ORO_main(int argc, char** argv)
     ExecutionServer peer("ExecutionPeer");
 
     // ... make task periodic
-    local.setActivity( new PeriodicActivity( OS::HighestPriority, 0.01 ) );
-    peer.setActivity( new PeriodicActivity( OS::HighestPriority + 1, 0.01 ) );
+    local.setActivity( new Activity( os::HighestPriority, 0.01 ) );
+    peer.setActivity( new Activity( os::HighestPriority + 1, 0.01 ) );
 
     ControlTaskServer::InitOrb(argc, argv);
 

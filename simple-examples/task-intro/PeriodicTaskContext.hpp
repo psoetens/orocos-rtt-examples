@@ -2,12 +2,12 @@
 #include <rtt/TaskContext.hpp>
 #include <rtt/Command.hpp>
 #include <rtt/Method.hpp>
-#include <rtt/PeriodicActivity.hpp>
+#include <rtt/Activity.hpp>
 #include <rtt/Property.hpp>
 #include <rtt/Attribute.hpp>
-#include <rtt/StateMachine.hpp>
+#include <rtt/scripting/StateMachine.hpp>
 #include <rtt/Logger.hpp>
-#include <rtt/MultiVector.hpp>
+#include <rtt/extras/MultiVector.hpp>
 
 #include <iostream>
 
@@ -23,7 +23,7 @@ class PeriodicTaskContext
     /**
      * Use the ZeroTimeThread.
      */
-    PeriodicActivity mytask;
+    Activity mytask;
 
     Constant<double>       speed_of_light;
 
@@ -47,7 +47,7 @@ public:
      */
     PeriodicTaskContext(const std::string& name )
         : TaskContext(name),
-          mytask( RTT::OS::HighestPriority, 0.01, this->engine() ),
+          mytask( RTT::os::HighestPriority, 0.01, this->engine() ),
           speed_of_light("SpeedOfLight",300000000.0),
           counter("Counter",0),
           target("Target",0),
@@ -58,9 +58,9 @@ public:
           vect("v","std::vector with 10 items.", std::vector<double>(10, 1.0))
     {
         this->properties()->addProperty( &vect );
-        // Add a Property to the AttributeRepository :
+        // Add a Property to the interface::AttributeRepository :
         this->properties()->addProperty( &parameter );
-        // Add a PropertyBag to the AttributeRepository :
+        // Add a PropertyBag to the interface::AttributeRepository :
         this->properties()->addProperty( &itemcollection );
         itemcollection.value().add( &item1 );
         itemcollection.value().add( &item2 );
@@ -76,7 +76,7 @@ public:
 
         this->commands()->addCommand( command( "countTo", &PeriodicTaskContext::countTo,
                             &PeriodicTaskContext::hasReached, this),
-                            "Count to a given number using a StateMachine program.",
+                            "Count to a given number using a scripting::StateMachine program.",
                             "Target", "Number to count to." );
 
     }

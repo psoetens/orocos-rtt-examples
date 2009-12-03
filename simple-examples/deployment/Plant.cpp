@@ -1,9 +1,9 @@
 
 #include <ocl/ComponentLoader.hpp>
-#include <rtt/TimeService.hpp>
+#include <rtt/os/TimeService.hpp>
 #include <rtt/TaskContext.hpp>
 #include <rtt/Property.hpp>
-#include <rtt/Ports.hpp>
+#include <rtt/Port.hpp>
 #include <rtt/RTT.hpp>
 
 using namespace Orocos;
@@ -16,10 +16,10 @@ class PlantType
     : public TaskContext
 {
     // Data Ports
-    WriteDataPort<double> position;
-    WriteDataPort<double> velocity;
-    BufferPort<double> setpoints;
-    TimeService::ticks stamp;
+    OutputPort<double> position;
+    OutputPort<double> velocity;
+    InputPort<double> setpoints;
+    os::TimeService::ticks stamp;
     // Internal state variables
     double pos,vel;
 public:
@@ -27,7 +27,7 @@ public:
         : TaskContext(name, PreOperational), // require configuration.
           position("Position", 0.0),
           velocity("Velocity", 0.0),
-          setpoints("Setpoints", 2),
+          setpoints("Setpoints"),
           stamp(0), pos(0.0),vel(0.0)
     {
         this->ports()->addPort( &position, "1D Position of this plant.");
@@ -35,49 +35,36 @@ public:
         this->ports()->addPort( &setpoints, "1D drive setpoint of this plant.");
     }
 
-    /**
-     * Reimplement the TaskCore stop() method.
-     */
-    bool stop()
-    {
-        if (this->isRunning() == false)
-            return false;
-        setpoints.Push(0.0);
-        return TaskCore::stop();
-    }
-
     bool configureHook()
     {
-        if ( !setpoints.ready() || !position.ready() ) {
+        if ( !setpoints.connected() || !position.connected() ) {
             log(Error) << "Refusing to configure without connected ports."<<endlog();
             return false;
         }
 
-        // We reconfigure the buffered data connection to allow us to block on empty.
-        setpoints = new BufferLockFree<double, BlockingPolicy, NonBlockingPolicy>(20);
         return true;
     }
 
     bool startHook()
     {
         // reset timestamp
-        stamp = TimeService::Instance()->getTicks();
+        stamp = os::TimeService::Instance()->getTicks();
         return true;
     }
 
     void updateHook()
     {
-        // Read setpoint, this is blocking on empty, see configureHook()
-        bool ret = setpoints.Pop( vel );
+        // Read setpoint.
+        bool ret = setpoints.read( vel );
         if (ret == false) {
             // The current blocking API always returns true.
             // assert(false);
         } else
-            pos += vel * TimeService::Instance()->secondsSince(stamp);
-        stamp = TimeService::Instance()->getTicks();
+            pos += vel * os::TimeService::Instance()->secondsSince(stamp);
+        stamp = os::TimeService::Instance()->getTicks();
 
-        position.Set( pos );
-        velocity.Set( vel );
+        position.write( pos );
+        velocity.write( vel );
 
         // Inform thread to call updateHook again after this one.
         this->engine()->getActivity()->trigger();

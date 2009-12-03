@@ -1,7 +1,7 @@
 
 #include <rtt/TaskContext.hpp>
 #include <rtt/Command.hpp>
-#include <rtt/NonPeriodicActivity.hpp>
+#include <rtt/Activity.hpp>
 #include <rtt/Event.hpp>
 #include <rtt/Logger.hpp>
 #include <math.h>
@@ -29,7 +29,7 @@ class WaitingTaskContext
     std::vector<int> primes;
 
     // A non periodic task from RTT
-    NonPeriodicActivity mytask;
+    Activity mytask;
 
     // Fire this event when ready factoring primes.
     Event<void(int,int)> primeEvent;
