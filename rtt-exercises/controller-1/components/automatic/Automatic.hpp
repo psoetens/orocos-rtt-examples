@@ -23,6 +23,7 @@ namespace UseCase
 	{
 	protected:
 		double target, step;
+        double baseStep;
 		bool target_reached;
 		Command<bool(double)> move;
 		Event<void(double)> atposition;
@@ -30,13 +31,14 @@ namespace UseCase
 		DataPort<double> input;
 
 		bool move_impl(double d) {
+            step = baseStep;
 			target = input.Get() + d;
 
 			// step and d must have same sign.
 			if ( d * step < 0)
 				step = -step;
 
-			if ( d < step ) {
+            if ( fabs(d) < fabs(step) ) {
 				output.Set(target);
 				log(Info) << "Did instant move to target "<< target <<endlog();
 				return true;
@@ -48,7 +50,7 @@ namespace UseCase
 		}
 
 		bool atpos_impl(double d) {
-			if ( output.Get() - target < step && output.Get() - target > -step )
+            if ( fabs(output.Get() - target) < baseStep )
 				return true;
 			return false;
 		}
@@ -56,7 +58,8 @@ namespace UseCase
 	public:
 		Automatic(const std::string& name) :
 			TaskContext(name, PreOperational),
-			target(0.0), step(0.0), target_reached(true),
+                        target(0.0), step(0.0)
+                        , baseStep(0.0), target_reached(true),
 			move("move",&Automatic::move_impl, &Automatic::atpos_impl, this),
 			atposition("atposition"),
 			output("output"),
@@ -90,7 +93,8 @@ namespace UseCase
 
 		bool startHook() {
 			// set our interpolation step to 1 unit/s.
-			step = this->getPeriod();
+            baseStep = this->getPeriod();
+            step = 0.0;
 
 			return true;
 		}
