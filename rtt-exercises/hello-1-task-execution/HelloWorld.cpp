@@ -9,7 +9,7 @@
 
 #include <rtt/Logger.hpp>
 #include <rtt/TaskContext.hpp>
-#include <rtt/PeriodicActivity.hpp>
+#include <rtt/Activity.hpp>
 
 #include <ocl/OCL.hpp>
 #include <ocl/TaskBrowser.hpp>
@@ -28,7 +28,7 @@ using namespace Orocos;
  * for detailed information, type 'this' (i.e. print the interface of the 'this'
  * task object).
  *
- * Next, edit this file and add a PeriodicActivity to the engine of this component
+ * Next, edit this file and add a Activity to the engine of this component
  * with a period of 0.5 seconds and priority 0.
  *
  * Next, add functions which use the log(Info) construct to display
@@ -38,13 +38,13 @@ using namespace Orocos;
  * Recompile and restart this application and try to configure, start, stop
  * and cleanup the component.
  *
- * Finally, change the PeriodicActivity to a NonPeriodicActivity (omit the period)
+ * Finally, change the Activity to a Activity (omit the period)
  * and try to start/stop the component. What's the difference ? How can you
  * 'trigger' updateHook() to be executed in this case ?
  *
  * Optional: Let the Hello component be created in the 'PreOperational' mode.
  * What effect does this have on the acceptance of the start() method ?
- * Optional: Replace the NonPeriodicActivity with a SlaveActivity. What are
+ * Optional: Replace the Activity with a SlaveActivity. What are
  * the effects of trigger and update in comparison with the other activity types ?
  */
 namespace Example

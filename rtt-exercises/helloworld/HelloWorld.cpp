@@ -9,14 +9,14 @@
 
 #include <rtt/Logger.hpp>
 #include <rtt/TaskContext.hpp>
-#include <rtt/PeriodicActivity.hpp>
+#include <rtt/Activity.hpp>
 
 #include <rtt/Property.hpp>
 #include <rtt/Attribute.hpp>
 #include <rtt/Method.hpp>
 #include <rtt/Command.hpp>
 #include <rtt/Event.hpp>
-#include <rtt/Ports.hpp>
+#include <rtt/Port.hpp>
 
 #include <ocl/OCL.hpp>
 #include <ocl/TaskBrowser.hpp>
@@ -61,15 +61,15 @@ namespace Hello
          * @{
          */
         /**
-         * DataPorts share data among readers and writers.
+         * OutputPorts share data among readers and writers.
          * A reader always reads the most recent data.
          */
-        DataPort<std::string> dataport;
+        OutputPort<std::string> dataport;
         /**
-         * BufferPorts buffer data among readers and writers.
+         * OutputPorts buffer data among readers and writers.
          * A reader reads the data in a FIFO way.
          */
-        BufferPort<std::string> bufferport;
+        OutputPort<std::string> bufferport;
         /** @} */
 
         /**
@@ -224,7 +224,7 @@ int ORO_main(int argc, char** argv)
     // 1: Priority
     // 0.5: Period (2Hz)
     // hello.engine(): is being executed.
-    hello.setActivity( new PeriodicActivity(1, 0.5, hello.engine() ) );
+    hello.setActivity( new Activity(1, 0.5, hello.engine() ) );
 
     log(Info) << "**** Starting the 'Hello' component ****" <<endlog();
     // Start the component:

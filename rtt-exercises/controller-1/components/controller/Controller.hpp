@@ -10,8 +10,8 @@
 
 #include <rtt/TaskContext.hpp>
 
-#include <rtt/Ports.hpp>
-#include <rtt/Properties.hpp>
+#include <rtt/Port.hpp>
+#include <rtt/extras/Properties.hpp>
 
 namespace UseCase
 {
@@ -21,9 +21,9 @@ namespace UseCase
 	protected:
 
 		Property<double> Kp;
-		DataPort<double> steer;
-		DataPort<double> target;
-		DataPort<double> sense;
+		OutputPort<double> steer;
+		InputPort<double> target;
+		InputPort<double> sense;
 
 	public:
 		Controller(const std::string& name) :
@@ -55,7 +55,9 @@ namespace UseCase
 		}
 
 		void updateHook() {
-			steer.Set( Kp.value() * (target.Get() - sense.Get()));
+            double target_sample, sense_sample;
+            if ( target.read(target_sample) && sense.read(sense_sample) )
+                steer.write( Kp.value() * (target_sample - sense_sample ) );
 		}
 
 		void stopHook() {

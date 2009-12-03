@@ -9,13 +9,13 @@
 
 #include <rtt/Logger.hpp>
 #include <rtt/TaskContext.hpp>
-#include <rtt/PeriodicActivity.hpp>
+#include <rtt/Activity.hpp>
 #include <rtt/Attribute.hpp>
 
 /**
  * Include this header in order to use data ports.
  */
-#include <rtt/Ports.hpp>
+#include <rtt/Port.hpp>
 
 #include <ocl/OCL.hpp>
 #include <ocl/TaskBrowser.hpp>
@@ -65,14 +65,14 @@ namespace Example
          * @{
          */
         /**
-         * DataPorts share data among readers and writers.
+         * OutputPorts share data among readers and writers.
          */
-        WriteDataPort<double> dataport;
+        OutputPort<double> dataport;
         /**
-         * BufferPorts buffer data among readers and writers.
+         * OutputPorts buffer data among readers and writers.
          * A reader reads the data in a FIFO way.
          */
-        ReadBufferPort< double > bufferport;
+        InputPort< double > bufferport;
         /** @} */
 
         /**
@@ -116,7 +116,7 @@ namespace Example
 		/**
 		 * This port object must be connected to Hello's port.
 		 */
-		WriteBufferPort<double> my_port;
+		OutputPort<double> my_port;
 		/** @} */
 
 		double value;
@@ -130,7 +130,7 @@ namespace Example
 		}
 
 		void updateHook() {
-			my_port.Push( value );
+			my_port.write( value );
 			++value;
 		}
 	};
@@ -157,7 +157,7 @@ int ORO_main(int argc, char** argv)
     // 1: Priority
     // 0.5: Period (2Hz)
     // hello.engine(): is being executed.
-    hello.setActivity( new PeriodicActivity(1, 0.5, hello.engine() ) );
+    hello.setActivity( new Activity(1, 0.5, hello.engine() ) );
 
     log(Info) << "**** Starting the 'Hello' component ****" <<endlog();
     hello.configure();
@@ -170,7 +170,7 @@ int ORO_main(int argc, char** argv)
     // 1: Priority
     // 0.5: Period (2Hz)
     // world.engine(): is being executed.
-    world.setActivity( new PeriodicActivity(1, 0.5, world.engine() ) );
+    world.setActivity( new Activity(1, 0.5, world.engine() ) );
 
     log(Info) << "**** Creating the 'Peer' connection ****" <<endlog();
     // This is a bidirectional connection.

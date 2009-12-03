@@ -25,7 +25,7 @@
 #include <rtt/Method.hpp>
 #include <rtt/Command.hpp>
 #include <rtt/Event.hpp>
-#include <rtt/Ports.hpp>
+#include <rtt/Port.hpp>
 
 using namespace std;
 using namespace RTT;
@@ -64,15 +64,15 @@ namespace Example
          * @{
          */
         /**
-         * DataPorts share data among readers and writers.
+         * OutputPorts share data among readers and writers.
          * A reader always reads the most recent data.
          */
-        DataPort<std::string> dataport;
+        OutputPort<std::string> dataport;
         /**
-         * BufferPorts buffer data among readers and writers.
+         * OutputPorts buffer data among readers and writers.
          * A reader reads the data in a FIFO way.
          */
-        BufferPort<std::string> bufferport;
+        OutputPort<std::string> bufferport;
         /** @} */
 
         /**

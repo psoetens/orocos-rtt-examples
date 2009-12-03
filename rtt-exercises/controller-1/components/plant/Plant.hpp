@@ -10,8 +10,8 @@
 
 #include <rtt/TaskContext.hpp>
 
-#include <rtt/Ports.hpp>
-#include <rtt/Properties.hpp>
+#include <rtt/Port.hpp>
+#include <rtt/extras/Properties.hpp>
 #include <rtt/Method.hpp>
 #include <rtt/Command.hpp>
 #include <rtt/Event.hpp>
@@ -22,13 +22,15 @@ namespace UseCase
 	class Plant
 		: public RTT::TaskContext {
 	protected:
+        double current;
 		Property<double> inertia;
-		DataPort<double> input;
-		DataPort<double> output;
+		InputPort<double> input;
+		OutputPort<double> output;
 
 	public:
 		Plant(const std::string& name)
 			: TaskContext(name, PreOperational),
+            current(0),
 			inertia("inertia","Inertia of the plant.", 10.0),
 			input("Input"),
 			output("Output")
@@ -47,7 +49,11 @@ namespace UseCase
 		}
 
 		void updateHook() {
-			output.Set( output.Get() + this->engine()->getActivity()->getPeriod()*input.Get()/inertia.value() );
+            double input_sample;
+            if ( input.read(input_sample) ) {
+                current += this->engine()->getActivity()->getPeriod()*input_sample /inertia.value();
+                output.write( current );
+            }
 		}
 
 		void stopHook() {

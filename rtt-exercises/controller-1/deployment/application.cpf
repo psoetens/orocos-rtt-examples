@@ -20,8 +20,10 @@
      ...
   -->
 
-  <simple name="Import" type="string"><value>/usr/local/lib/liborocos-reporting</value></simple>
-  <simple name="Import" type="string"><value>/usr/local/lib/liborocos-timer</value></simple>
+  <!-- These component libraries are probably installed in some system path. 
+       Edit the Deployer-site.cpf file to point the Deployer to this path -->
+  <simple name="Import" type="string"><value>liborocos-reporting</value></simple>
+  <simple name="Import" type="string"><value>liborocos-timer</value></simple>
 
   <simple name="Import" type="string"><value>components/joystick</value></simple>
   <simple name="Import" type="string"><value>components/automatic</value></simple>

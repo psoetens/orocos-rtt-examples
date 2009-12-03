@@ -10,8 +10,8 @@
 
 #include <rtt/TaskContext.hpp>
 
-#include <rtt/Ports.hpp>
-#include <rtt/Properties.hpp>
+#include <rtt/Port.hpp>
+#include <rtt/extras/Properties.hpp>
 #include <rtt/Method.hpp>
 
 namespace UseCase
@@ -24,7 +24,7 @@ namespace UseCase
 		double jog_value;
 		Property<double> scale;
 		Method<void(double)> setPosition;
-		DataPort<double> output;
+		OutputPort<double> output;
 
 		void methodimpl(double d) {
 			jog_value = d;
@@ -55,7 +55,7 @@ namespace UseCase
 		}
 
 		void updateHook() {
-			output.Set( scale.value() * jog_value );
+			output.write( scale.value() * jog_value );
 		}
 
 		void stopHook() {

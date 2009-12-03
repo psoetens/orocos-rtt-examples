@@ -9,7 +9,7 @@
 
 #include <rtt/Logger.hpp>
 #include <rtt/TaskContext.hpp>
-#include <rtt/PeriodicActivity.hpp>
+#include <rtt/Activity.hpp>
 
 /**
  * Include this header in order to use events.
@@ -162,7 +162,7 @@ int ORO_main(int argc, char** argv)
     // 1: Priority
     // 0.5: Period (2Hz)
     // hello.engine(): is being executed.
-    hello.setActivity( new PeriodicActivity(1, 0.5, hello.engine() ) );
+    hello.setActivity( new Activity(1, 0.5, hello.engine() ) );
 
     log(Info) << "**** Starting the 'Hello' component ****" <<endlog();
     // Start the component:
@@ -174,7 +174,7 @@ int ORO_main(int argc, char** argv)
     // 1: Priority
     // 0.5: Period (2Hz)
     // world.engine(): is being executed.
-    world.setActivity( new PeriodicActivity(1, 0.5, world.engine() ) );
+    world.setActivity( new Activity(1, 0.5, world.engine() ) );
 
     log(Info) << "**** Creating the 'Peer' connection ****" <<endlog();
     // This is a bidirectional connection.

@@ -12,4 +12,6 @@
      <simple name="Port" type="string"><value>Joystick.output</value></simple>
      <simple name="Component" type="string"><value>Joystick</value></simple>
   </struct>
+  <simple name="SnapshotOnly" type="boolean"><description>Set to true to only log data if a snapshot() was done.</description><value>0</value></simple>
+  <simple name="NullSample" type="string"><description>The characters written to the log to indicate that no new data was available for that port during a snapshot(). As a special value, the string 'last' is interpreted as repeating the last value.</description><value>-</value></simple>
 </properties>

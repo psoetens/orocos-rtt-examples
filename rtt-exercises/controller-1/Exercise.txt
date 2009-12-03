@@ -41,7 +41,7 @@ for a global overview of the application architecture.
  
 * Exercises
  - See components/modeswitch/ModeSwitch.hpp/cpp, components/joystick/Joystick.hpp,
- components/controller/Controller.hpp, deployment/application.cpf, 
+ components/controller/Controller.hpp, deployment/application.cpf, Deployer-site.cpf
  deployment/statemachine.osd and deployment/program.ops for the scattered
  instructions. The main idea is to add the ModeSwitch component to the application
  (it won't be loaded when you start with application.cpf) and then extend it

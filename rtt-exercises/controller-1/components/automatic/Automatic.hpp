@@ -10,7 +10,7 @@
 
 #include <rtt/TaskContext.hpp>
 
-#include <rtt/Ports.hpp>
+#include <rtt/Port.hpp>
 #include <rtt/Command.hpp>
 #include <rtt/Event.hpp>
 
@@ -22,24 +22,28 @@ namespace UseCase
 		: public RTT::TaskContext
 	{
 	protected:
-		double target, step;
+		double target, step, current;
         double baseStep;
 		bool target_reached;
 		Command<bool(double)> move;
 		Event<void(double)> atposition;
-		DataPort<double> output;
-		DataPort<double> input;
+		OutputPort<double> output;
+		InputPort<double> input;
 
 		bool move_impl(double d) {
-            step = baseStep;
-			target = input.Get() + d;
+            double input_sample;
+            if ( input.read( input_sample) ) {
+                step = baseStep;
+                target = input_sample + d;
+            } else
+                return false;
 
 			// step and d must have same sign.
 			if ( d * step < 0)
 				step = -step;
 
             if ( fabs(d) < fabs(step) ) {
-				output.Set(target);
+				output.write( target );
 				log(Info) << "Did instant move to target "<< target <<endlog();
 				return true;
 			}
@@ -50,7 +54,7 @@ namespace UseCase
 		}
 
 		bool atpos_impl(double d) {
-            if ( fabs(output.Get() - target) < baseStep )
+            if ( fabs(current - target) < baseStep )
 				return true;
 			return false;
 		}
@@ -100,9 +104,9 @@ namespace UseCase
 		}
 
 		void updateHook() {
-			output.Set( output.Get() + step );
+			output.write( current + step );
 			if ( atpos_impl(target) && !target_reached) {
-				output.Set(target);
+				output.write( target );
 				log(Info) << "Position reached at " << target <<endlog();
 				atposition(target);
 				step = 0.0;
