@@ -46,7 +46,7 @@ namespace UseCase
          * this component, using the Scripting service.
          */
         bool startHook() {
-        	StateMachinePtr sm = this->engine()->states()->getStateMachine("the_statemachine");
+            scripting::StateMachinePtr sm = this->engine()->states()->getStateMachine("the_statemachine");
         	if (!sm) {
         		log(Error) << "State Machine the_statemachine not loaded in ModeSwitch."<< endlog();
         		return false;
@@ -55,7 +55,7 @@ namespace UseCase
         }
 
         void stopHook() {
-        	StateMachinePtr sm = this->engine()->states()->getStateMachine("the_statemachine");
+            scripting::StateMachinePtr sm = this->engine()->states()->getStateMachine("the_statemachine");
         	if (!sm) {
         		log(Error) << "State Machine the_statemachine not loaded in ModeSwitch."<< endlog();
         		return;
