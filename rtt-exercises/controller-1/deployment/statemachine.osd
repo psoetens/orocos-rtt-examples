@@ -64,7 +64,7 @@ StateMachine OurStateMachineType
          * 10.0 and -10.0 again, 'recover' from the warning state.
          */
         run {
-        	if (Joystick.output.Get() > 10.0 || Joystick.output.Get() < -10.0 ) then {
+        	if (Joystick.output.last() > 10.0 || Joystick.output.last() < -10.0 ) then {
         		do Joystick.warning();
         	}
 		/** See Joystick.hpp for the use of recovered() */
