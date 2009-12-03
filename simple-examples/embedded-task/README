@@ -1,0 +1,14 @@
+This application demonstrates that it is possible to 
+get an Orocos application running < 400KB.
+
+In order to compile Orocos for embedded usage, do:
+
+* Disable the RealTime Toolkit
+* Select the 'Embedded Operating System' flag in
+  the 'Operating System' package
+* Remove the 'Program Parser' and 'Properties Marshalling'
+  packages.
+* Compile for 'Execution' (-O3) in the 'Global Build Flags'
+
+Use 'strip' to strip symbol information from the executable
+in order to see the actual code size.

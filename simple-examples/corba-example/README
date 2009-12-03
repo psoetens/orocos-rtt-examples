@@ -1,0 +1,11 @@
+
+This examples requires that the `orocos-rtt' library has been
+built with Corba support (using make rtt-corba).
+
+This demo can be started by running ./startdemo.sh, if you 
+have set the ACE_ROOT and TAO_ROOT environment variables correctly.
+If you installed ACE/TAO from distribution packages, these 
+variables are probably not needed and it will compile anyway.
+
+See startdemo.sh to see the action which must be taken to start
+a CORBA server and a client.

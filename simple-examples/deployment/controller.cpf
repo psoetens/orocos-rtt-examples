@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "cpf.dtd">
+<properties>
+  <simple name="Gain" type="double"><description>The proportional gain.</description><value>100</value></simple>
+</properties>

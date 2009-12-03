@@ -1,0 +1,7 @@
+This task example has the interface as demonstrated
+in the Component Builder's Manual. The ORO_main()
+program shows some examples on how to use a task's
+interface in pure C++, without scripts.
+
+make
+./simpletask

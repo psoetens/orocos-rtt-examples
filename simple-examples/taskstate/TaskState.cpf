@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "cpf.dtd">
+<properties>
+  <simple name="BufSize" type="long"><description>Configurable buffer size of Packets</description><value>30</value></simple>
+  <simple name="InitialValue" type="double"><description>Value used to write into Packet Buffer</description><value>1.23</value></simple>
+  <simple name="ReadPropFile" type="boolean"><description>Set to true if properties must be read from disk upon configure().</description><value>0</value></simple>
+</properties>

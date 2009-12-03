@@ -1,0 +1,175 @@
+
+StateMachine Main 
+{
+  var bool calibrate_offsets = true
+  var int state = 0
+
+  initial state StartRobotState {
+    entry {
+      do Robot.prepareForUse()
+    }
+    handle {
+    }
+    exit {
+      do Robot.unlockAllAxes()
+      do Robot.startAllAxes()
+    }
+    transitions {
+         select CalibrateOffsetsState
+    }
+  }
+
+
+
+
+
+  state CalibrateOffsetsState {
+    preconditions {
+      if (calibrate_offsets == false) then
+        select JointMoveState
+    }
+    entry {
+      do nAxesSensor.start()
+      do nAxesGeneratorPos.start()
+      do nAxesControllerPos.start()
+      do nAxesEffectorVel.start()
+
+      do CalibrateOffsetsProg.start()
+    }
+    exit {
+      do nAxesEffectorVel.stop()
+      do nAxesControllerPos.stop()
+      do nAxesGeneratorPos.stop()
+      do nAxesSensor.stop()
+    }
+    transitions {
+      if !CalibrateOffsetsProg.isRunning then
+       select JointMoveState
+    }
+  }
+
+
+
+
+  state JointMoveState{
+    entry{
+	do nAxesSensor.start()
+	do nAxesGeneratorPos.start()
+	do nAxesControllerPosVel.start()
+	do nAxesEffectorVel.start()
+	set joints = nAxesSensor.nAxesSensorPosition.Get()
+    }
+
+    transitions{ 
+       if(state==1) then 
+          select CartesianMoveState
+       if(state==2) then 
+          select MoveAroundState
+       if(state==3) then 
+          select StopRobotState
+    }
+    exit{
+       do nAxesEffectorVel.stop()
+       do nAxesControllerPosVel.stop()
+       do nAxesGeneratorPos.stop()
+       do nAxesSensor.stop()
+    }
+  }
+
+
+
+
+  state CartesianMoveState{
+    entry{
+	do CartesianSensor.start()
+	do CartesianGenerator.start()
+	do CartesianController.start()
+	do CartesianEffector.start()
+	set f = CartesianSensor.CartesianSensorPosition.Get()
+     }
+     transitions{ 
+        if(state==0) then
+           select JointMoveState
+        if(state==2) then 
+           select MoveAroundState
+        if(state==3) then 
+	   select StopRobotState
+     }
+     exit{
+	do CartesianEffector.stop()
+	do CartesianController.stop()
+	do CartesianGenerator.stop()
+	do CartesianSensor.stop()
+     }
+  }
+
+
+
+
+  state MoveAroundState{
+    entry{
+	do nAxesSensor.start()
+	do nAxesGeneratorPos.start()
+	do nAxesControllerPosVel.start()
+	do nAxesEffectorVel.start()
+	set joints[0] = 0.0
+	set joints[1] = 1.0
+	set joints[2] = 1.0
+	set joints[3] = 0.0
+	set joints[4] = 2.0
+	set joints[5] = 0.0
+        do nAxesGeneratorPos.moveTo(joints,0.0);
+        do nAxesEffectorVel.stop()
+        do nAxesControllerPosVel.stop()
+        do nAxesGeneratorPos.stop()
+        do nAxesSensor.stop()
+
+	do CartesianSensor.start()
+	do CartesianGenerator.start()
+	do CartesianController.start()
+	do CartesianEffector.start()
+	set f = CartesianSensor.CartesianSensorPosition.Get()
+	set f = frame(vector(-0.1,-0.9,1.0),rotation(3.14,0.0,0.0))
+	do CartesianGenerator.moveTo(f,0.0)
+	set f = frame(vector(-0.1,-0.9,1.0),rotation(3.14,1.57,0.0))
+	do CartesianGenerator.moveTo(f,0.0)
+	set f = frame(vector(-0.6,-0.9,1.0),rotation(3.14,1.57,0.0))
+	do CartesianGenerator.moveTo(f,0.0)
+	set f = frame(vector(-0.6,-0.9,0.6),rotation(3.14,1.57,0.0))
+	do CartesianGenerator.moveTo(f,0.0)
+	set f = frame(vector(-0.6,-0.6,0.6),rotation(3.14,1.57,0.0))
+	do CartesianGenerator.moveTo(f,0.0)
+	set f = frame(vector(-0.3,-0.9,0.9),rotation(3.14,1.57,0.0))
+	do CartesianGenerator.moveTo(f,0.0)
+     }
+     transitions{ 
+        if(state==0) then
+           select JointMoveState
+        if(state==1) then 
+           select JointMoveState
+        if(state==3) then 
+	   select StopRobotState
+     }
+     exit{
+        //do nAxesEffectorVel.stop()
+        //do nAxesControllerPosVel.stop()
+        //do nAxesGeneratorPos.stop()
+        //do nAxesSensor.stop()
+	do CartesianEffector.stop()
+	do CartesianController.stop()
+	do CartesianGenerator.stop()
+	do CartesianSensor.stop()
+     }
+  }
+
+
+  final state StopRobotState {
+    entry {
+       do Robot.stopAllAxes()
+       do Robot.lockAllAxes()
+       do Robot.prepareForShutdown()
+    }
+  }
+}
+
+RootMachine Main Default

@@ -1,0 +1,31 @@
+
+/**
+ * This script defines the behaviour of the controller
+ * and is loaded at runtime.
+ */
+program ControllerAction
+{
+   // Helper variables
+   var double input = 0.0, output = 0.0;
+
+   // This program never quits.
+   while( true ) {
+
+        // Read the SensorValues DataPort, connected to the Plant.
+	set input = SensorValues.Get();
+
+        // Calculate the output signal
+        // nextPosition is a method, Gain is a property
+	set output = (nextPosition() - input) * Gain;
+
+        // Send the signal into a buffer, connected to the Plant.
+	// ignore buffer full 
+        try SteeringSignals.Push( output );
+	// The Plant will wake-up using this value.
+
+	// Forced synchronisation point. Because we did not use
+	// any commands, we need to force the ProgramProcessor to
+	// stop processing temporarily here:
+	do nothing;
+   }
+}

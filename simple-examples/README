@@ -1,0 +1,35 @@
+RTT Examples for building Components.
+
+All examples except 'motioncontrol' are built using the 'make'
+command:
+
+  $ cd example
+  $ make OROPATH=/usr/local
+
+enter a subdirectory and invoke make with the installation path of 
+Orocos.
+
+IMPORTANT:
+ These examples require that the `orocos-rtt' library and that the
+`orocos-ocl' library are installed *IN THE SAME LOCATION* (like
+/usr/local). The OCL is required to contain the TaskBrowser component.
+
+Before you start the application, type (with OROPATH=/usr/local):
+ 
+ export LD_LIBRARY_PATH=/usr/local/lib
+ 
+OR:
+ 
+as the 'root' user, add the line
+  /usr/local/lib
+to /etc/ld.so.conf and run the 'ldconfig' program.
+ 
+The second option is easier, as you only need to do it once.
+
+
+The 'motioncontrol' example is built using the 'cmake' system
+(http://www.cmake.org):
+
+  $ cd motioncontrol
+  $ cmake .  [or: ccmake . ]
+  $ make

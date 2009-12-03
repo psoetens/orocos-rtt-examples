@@ -1,0 +1,25 @@
+/**
+ * This very simple program demonstrates built-in features
+ * of the Program Parser.
+ */
+program MyProgram {
+	//var vector v    = vector(1.0,1.0,1.0)
+	const double6d d6 = double6d(1.0)
+	const double6d d62 = double6d(1.0,2.0,3.0,4.0,5.0, 6.0)
+
+	var double6d res = d6 + d62
+
+	set res = res * 2.0
+
+	var double test = d6[0]
+
+	var double test2 = (d6-res*5.0)[1] - 5.01234
+
+	set res[4] = -1.0
+
+	set test2 = res[4]
+
+	set res[4] = 1. * res[4] -1. + 5. / res[2]
+
+	set res = res * double6d(2.) + res - double6d(5.) 
+}

@@ -1,0 +1,54 @@
+
+/**
+ * This StateMachine must be loaded in the 
+ * PeriodicTaskContext to execute the counting program.
+ */
+StateMachine CountingSM
+{
+    param int multiplier
+
+    /**
+     * Wait for a command.
+     */
+    initial state Waiting
+    {
+	entry {
+		set Counter = 0
+		set Target  = 0
+	}
+	/**
+	 * Transition based on condition:
+         */
+	transitions {
+		if ( Counter != Target ) then
+			select Counting
+	}
+    }
+
+    /**
+     * Process a command.
+     */
+    state Counting
+    {
+	handle {
+		// This program is
+		// executed each time no transition can be made.
+		set Counter = Counter + 1 * multiplier
+
+	}
+	transitions {
+		// If done counting,
+		if Counter == Target then
+			select Waiting
+	}
+    }
+
+    /**
+     * Empty final state.
+     */
+    final state End {
+    }
+
+}
+
+RootMachine CountingSM counterMachine( multiplier = 1 )

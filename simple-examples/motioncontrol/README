@@ -1,0 +1,28 @@
+This example requires that the OCL is configured with the KUKA
+component of the HARDWARE section, and the VIEWER, MOTION and NAXES
+components. REPORTING and TASKBROWSER is required as well.
+
+mkdir build
+cd build
+
+cmake .. [ or ccmake .. to set paths ]
+
+make
+
+cd src
+ln -s ../../cpf
+ln -s ../../programs
+ln -s ../../states
+
+./robotdemo
+
+Then start the state machine:
+
+Default.activate()
+Default.start()
+
+Now you can proceed with MoveToCartesian commands.
+
+MoveToCartesian(frame(vector(1.4,1.0,0.0), rotation(90.0,0.0,0.0)))
+
+** This is a very complex demo with little instructions. **

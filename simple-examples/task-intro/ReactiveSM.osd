@@ -1,0 +1,44 @@
+
+/**
+ * This StateMachine must be loaded in the 
+ * ReactiveTaskContext to wait for events using
+ * a StateMachine script.
+ */
+StateMachine ReactiveSM
+{
+    var int the_number, factors
+
+    /**
+     * Wait for a number to be factored.
+     */
+    initial state Waiting
+    {
+
+	/**
+	 * Transition based on an event:
+	 */
+	transition FactoringTask.PrimeEvent(the_number, factors)
+		if factors == 1 then select FoundPrime
+    }
+
+    /**
+     * Store the prime number.
+     */
+    state FoundPrime {
+	run {
+		set last_prime = the_number
+	}
+	transitions {
+		select Waiting
+	}
+    }
+
+    /**
+     * Empty final state.
+     */
+    final state End {
+    }
+
+}
+
+RootMachine ReactiveSM reactiveMachine()

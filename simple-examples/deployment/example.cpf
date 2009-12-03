@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "cpf.dtd">
+<properties>
+
+  <!-- See the 'Deployment Component Manual' for a full description of the syntax. -->
+
+  <!-- Modify this path if you have installed the OCL in another location -->
+  <simple name="Import" type="string"><value>liborocos-reporting</value></simple>
+
+  <simple name="Import" type="string"><value>.</value></simple>
+
+  <!-- This struct describes one component 'Reporter' of type 'OCL::FileReporting'. -->
+  <!-- See the Reporting Component Manual for a full description. -->
+  <struct name="Reporter" type="OCL::FileReporting">
+
+    <!-- The component allows to assign an activity which executes its functionality. -->
+    <struct name="Activity" type="PeriodicActivity">
+      <simple name="Period" type="double"><value>0.005</value></simple>
+      <simple name="Priority" type="short"><value>0</value></simple>
+      <simple name="Scheduler" type="string"><value>ORO_SCHED_OTHER</value></simple>
+    </struct>
+
+    <!-- Loads the settings and data to report from a single file -->
+    <simple name="LoadProperties" type="string"><value>reporting.cpf</value></simple>
+
+    <!-- Instruct the deployer to call configure() on this component. -->
+    <simple name="AutoConf" type="boolean"><value>1</value></simple>
+
+    <!-- Instruct the deployer to call start() on this component. -->
+    <simple name="AutoStart" type="boolean"><value>1</value></simple>
+
+    <!-- This list tells which other components this component must be linked to. -->
+    <struct name="Peers" type="PropertyBag">
+      <!-- Since we are Peer of 'Plant', we can report its data ports. -->
+      <simple type="string"><value>Plant</value></simple>
+    </struct>
+  </struct>
+  <!-- End of component description -->
+
+  <!-- Controller Component. See Controller.cpp -->
+  <struct name="Controller" type="ControllerType">
+
+    <struct name="Activity" type="PeriodicActivity">
+      <simple name="Period" type="double"><value>0.001</value></simple>
+      <simple name="Priority" type="short"><value>99</value></simple>
+      <simple name="Scheduler" type="string"><value>ORO_SCHED_RT</value></simple>
+    </struct>
+
+    <simple name="AutoConf" type="boolean"><value>1</value></simple>
+    <simple name="AutoStart" type="boolean"><value>1</value></simple>
+
+    <simple name="PropertyFile" type="string"><value>controller.cpf</value></simple>
+
+    <struct name="Ports" type="PropertyBag">
+      <simple name="SensorValues" type="string"><value>SensorValuesConnection</value></simple>
+      <simple name="SteeringSignals" type="string"><value>DriveConnection</value></simple>
+    </struct>
+
+    <struct name="Peers" type="PropertyBag">
+      <simple type="string"><value>Plant</value></simple>
+    </struct>
+
+    <simple name="ProgramScript" type="string"><value>controller-program.ops</value></simple>
+<!--     <simple name="StateMachineScript" type="string"><value>controller-states.ops</value></simple> -->
+  </struct>
+
+  <!-- Plant Component. See Plant.cpp -->
+  <struct name="Plant" type="PlantType">
+    <struct name="Activity" type="NonPeriodicActivity">
+      <simple name="Priority" type="short"><value>0</value></simple>
+      <simple name="Scheduler" type="string"><value>ORO_SCHED_RT</value></simple>
+    </struct>
+    <simple name="AutoConf" type="boolean"><value>1</value></simple>
+    <simple name="AutoStart" type="boolean"><value>1</value></simple>
+    <struct name="Ports" type="PropertyBag">
+      <simple name="Position" type="string"><value>SensorValuesConnection</value></simple>
+      <simple name="Setpoints" type="string"><value>DriveConnection</value></simple>
+    </struct>
+  </struct>
+</properties>

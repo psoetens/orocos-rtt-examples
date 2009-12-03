@@ -1,0 +1,7 @@
+This example application sets up two 'TaskContext's
+which communicate data through their 'Data Flow Ports' 
+back and forth. The ports and data are accessible
+from the scripting interface as well.
+
+make
+./dataflowtask

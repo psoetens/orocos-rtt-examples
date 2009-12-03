@@ -1,0 +1,7 @@
+
+/**
+ */
+program TestProgram
+{
+   do nothing until { if time > 5s then continue }
+}

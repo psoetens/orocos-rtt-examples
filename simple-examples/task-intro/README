@@ -1,0 +1,21 @@
+
+Task Introduction Example
+-------------------------
+
+Building :
+The Makefile assumes orocos is installed in /usr/local.
+Modify the Makefile to an alternative path if needed. Then 
+compile with 'make all'.
+
+This small example demonstrates 3 Orocos Tasks. The
+'FactoringTask' waits for a command to factor a number
+in its primes. When done, it fires an event with the result.
+The 'ReactiveTask' is a periodic task which waits for
+the events to happen when it is running. The 'PeriodicTask'
+can count to a certain number in each periodic step,
+when given the command to do so.
+
+When the application starts, you get the TaskBrowser's prompt.
+You can send commands to the other tasks or 'cd' to the other
+tasks and then give the command. Read the 'help' carefully
+or read the Orocos Component Builders Manual.

@@ -1,0 +1,36 @@
+
+This example contains two components, taken from the Deployment
+Component manual example. Each component is compiled into a shared
+library. This example requires the OCL deployer application and the
+reporting component.
+
+1. Use 'make' to compile. (or: make OROPATH=/path/to/orocos)
+
+2. Start the deployer application:
+$ deployer-gnulinux -l info
+
+3. The TaskBrowser appears, now load the configuration from the XML
+  file: loadComponents("example.cpf")
+
+4. Configure the components using the XML specifications:
+  configureComponents()
+
+5. start the components:
+  startComponents()
+
+OR use kickStart("example.cpf") in step 3. to load, configure and
+start this example.
+
+The Controller will make the Plant component describe a sine shaped
+trajectory.  The reporting trace can be found in results.txt.
+
+Files:
+
+controller.cpf         - Properties of the Controller component
+Controller.cpp         - The Controller component (C++)
+Plant.cpp              - The Plant component (C++)
+controller-program.ops - A script loaded into the controller
+example.cpf            - The main XML file describing how the application is setup
+libcontroller.so       - The compiled controller component
+libplant.so            - The compiled plant component
+reporting.cpf          - Properties of the data reporting component
