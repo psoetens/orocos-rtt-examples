@@ -25,7 +25,7 @@ using namespace RTT;
 using namespace Orocos;
 
 /**
- * Exercise 2: Read Orocos Component Builder's Manual, Chap 2 sect. 3.11
+ * Exercise 2: Read Orocos Component Builder's Manual, Chap 2 sect. 3.6
  *
  * First, compile and run this application and use 'the_property' and 'the_attribute':
  * Change and print their values.
@@ -37,6 +37,7 @@ using namespace Orocos;
  *
  * Next Open and modify the XML file and read it back in using the marshalling object.
  *
+ * For the optional exercises, reead Chap 2, sect 6.1
  * Optional : read the property file from configureHook() and log it's value.
  * Optional : write the property file in cleanupHook().
  */
@@ -62,13 +63,13 @@ namespace Example
          */
         Property<std::string> property;
         /**
-         * Attributes take a name and contain changing values.
+         * Attributes are C++ variables exported to the interface.
          */
-        Attribute<double> attribute;
+        double attribute;
         /**
-         * Constants take a name and contain a constant value.
+         * Constants are not changeable by an outsider, only by us.
          */
-        Constant<std::string> constant;
+        std::string constant;
         /** @} */
 
     public:
@@ -79,23 +80,16 @@ namespace Example
         Hello(std::string name)
             : TaskContext(name),
               // Name, description, value
-              property("the_property", "the_property Description", "Hello World"),
-              // Name, value
-              attribute("the_attribute", 5.0),
-              // Name, value
-              constant("the_constant", "Hello World")
+              property("the_property", "the_property Description", "Hello World")
         {
             // Check if all initialization was OK:
             assert( property.ready() );
-            assert( attribute.ready() );
-            assert( constant.ready() );
 
             // Now add it to the interface:
             this->properties()->addProperty(&property);
 
-            this->attributes()->addAttribute(&attribute);
-            this->attributes()->addConstant(&constant);
-
+            this->addAlias("the_attribute", attribute);
+            this->addConstAlias("the_constant", constant);
         }
     };
 }
@@ -120,7 +114,7 @@ int ORO_main(int argc, char** argv)
     // 1: Priority
     // 0.5: Period (2Hz)
     // hello.engine(): is being executed.
-    hello.setActivity( new Activity(1, 0.5, hello.engine() ) );
+    hello.setActivity( new Activity(1, 0.5) );
 
     log(Info) << "**** Starting the 'Hello' component ****" <<endlog();
     // Start the component:

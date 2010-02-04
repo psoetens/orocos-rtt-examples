@@ -1,7 +1,7 @@
 
 /**
  * @file HelloWorld.cpp
- * This file demonstrates the Orocos Data Ports primitive with
+ * This file demonstrates the Orocos Input/Output Ports primitives with
  * a 'hello world' example.
  */
 
@@ -25,27 +25,27 @@ using namespace RTT;
 using namespace Orocos;
 
 /**
- * Exercise 3: Read Orocos Component Builder's Manual, Chap 2 sect 3.8; Chap 2 sect 3.1
+ * Exercise 3: Read Orocos Component Builder's Manual, Chap 2 sect 3.4; Chap 2 sect 3.1
  *
  * First, compile and run this application and use
- * 'the_data_port' and 'the_buffer_port' of the Hello component.
- * Use the 'pop_helper' attribute to store a Pop'ed value.
+ * 'the_output_port' and 'the_input_port' of the Hello component.
+ * Use the 'read_helper' attribute to store a read value.
  *
- * Next, write a configureHook() in Hello which checks if the buffer port is
+ * Next, write a configureHook() in Hello which checks if the input port is
  * connected and fails if it is not.
  * Question: how did we force configureHook() to be called in the current flow ?
  *
- * Next, write an updateHook() which reads the_buffer_port and
- * writes the data to 'the_data_port'. Be careful only to write data
- * when a Pop from the buffer was succesful.
+ * Next, write an updateHook() which reads the_input_port and
+ * writes the data to 'the_output_port'. Be careful only to write data
+ * when a read from the input was succesful.
  *
  * Finally start the World component ('World.start()'). See how it uses the
- * buffer port in C++. Start and stop the Hello component. See how this
- * influences the buffer's size.
+ * input port in C++. Start and stop the Hello component. See how this
+ * influences the input's size.
  *
  * Optionally 1: Remove the code from updateHook and write a propram script
- * that does exactly the same, i.e., read data from the buffer port and,
- * if any, write it to the data port. Do this in a while loop.
+ * that does exactly the same, i.e., read data from the input port and,
+ * if any, write it to the output port. Do this in a while loop.
  *
  */
 namespace Example
@@ -65,21 +65,20 @@ namespace Example
          * @{
          */
         /**
-         * OutputPorts share data among readers and writers.
+         * OutputPorts publish data.
          */
-        OutputPort<double> dataport;
+        OutputPort<double> outputport;
         /**
-         * OutputPorts buffer data among readers and writers.
-         * A reader reads the data in a FIFO way.
+         * InputPorts read data.
          */
-        InputPort< double > bufferport;
+        InputPort< double > inputport;
         /** @} */
 
         /**
-         * Since Pop requires an argument, we provide this
-         * attribute to hold the pop'ed value.
+         * Since read() requires an argument, we provide this
+         * attribute to hold the read value.
          */
-        Attribute<double> pop_helper;
+        double read_helper;
     public:
         /**
          * This example sets the interface up in the Constructor
@@ -88,14 +87,13 @@ namespace Example
         Hello(std::string name)
             : TaskContext(name, PreOperational),
               // Name, initial value
-              dataport("the_data_port", 0.0),
+              outputport("the_output_port", 0.0),
               // Name
-              bufferport("the_buffer_port"),
-              pop_helper("pop_helper")
+              inputport("the_input_port")
         {
-            this->attributes()->addAttribute(&pop_helper);
-            this->ports()->addPort(&dataport, "Shared Data Port");
-            this->ports()->addPort(&bufferport, "Buffered Data Port");
+            this->addAlias("read_helper", read_helper);
+            this->ports()->addPort(&outputport, "Shared output Port");
+            this->ports()->addPort(&inputport, "inputed Data Port");
         }
 
         void updateHook()
@@ -107,7 +105,7 @@ namespace Example
 	 * World is the component that shows how to use the interface
 	 * of the Hello component.
 	 *
-	 * This component is a pure producer of buffered values.
+	 * This component is a pure producer of values.
 	 */
 	class World
 	: public TaskContext
@@ -123,10 +121,10 @@ namespace Example
 	public:
 		World(std::string name)
 		: TaskContext(name),
-		my_port("world_port", 10, 0.0),
+		my_port("world_port"),
 		value( 0.0 )
 		{
-            this->ports()->addPort(&my_port, "World's Buffered Data Port");
+            this->ports()->addPort(&my_port, "World's data producing port.");
 		}
 
 		void updateHook() {
@@ -157,7 +155,7 @@ int ORO_main(int argc, char** argv)
     // 1: Priority
     // 0.5: Period (2Hz)
     // hello.engine(): is being executed.
-    hello.setActivity( new Activity(1, 0.5, hello.engine() ) );
+    hello.setActivity( new Activity(1, 0.5 ) );
 
     log(Info) << "**** Starting the 'Hello' component ****" <<endlog();
     hello.configure();
@@ -170,7 +168,7 @@ int ORO_main(int argc, char** argv)
     // 1: Priority
     // 0.5: Period (2Hz)
     // world.engine(): is being executed.
-    world.setActivity( new Activity(1, 0.5, world.engine() ) );
+    world.setActivity( new Activity(1, 0.5 ) );
 
     log(Info) << "**** Creating the 'Peer' connection ****" <<endlog();
     // This is a bidirectional connection.
@@ -178,7 +176,7 @@ int ORO_main(int argc, char** argv)
 
     log(Info) << "**** Creating the 'Data Flow' connection ****" <<endlog();
     // The data flow direction is from world to hello.
-    world.ports()->getPort("world_port")->connectTo( hello.ports()->getPort("the_buffer_port") );
+    world.ports()->getPort("world_port")->connectTo( *hello.ports()->getPort("the_input_port") );
 
     log(Info) << "**** Starting the TaskBrowser       ****" <<endlog();
     // Switch to user-interactive mode.

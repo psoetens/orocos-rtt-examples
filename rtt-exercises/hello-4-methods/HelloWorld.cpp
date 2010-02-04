@@ -1,7 +1,7 @@
 
 /**
  * @file HelloWorld.cpp
- * This file demonstrates the Orocos 'Method' primitive with
+ * This file demonstrates the Orocos 'Method/Operation' primitive with
  * a 'hello world' example.
  */
 
@@ -24,17 +24,21 @@ using namespace RTT;
 using namespace Orocos;
 
 /**
- * Exercise 4: Read Orocos Component Builder's Manual, Chap 2 sect 3.9
+ * Exercise 4: Read Orocos Component Builder's Manual, Chap 2 sect 3.5
  *
  * First, compile and run this application and use 'the_method'.
- * Stop the Hello component and try to use 'the_method' again,
- * does it still work ?
- * Start the World component ('World.start()') and see
- * how it uses the_method.
+ * Configure and start the World component ('World.start()') and see
+ * how it uses the_method. Fix any bugs :-)
  *
- * Next, add to Hello a second method 'void sayIt(string word)'
- * which uses log(Info) to display a sentence.
- * Add this function to the method interface of this class.
+ * Next, add to Hello a second method 'bool sayIt(string sentence, string& answer)'
+ * which uses log(Info) to display a sentence in the thread of the Hello component.
+ * When sentence is "Orocos", the answer is "" and true is returned. Otherwise,
+ * false is returned and answer remains untouched.
+ * Add this function to the operation interface of this class and document it
+ * and its arguments. Test sending and collecting arguments with the TaskBrowser.
+ *
+ * Next do the same in C++. Send sayIt to Hello in updateHook of the World component, but only
+ * check for the results in the next iteration of updateHook.
  */
 namespace Example
 {
@@ -49,19 +53,11 @@ namespace Example
     {
     protected:
         /**
-         * @name Method
+         * @name Operations
          * @{
          */
         /**
-         * Methods take a number of arguments and
-         * return a value. The are executed in the
-         * thread of the caller.
-         */
-        Method< string(void) > method;
-
-        /**
-         * The method function is executed by
-         * the method object:
+         * Returns a string.
          */
         string mymethod() {
             return "Hello World";
@@ -74,14 +70,9 @@ namespace Example
          * of the component.
          */
         Hello(std::string name)
-            : TaskContext(name),
-              // Name, function pointer, object
-              method("the_method", &Hello::mymethod, this)
+            : TaskContext(name)
         {
-            // Check if all initialisation was ok:
-            assert( method.ready() );
-
-            this->methods()->addMethod(&method, "'the_method' Description");
+            this->addOperation("the_method", &Hello::mymethod, this).doc("Returns a friendly word.");
         }
 
     };
@@ -121,9 +112,9 @@ namespace Example
 
     	    // It is best practice to lookup methods of peers in
     	    // your configureHook.
-    	    hello_method = peer->methods()->getMethod<string(void)>("the_method");
+    	    hello_method = peer->getOperation<string(void)>("themethod");
     	    if ( !hello_method.ready() ) {
-    	    	log(Error) << "Could not find Hello.hello_method Method!"<<endlog();
+    	    	log(Error) << "Could not find Hello.the_method Operation!"<<endlog();
     	    	return false;
     	    }
     	    return true;
@@ -155,9 +146,9 @@ int ORO_main(int argc, char** argv)
     // 1: Priority
     // 0.5: Period (2Hz)
     // hello.engine(): is being executed.
-    hello.setActivity( new Activity(1, 0.5, hello.engine() ) );
+    hello.setActivity( new Activity(1, 0.5 ) );
     log(Info) << "**** Starting the 'hello' component ****" <<endlog();
-    // Start the component's activity:
+    // Start the component:
     hello.start();
 
     log(Info) << "**** Creating the 'World' component ****" <<endlog();
@@ -166,14 +157,11 @@ int ORO_main(int argc, char** argv)
     // 1: Priority
     // 0.5: Period (2Hz)
     // world.engine(): is being executed.
-    world.setActivity( new Activity(1, 0.5, world.engine() ) );
+    world.setActivity( new Activity(1, 0.5 ) );
 
     log(Info) << "**** Creating the 'Peer' connection ****" <<endlog();
     // This is a bidirectional connection.
     connectPeers(&world, &hello );
-
-    // Let World lookup Hello's method.
-    world.configure();
 
     log(Info) << "**** Starting the TaskBrowser       ****" <<endlog();
     // Switch to user-interactive mode.

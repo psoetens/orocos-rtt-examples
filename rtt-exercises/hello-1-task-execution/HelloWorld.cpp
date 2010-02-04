@@ -22,14 +22,14 @@ using namespace Orocos;
  * Exercise 1: Read Orocos Component Builder's Manual, Chap 2 sect 3 and 3.1
  *
  * First, compile and run this application and try to start the component
- * from the TaskBrowser console.
+ * from the TaskBrowser console. How often is updateHook() executed ? Why ?
  *
  * Tip: In order to find out which functions this component has, type 'ls', and
  * for detailed information, type 'this' (i.e. print the interface of the 'this'
  * task object).
  *
- * Next, edit this file and add a Activity to the engine of this component
- * with a period of 0.5 seconds and priority 0.
+ * Next, Set the period of the component in configureHook to 0.5 seconds and
+ * make start() succeed when the period of the component indeed equals 0.5 seconds.
  *
  * Next, add functions which use the log(Info) construct to display
  * a notice when the configureHook(), startHook(), stopHook() and cleanupHook()
@@ -38,13 +38,11 @@ using namespace Orocos;
  * Recompile and restart this application and try to configure, start, stop
  * and cleanup the component.
  *
- * Finally, change the Activity to a Activity (omit the period)
- * and try to start/stop the component. What's the difference ? How can you
- * 'trigger' updateHook() to be executed in this case ?
- *
  * Optional: Let the Hello component be created in the 'PreOperational' mode.
  * What effect does this have on the acceptance of the start() method ?
  * Optional: Replace the Activity with a SlaveActivity. What are
+ * the effects of trigger and update in comparison with the other activity types ?
+ * Optional: Replace the Activity with a SequentialActivity. What are
  * the effects of trigger and update in comparison with the other activity types ?
  */
 namespace Example
@@ -67,6 +65,7 @@ namespace Example
             : RTT::TaskContext(name)
         {
         }
+
         void updateHook()
         {
         	log(Info) << "Update !" <<endlog();
@@ -94,12 +93,6 @@ int ORO_main(int argc, char** argv)
     log(Info) << "**** Creating the 'Hello' component ****" <<endlog();
     // Create the task:
     Hello hello("Hello");
-
-    // Create the activity which runs the task's engine:
-    // 0: Priority
-    // 0.5: Period (=2Hz)
-
-    // your code here...
 
     log(Info) << "**** Starting the TaskBrowser       ****" <<endlog();
     // Switch to user-interactive mode.
