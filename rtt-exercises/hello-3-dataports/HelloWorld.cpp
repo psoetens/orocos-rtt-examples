@@ -27,6 +27,8 @@ using namespace Orocos;
 /**
  * Exercise 3: Read Orocos Component Builder's Manual, Chap 2 sect 3.4; Chap 2 sect 3.1
  *
+ * Reading and writing Ports.
+ *
  * First, compile and run this application and use
  * 'the_output_port' and 'the_input_port' of the Hello component.
  * Use the 'read_helper' attribute to store a read value.
@@ -43,9 +45,24 @@ using namespace Orocos;
  * input port in C++. Start and stop the Hello component. See how this
  * influences the input's size.
  *
- * Optionally 1: Remove the code from updateHook and write a propram script
- * that does exactly the same, i.e., read data from the input port and,
- * if any, write it to the output port. Do this in a while loop.
+ * Connection policies.
+ *
+ * We did not specify yet if connections should be buffered or not. Modify at the
+ * bottom of this file the connectTo statement to indicate a buffering policy,
+ * buffer size 10 and using locks. Set the period of World's activity to 0.1s
+ * and modify updateHook in Hello to keep reading as long as NewData is available
+ * and print the results.
+ *
+ * Analysing real-time behaviour:
+ *
+ * Create a struct 'Data' that holds an std::vector<double> and logs in
+ * the constructor, destructor, copy constructor and operator=. Replace
+ * the ports in this example with ports holding <Data>. Re-run the program,
+ * Explain when and why data is copied, constructed or destructed in both the
+ * default 'data' connection policy and in the 'buffered' connection policy.
+ *
+ * Now find out how to initialise a connection such that copies are real-time
+ * safe with respect to copying the vector of doubles.
  *
  */
 namespace Example
@@ -175,7 +192,8 @@ int ORO_main(int argc, char** argv)
     connectPeers(&world, &hello );
 
     log(Info) << "**** Creating the 'Data Flow' connection ****" <<endlog();
-    // The data flow direction is from world to hello.
+
+    // This uses the default connection policy.
     world.ports()->getPort("world_port")->connectTo( *hello.ports()->getPort("the_input_port") );
 
     log(Info) << "**** Starting the TaskBrowser       ****" <<endlog();
