@@ -32,7 +32,7 @@ using namespace Orocos;
  *
  * Next, add to Hello a second method 'bool sayIt(string sentence, string& answer)'
  * which uses log(Info) to display a sentence in the thread of the Hello component.
- * When sentence is "Orocos", the answer is "" and true is returned. Otherwise,
+ * When sentence is "Orocos", the answer is "Hello Friend!" and true is returned. Otherwise,
  * false is returned and answer remains untouched.
  * Add this function to the operation interface of this class and document it
  * and its arguments. Test sending and collecting arguments with the TaskBrowser.
