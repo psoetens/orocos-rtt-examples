@@ -16,7 +16,6 @@
 #include <rtt/TaskContext.hpp>
 
 #include <rtt/Property.hpp>
-#include <rtt/Event.hpp>
 #include <rtt/Port.hpp>
 
 using namespace std;
@@ -48,35 +47,17 @@ namespace Example
          * @{
          */
         /**
-         * OutputPorts share data among readers and writers.
-         * A reader always reads the most recent data.
+         * OutputPorts produce data
          */
-        OutputPort<std::string> dataport;
+        OutputPort<std::string> outport;
         /**
-         * OutputPorts buffer data among readers and writers.
-         * A reader reads the data in a FIFO way.
+         * InputPorts consume data.
          */
-        OutputPort<std::string> bufferport;
+        InputPort<std::string> inport;
         /** @} */
 
-        /**
-         * @name Event
-         * @{
-         */
-        /**
-         * Stores the connection between 'event' and 'mycallback'.
-         */
-        Handle h;
-
-        /**
-         * An event callback (or subscriber) function.
-         */
-        void mycallback( std::string data )
-        {
-            log() << "Receiving Event: " << data << endlog();
-        }
-        /** @} */
-
+        Method <string(void)> mymethod;
+        Method <bool(string)> sayWorld;
     public:
         /**
          * This example sets the interface up in the Constructor
@@ -87,19 +68,23 @@ namespace Example
               // Name, description, value
               property("world_property", "the_property Description", "Example"),
               // Name, initial value
-              dataport("world_data_port","World"),
+              outport("outport"),
               // Name, buffer size, initial value
-              bufferport("world_buffer_port",13, "World")
+              inport("inport"),
+              mymethod("the_method"),
+              sayWorld("the_command")
         {
             // Check if all initialisation was ok:
             assert( property.ready() );
 
             // Now add it to the interface:
-            this->properties()->addProperty(&property);
+            this->addProperty(&property);
 
-            this->ports()->addPort(&dataport);
-            this->ports()->addPort(&bufferport);
+            this->ports()->addPort(&outport);
+            this->ports()->addPort(&inport);
 
+            this->requires()->addMethod(mymethod);
+            this->requires()->addMethod(sayWorld);
         }
 
         bool configureHook() {
@@ -110,18 +95,7 @@ namespace Example
                 log(Error) << "Could not find Hello component!"<<endlog();
                 return false;
             }
-
-            // It is best practice to lookup events of peers in
-            // your configureHook().
-            // Setup an asynchronous (note the use of 'this->engine()' ) call-back
-            // to 'the_event' of 'peer':
-            h = peer->events()->setupConnection("the_event").callback(this, &World::mycallback, this->engine()->events() ).handle();
-
-            // now use h to connect or disconnect the callback function.
-            assert( !h.connected() );
-            // if connect() returns true, 'mycallback' was effectively connected to 'the_event'
-            // and will be executed each time 'the_event' is fired.
-            return h.connect();
+            return true;
         }
 
     };

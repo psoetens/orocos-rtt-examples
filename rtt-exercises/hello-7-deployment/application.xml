@@ -24,7 +24,7 @@
 
        And check with displayComponentTypes() that at least the Example::World
        component type could be found. If the Example::Hello component was not found,
-       check that HelloWorld.cpp contains the necessary C macro and recompile that file.
+       check that Hello.cpp contains the necessary C macro and recompile that file.
 
        Also, you should then notice that a 'World' component is loaded but unconfigured.
        If this works, you can continue with the exercise below.
@@ -43,9 +43,9 @@
 
        Connect the ports of the World Component with this component.
        In order to do this, create a connection "HelloDataConnection"
-       and add hello_data_port and world_data_port to that connection and a connection
-       "HelloBufferConnection with hello_buffer_port and world_buffer_port. (See also
-	the World component below).
+       and add hello's outport and world's inport to that connection and a connection
+       "HelloBufferConnection" with hello's inport and world's outport. (See also
+	   the World component below).
 
        Finally, instruct the deployer to read the properties from 
        a property file 'Hello.cpf'
@@ -56,7 +56,7 @@
        above in order to have the application fully functional.
        -->
   <struct name="World" type="Example::World">
-    <struct name="Activity" type="NonPeriodicActivity">
+    <struct name="Activity" type="Activity">
       <simple name="Priority" type="short"><value>0</value></simple>
       <simple name="Scheduler" type="string"><value>ORO_SCHED_RT</value></simple>
     </struct>

@@ -19,12 +19,10 @@
 
 #include <rtt/Logger.hpp>
 #include <rtt/TaskContext.hpp>
-
+#include <rtt/Activity.hpp>
 #include <rtt/Property.hpp>
 #include <rtt/Attribute.hpp>
 #include <rtt/Method.hpp>
-#include <rtt/Command.hpp>
-#include <rtt/Event.hpp>
 #include <rtt/Port.hpp>
 
 using namespace std;
@@ -50,13 +48,14 @@ namespace Example
          */
         Property<std::string> property;
         /**
-         * Attributes take a name and contain changing values.
+         * Attributes are aliased to class variables.
          */
-        Attribute<std::string> attribute;
+        std::string attribute;
         /**
-         * Constants take a name and contain a constant value.
+         * Constants are aliased, but can only be changed
+         * from the component itself.
          */
-        Constant<std::string> constant;
+        std::string constant;
         /** @} */
 
         /**
@@ -64,81 +63,36 @@ namespace Example
          * @{
          */
         /**
-         * OutputPorts share data among readers and writers.
-         * A reader always reads the most recent data.
+         * We publish our data through this OutputPort
+         *
          */
-        OutputPort<std::string> dataport;
+        OutputPort<std::string> outport;
         /**
-         * OutputPorts buffer data among readers and writers.
-         * A reader reads the data in a FIFO way.
+         * This InputPort buffers incoming data.
          */
-        OutputPort<std::string> bufferport;
+        InputPort<std::string> inport;
         /** @} */
 
         /**
-         * @name Method
-         * @{
-         */
-        /**
-         * Methods take a number of arguments and
-         * return a value. The are executed in the
-         * thread of the caller.
-         */
-        Method<std::string(void)> method;
-
-        /**
-         * The method function is executed by
-         * the method object:
+         * An operation we want to add to our interface.
          */
         std::string mymethod() {
             return "Hello World";
         }
-        /** @} */
 
         /**
-         * @name Command
-         * @{
+         * This one is executed in our own thread.
          */
-        /**
-         * Commands take a number of arguments and
-         * return true or false. They are asynchronous
-         * and executed in the thread of the receiver.
-         */
-        Command<bool(std::string)> command;
-
-        /**
-         * The command function executed by the receiver.
-         */
-        bool mycommand(std::string arg) {
-            log() << "Hello Command: "<< arg << endlog();
-            if ( arg == "World" )
+        bool sayWorld( std::string word) {
+            cout <<"Saying Hello '"<<word<<"' in own thread." <<endl;
+            if (word == "World")
                 return true;
-            else
-                return false;
+            return false;
         }
 
-        /**
-         * The completion condition checked by the sender.
-         */
-        bool mycomplete(std::string arg) {
-            log() << "Checking Command: "<< arg <<endlog();
-            return true;
+        void updateHook() {
+            //cout << "."<<endl;
         }
-        /** @} */
-
-        /**
-         * @name Event
-         * @{
-         */
-        /**
-         * The event takes a payload which is distributed
-         * to anonymous receivers. Distribution can happen
-         * synchronous and asynchronous.
-         */
-        Event<void(std::string)> event;
-
-        /** @} */
-
     public:
         /**
          * This example sets the interface up in the Constructor
@@ -148,45 +102,41 @@ namespace Example
             : TaskContext(name),
               // Name, description, value
               property("the_property", "the_property Description", "Hello World"),
-              // Name, value
-              attribute("the_attribute", "Hello World"),
-              // Name, value
-              constant("the_constant", "Hello World"),
+              attribute("Hello World"),
+              constant("Hello World"),
               // Name, initial value
-              dataport("hello_data_port","World"),
-              // Name, buffer size, initial value
-              bufferport("hello_buffer_port",13, "World"),
-              // Name, function pointer, object
-              method("the_method", &Hello::mymethod, this),
-              // Name, command function pointer, completion condition function pointer, object
-              command("the_command", &Hello::mycommand, &Hello::mycomplete, this),
-              // Name
-              event("the_event")
+              outport("outport",true),
+              // Name, policy
+              inport("inport",ConnPolicy::buffer(13,ConnPolicy::LOCK_FREE,true) )
         {
+            // New activity with period 0.01s and priority 0.
+            this->setActivity( new Activity(0, 0.01) );
+
+            // Set log level more verbose than default,
+            // such that we can see output :
+            if ( log().getLogLevel() < Logger::Info ) {
+                log().setLogLevel( Logger::Info );
+                log(Info) << "HelloWorld manually raises LogLevel to 'Info' (5). See also file 'orocos.log'."<<endlog();
+            }
+
             // Check if all initialisation was ok:
             assert( property.ready() );
-            assert( attribute.ready() );
-            assert( constant.ready() );
-            assert( method.ready() );
-            assert( command.ready() );
-            assert( event.ready() );
 
             // Now add it to the interface:
-            this->properties()->addProperty(&property);
+            this->addProperty(&property);
+            this->addAlias("the_attribute", attribute);
+            this->addConstAlias("the_constant", constant);
 
-            this->attributes()->addAttribute(&attribute);
-            this->attributes()->addConstant(&constant);
+            this->ports()->addPort(&outport);
+            this->ports()->addPort(&inport);
 
-            this->ports()->addPort(&dataport);
-            this->ports()->addPort(&bufferport);
+            this->addOperation( "the_method", &Hello::mymethod, this, ClientThread ).doc("'the_method' Description");
 
-            this->methods()->addMethod(&method, "'the_method' Description");
-        
-            this->commands()->addCommand(&command, "'the_command' Description",
-                                         "the_arg", "Use 'World' as argument to make the command succeed.");
+            this->addOperation( "the_command", &Hello::sayWorld, this, OwnThread).doc("'the_command' Description").arg("the_arg", "Use 'World' as argument to make the command succeed.");
 
-            this->events()->addEvent(&event, "'the_event' Description",
-                                     "the_data", "The data of this event.");
+            log(Info) << "**** Starting the 'Hello' component ****" <<endlog();
+            // Start the component's activity:
+            this->start();
         }
     };
 }
