@@ -66,7 +66,7 @@ namespace Example
         /**
          * This InputPort buffers incoming data.
          */
-        InputPort<std::string> bufferport;
+        InputPort<std::string> inport;
         /** @} */
 
         /**
@@ -101,9 +101,9 @@ namespace Example
               attribute("Hello World"),
               constant("Hello World"),
               // Name, initial value
-              outport("the_results",true),
+              outport("outport",true),
               // Name, policy
-              bufferport("the_buffer_port",ConnPolicy::buffer(13,ConnPolicy::LOCK_FREE,true) )
+              inport("inport",ConnPolicy::buffer(13,ConnPolicy::LOCK_FREE,true) )
         {
             // New activity with period 0.01s and priority 0.
             this->setActivity( new Activity(0, 0.01) );
@@ -117,14 +117,14 @@ namespace Example
 
             // Check if all initialisation was ok:
             assert( property.ready() );
-            // Now add it to the interface:
-            this->properties()->addProperty(&property);
 
+            // Now add it to the interface:
+            this->addProperty(&property);
             this->addAlias("the_attribute", attribute);
             this->addConstAlias("the_constant", constant);
 
             this->ports()->addPort(&outport);
-            this->ports()->addPort(&bufferport);
+            this->ports()->addPort(&inport);
 
             this->addOperation( "the_method", &HelloWorld::mymethod, this, ClientThread ).doc("'the_method' Description");
 
