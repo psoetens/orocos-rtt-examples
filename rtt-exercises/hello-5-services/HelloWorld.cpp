@@ -24,7 +24,7 @@ using namespace RTT;
 using namespace Orocos;
 
 /**
- * Exercise 4: Read Orocos Component Builder's Manual, Chap 2 sect 5
+ * Exercise 5: Read Orocos Component Builder's Manual, Chap 2 sect 5
  *
  * In this exercise, we want to put our operations in a provided service
  * and our methods in a required service with the name 'Robot'.
@@ -46,6 +46,10 @@ using namespace Orocos;
  *
  * Finally test this all in the TaskBrowser, how did the interface of Hello and
  * World change compared to previous exercises ?
+ *
+ * Optional: rewrite this exercise, with the exact same functionality,
+ * but with the least amount of code and classes.
+ * What effects has this on re-usability ?
  */
 namespace Example
 {
@@ -88,8 +92,8 @@ namespace Example
         Hello(std::string name)
             : TaskContext(name)
         {
-            this->addOperation("mymethod", &Hello::mymethod, this).doc("Returns a friendly word.");
-            this->addOperation("sayIt", &Hello::sayIt, this).doc("Returns a friendly answer.")
+            this->provides("robot")->addOperation("mymethod", &Hello::mymethod, this).doc("Returns a friendly word.");
+            this->provides("robot")->addOperation("sayIt", &Hello::sayIt, this).doc("Returns a friendly answer.")
                     .arg("sentence", "That's what I'll say.")
                     .arg("answer", "That's the answer you'll get if you let me say the right thing.");
         }
@@ -117,14 +121,17 @@ namespace Example
 
     public:
     	World(std::string name)
-			: TaskContext(name, PreOperational)
+			: TaskContext(name, PreOperational),
+			  mymethod("mymethod"), sayIt("sayIt")
     	{
+    	    this->requires("robot")->addMethod(mymethod);
+    	    this->requires("robot")->addMethod(sayIt);
     	}
 
     	bool configureHook() {
     	    // Check for the service being ready here and if not, connect to the provided service
     	    // from peer 'Hello'.
-    	    return true;
+    	    return requires("robot")->connectTo( getPeer("Hello")->provides("robot"));
     	}
 
     	void updateHook() {
@@ -153,7 +160,6 @@ int ORO_main(int argc, char** argv)
     // Create the activity which runs the task's engine:
     // 1: Priority
     // 0.5: Period (2Hz)
-    // hello.engine(): is being executed.
     hello.setActivity( new Activity(1, 0.5 ) );
     log(Info) << "**** Starting the 'hello' component ****" <<endlog();
     // Start the component:
@@ -164,7 +170,6 @@ int ORO_main(int argc, char** argv)
     // Create the activity which runs the task's engine:
     // 1: Priority
     // 0.5: Period (2Hz)
-    // world.engine(): is being executed.
     world.setActivity( new Activity(1, 0.5 ) );
 
     log(Info) << "**** Creating the 'Peer' connection ****" <<endlog();
