@@ -58,6 +58,8 @@ namespace Example
 
         Method <string(void)> mymethod;
         Method <bool(string)> sayWorld;
+
+        int counter;
     public:
         /**
          * This example sets the interface up in the Constructor
@@ -72,16 +74,18 @@ namespace Example
               // Name, buffer size, initial value
               inport("inport"),
               mymethod("the_method"),
-              sayWorld("the_command")
+              sayWorld("the_command"),
+              counter(0)
         {
             // Check if all initialisation was ok:
             assert( property.ready() );
 
             // Now add it to the interface:
             this->addProperty(&property);
+            this->addAlias("counter",counter);
 
             this->ports()->addPort(&outport);
-            this->ports()->addPort(&inport);
+            this->ports()->addEventPort(&inport);
 
             this->requires()->addMethod(mymethod);
             this->requires()->addMethod(sayWorld);
@@ -98,6 +102,20 @@ namespace Example
             return true;
         }
 
+        /**
+         * This function may be called for multiple samples in inport
+         */
+        void updateHook() {
+            std::string data;
+            // for each sample we consume, produce 2 new ones.
+            while ( inport.read(data) == NewData ) {
+                std::stringstream ss;
+                ss << ++counter;
+                outport.write( ss.str() );
+                ss << ", " << (counter + 1);
+                outport.write( ss.str() );
+            }
+        }
     };
 }
 

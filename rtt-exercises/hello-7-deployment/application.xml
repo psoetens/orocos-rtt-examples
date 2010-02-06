@@ -29,10 +29,11 @@
        Also, you should then notice that a 'World' component is loaded but unconfigured.
        If this works, you can continue with the exercise below.
   -->
+  <simple name="Import" type="string"><value>.</value></simple>
 
   <!-- Exercise: Create an instance of the "Example::Hello" type of component
        and name it "Hello". Assign it an "Activity" of type "PeriodicActivity"
-       with a "Period" of 0.01, a "Priority" of 0 and as "Scheduler" the
+       with a "Period" of 0.1, a "Priority" of 0 and as "Scheduler" the
        real-time ORO_SCHED_RT.
 
        Next, set "AutoConf" and "AutoStart" to 1 in order to configure and
@@ -51,7 +52,8 @@
        a property file 'Hello.cpf'
 
        -->
-
+  <!-- Exercise: Give the World component a SequentialActivity. -->
+       
   <!-- You must extend the World component likewise as the Hello component
        above in order to have the application fully functional.
        -->

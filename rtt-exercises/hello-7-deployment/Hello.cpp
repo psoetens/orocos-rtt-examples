@@ -91,7 +91,11 @@ namespace Example
         }
 
         void updateHook() {
-            //cout << "."<<endl;
+            std::string value;
+            // repeat the last read value
+            while (inport.read(value) == NewData) {
+                outport.write("last was:" + value);
+            }
         }
     public:
         /**
@@ -104,21 +108,11 @@ namespace Example
               property("the_property", "the_property Description", "Hello World"),
               attribute("Hello World"),
               constant("Hello World"),
-              // Name, initial value
+              // Name, keep_last_written_value
               outport("outport",true),
               // Name, policy
               inport("inport",ConnPolicy::buffer(13,ConnPolicy::LOCK_FREE,true) )
         {
-            // New activity with period 0.01s and priority 0.
-            this->setActivity( new Activity(0, 0.01) );
-
-            // Set log level more verbose than default,
-            // such that we can see output :
-            if ( log().getLogLevel() < Logger::Info ) {
-                log().setLogLevel( Logger::Info );
-                log(Info) << "HelloWorld manually raises LogLevel to 'Info' (5). See also file 'orocos.log'."<<endlog();
-            }
-
             // Check if all initialisation was ok:
             assert( property.ready() );
 
@@ -133,10 +127,6 @@ namespace Example
             this->addOperation( "the_method", &Hello::mymethod, this, ClientThread ).doc("'the_method' Description");
 
             this->addOperation( "the_command", &Hello::sayWorld, this, OwnThread).doc("'the_command' Description").arg("the_arg", "Use 'World' as argument to make the command succeed.");
-
-            log(Info) << "**** Starting the 'Hello' component ****" <<endlog();
-            // Start the component's activity:
-            this->start();
         }
     };
 }
@@ -146,4 +136,6 @@ namespace Example
  * Exercise: Add the necessary OCL header include and C macro such that the
  * Example::Hello class becomes a loadable Orocos component.
  */
+#include <ocl/ComponentLoader.hpp>
+ORO_CREATE_COMPONENT( Example::Hello );
 
