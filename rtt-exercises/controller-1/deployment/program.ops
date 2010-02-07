@@ -17,11 +17,16 @@
 	  * Now change the script to repeat the a-b-c-d movement 5 times.
 	  */
 
-	 for( int i = 0; i < 5; ++i) {
+	 for( var int i = 0; i < 5; set i = i+1) {
 		 do move(5.0);
+		 while ( !moveDone() ) yield;
 		 do move(-30.0);
+         while ( !moveDone() ) yield;
 		 do move(50.0);
+         while ( !moveDone() ) yield;
 		 do move(-300.0);
+         while ( !moveDone() ) yield;
 		 do move(0.0);
+         while ( !moveDone() ) yield;
 	 }
  }
