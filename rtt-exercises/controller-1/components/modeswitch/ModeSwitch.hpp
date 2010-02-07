@@ -3,6 +3,9 @@
 
 #include <rtt/TaskContext.hpp>
 #include <rtt/Attribute.hpp>
+#include <rtt/Port.hpp>
+#include <rtt/scripting/ScriptingAccess.hpp>
+#include <ocl/TimerComponent.hpp>
 
 namespace UseCase
 {
@@ -19,21 +22,29 @@ namespace UseCase
          * or "Manual". You will write this port from the
          * TaskBrowser console.
          */
-         Event<void(std::string)> switchMode;
+         OutputPort<std::string> switchMode;
+         InputPort<std::string> switchModeCatcher;
+
+         InputPort<RTT::os::Timer::TimerId> time_event;
 
         /* Exercise: Add an Attribute of type bool which
          * contains the status of a safety switch.
          */
-         Attribute<bool> safetySwitch;
+         bool safetySwitch;
     public:
         ModeSwitch(const std::string& name)
             : TaskContext(name),
               switchMode("switchMode"),
-              safetySwitch("safetySwitch",true )
+              switchModeCatcher("switchModeCatcher"),
+              time_event("timeout"),
+              safetySwitch(true)
         {
-        	this->events()->addEvent(&switchMode, "Signals a mode switch.",
-									 "mode", "The mode to which the application should switch.");
-        	this->attributes()->addAttribute(&safetySwitch);
+        	this->ports()->addPort(&switchMode, "Signals a mode switch.");
+        	this->ports()->addEventPort(&time_event);
+        	this->ports()->addEventPort(&switchModeCatcher);
+        	this->addAlias("safetySwitch",safetySwitch);
+
+        	switchMode.connectTo(switchModeCatcher,ConnPolicy::buffer(10,ConnPolicy::BUFFER,true));
         }
 
         ~ModeSwitch()
@@ -46,7 +57,8 @@ namespace UseCase
          * this component, using the Scripting service.
          */
         bool startHook() {
-            scripting::StateMachinePtr sm = this->engine()->states()->getStateMachine("the_statemachine");
+            scripting::ScriptingAccess* sa = dynamic_cast<scripting::ScriptingAccess*>(getService("scripting"));
+            scripting::StateMachinePtr sm = sa->getStateMachine("the_statemachine");
         	if (!sm) {
         		log(Error) << "State Machine the_statemachine not loaded in ModeSwitch."<< endlog();
         		return false;
@@ -55,7 +67,8 @@ namespace UseCase
         }
 
         void stopHook() {
-            scripting::StateMachinePtr sm = this->engine()->states()->getStateMachine("the_statemachine");
+            scripting::ScriptingAccess* sa = dynamic_cast<scripting::ScriptingAccess*>(getService("scripting"));
+            scripting::StateMachinePtr sm = sa->getStateMachine("the_statemachine");
         	if (!sm) {
         		log(Error) << "State Machine the_statemachine not loaded in ModeSwitch."<< endlog();
         		return;
@@ -70,8 +83,8 @@ namespace UseCase
          * true, write the mode switch port with the value "manual".
          */
         void updateHook() {
-        	if (safetySwitch.get() != true) {
-        		switchMode("manual");
+        	if (safetySwitch != true) {
+        		switchMode.write("manual");
         	}
         }
 };

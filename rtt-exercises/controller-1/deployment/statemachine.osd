@@ -23,12 +23,15 @@ StateMachine OurStateMachineType
      * go to the Automatic state.
      */
 	initial state INIT {
-		entry {
-			do Timer.arm(TIMER_ID, 5.0);
-		}
-		transition Timer.timeout(received_id)
-			if (received_id == TIMER_ID) then select Automatic;
-        //transition select Automatic;
+        transition select Waiting;
+    }
+
+    state Waiting {
+        entry {
+            do Timer.arm(TIMER_ID, 5.0);
+        }
+        transition timeout(received_id)
+            if (received_id == TIMER_ID) then select Automatic;
     }
 
     state Automatic {
@@ -47,7 +50,7 @@ StateMachine OurStateMachineType
          * when ModeSwitch signals this with a
          * switchMode event.
          */
-        transition switchMode(new_mode)
+        transition switchModeCatcher(new_mode)
 			if (new_mode == "manual") then select Manual;
     }
 
@@ -60,12 +63,12 @@ StateMachine OurStateMachineType
          * Exercise: write a 'run' program that checks
          * the joysticks output value. If the value is larger
          * than 10.0 or smaller than -10.0, switch the Joystick
-         * to the run time 'warning' state, if the value is between
+         * to the run time 'error' state, if the value is between
          * 10.0 and -10.0 again, 'recover' from the warning state.
          */
         run {
         	if (Joystick.output.last() > 10.0 || Joystick.output.last() < -10.0 ) then {
-        		do Joystick.warning();
+        		do Joystick.error();
         	}
 		/** See Joystick.hpp for the use of recovered() */
         }
@@ -80,7 +83,7 @@ StateMachine OurStateMachineType
          * when ModeSwitch signals this with a
          * switchMode event.
          */
-        transition switchMode(new_mode)
+        transition switchModeCatcher(new_mode)
 			if (new_mode == "automatic" && safetySwitch == true ) then
 				select Automatic;
 

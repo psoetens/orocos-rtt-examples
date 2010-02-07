@@ -56,11 +56,13 @@ namespace UseCase
 		void updateHook() {
             double steer = scale.value() * jog_value ;
 			output.write( steer );
+		}
 
-			if ( this->inRunTimeWarning() && (steer < 10.0 && steer > -10.0 ) ) {
-			     this->recovered();
-			}
-
+		void errorHook() {
+            double steer = scale.value() * jog_value ;
+	          if ( steer < 10.0 && steer > -10.0 ) {
+	                 this->recovered();
+	            }
 		}
 
 		void stopHook() {
