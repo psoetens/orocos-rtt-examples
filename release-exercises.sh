@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ x$1 = x ] ; then 
-echo "Please provide version-string parameter (e.g. 1.2.1)"
+if [ x$2 = x ] ; then 
+echo "Please provide version-string parameter (e.g. 2.0.1) and release (e.g. 2.0)"
 exit 1
 fi;
 
@@ -10,14 +10,15 @@ mkdir export || exit 1
 fi;
 
 VERSION=$1 
+RELEASE=$2
 
 #Make sure we start from right branch.
-git checkout master || exit 1
+git checkout rtt-$RELEASE-examples || exit 1
 
 #Merge latest changes into solution branch
-git checkout solution || exit 1
-git rebase master || exit 1
-git checkout master || exit 1
+git checkout rtt-$RELEASE-solution || exit 1
+git rebase rtt-$RELEASE-examples || exit 1
+git checkout rtt-$RELEASE-examples || exit 1
 
 #cleanup
 rm -rf export/rtt-exercises-$VERSION
@@ -34,7 +35,7 @@ rm -rf controller-1/build
 #hacky, need to improve this
 cp -a controller-1 controller-1-solution
 cd controller-1-solution
-git diff master..solution | patch -p3 || exit 1
+git diff rtt-$RELEASE-examples..rtt-$RELEASE-solution | patch -p3 || exit 1
 #rename Eclipse project files.
 sed -i ",s/controller-1/controller-1-solution/g" .project .cproject
 cd ../..
