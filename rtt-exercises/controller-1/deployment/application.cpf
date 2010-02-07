@@ -38,7 +38,7 @@
   --> 
   
   <struct name="Controller" type="UseCase::Controller">
-    <struct name="Activity" type="PeriodicActivity">
+    <struct name="Activity" type="Activity">
       <simple name="Period" type="double"><value>0.001</value></simple>
       <simple name="Priority" type="short"><value>0</value></simple>
       <simple name="Scheduler" type="string"><value>ORO_SCHED_RT</value></simple>
@@ -70,7 +70,7 @@
        final application communicate with hardware IO signals.
   -->
   <struct name="Plant" type="UseCase::Plant">
-    <struct name="Activity" type="PeriodicActivity">
+    <struct name="Activity" type="Activity">
       <simple name="Period" type="double"><value>0.001</value></simple>
       <simple name="Priority" type="short"><value>0</value></simple>
       <simple name="Scheduler" type="string"><value>ORO_SCHED_RT</value></simple>
@@ -90,7 +90,7 @@
 
   <!-- The Joystick drives the plant directly -->
   <struct name="Joystick" type="UseCase::Joystick">
-    <struct name="Activity" type="PeriodicActivity">
+    <struct name="Activity" type="Activity">
       <simple name="Period" type="double"><value>0.01</value></simple>
 <!--       <simple name="Priority" type="string"><value>HighestPriority</value></simple> -->
       <simple name="Priority" type="short"><value>0</value></simple>
@@ -112,7 +112,7 @@
        and sends them to the Controller component.
   -->
   <struct name="Automatic" type="UseCase::Automatic">
-    <struct name="Activity" type="PeriodicActivity">
+    <struct name="Activity" type="Activity">
       <simple name="Period" type="double"><value>0.01</value></simple>
 <!--       <simple name="Priority" type="string"><value>HighestPriority</value></simple> -->
       <simple name="Priority" type="short"><value>0</value></simple>
@@ -138,7 +138,7 @@
        another file in addition to this file must be edited to do so.
   -->
   <struct name="Reporting" type="OCL::FileReporting">
-    <struct name="Activity" type="PeriodicActivity">
+    <struct name="Activity" type="Activity">
       <simple name="Period" type="double"><value>0.01</value></simple>
       <simple name="Priority" type="short"><value>0</value></simple>
       <simple name="Scheduler" type="string"><value>ORO_SCHED_OTHER</value></simple>
@@ -156,10 +156,13 @@
 
   <!-- The OCL Timer component is used in state machines to 
        program the expiration of 'timeout' events, to which the
-       state machine can react.
+       state machine can react. It defines a 'timeout' output port
+       to which your component must connect using an input port.
+       You'd better use a buffered connection in order not to miss
+       any timer events.
   -->
   <struct name="Timer" type="OCL::TimerComponent">
-    <struct name="Activity" type="NonPeriodicActivity">
+    <struct name="Activity" type="Activity">
       <simple name="Priority" type="short"><value>0</value></simple>
       <simple name="Scheduler" type="string"><value>ORO_SCHED_RT</value></simple>
     </struct>
