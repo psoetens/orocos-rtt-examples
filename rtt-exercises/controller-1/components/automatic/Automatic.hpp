@@ -11,8 +11,7 @@
 #include <rtt/TaskContext.hpp>
 
 #include <rtt/Port.hpp>
-#include <rtt/Command.hpp>
-#include <rtt/Event.hpp>
+#include <rtt/Method.hpp>
 
 namespace UseCase
 {
@@ -25,8 +24,9 @@ namespace UseCase
 		double target, step, current;
         double baseStep;
 		bool target_reached;
-		Command<bool(double)> move;
-		Event<void(double)> atposition;
+		Operation<bool(double)> move;
+		Operation<bool(void)> moveDone;
+		OutputPort<double> atposition;
 		OutputPort<double> output;
 		InputPort<double> input;
 
@@ -56,8 +56,7 @@ namespace UseCase
 			return true;
 		}
 
-		bool atpos_impl(double d) {
-            /** d is ignored */
+		bool atpos_impl() {
             if ( fabs(current - target) < baseStep )
 				return true;
 			return false;
@@ -68,14 +67,15 @@ namespace UseCase
 			TaskContext(name, PreOperational),
             target(0.0), step(0.0), current(0.0),
             baseStep(0.0), target_reached(true),
-			move("move",&Automatic::move_impl, &Automatic::atpos_impl, this),
+			move("move",&Automatic::move_impl, this, OwnThread),
+			moveDone("moveDone", &Automatic::atpos_impl, this),
 			atposition("atposition"),
 			output("output"),
 			input("input")
 		{
-			this->commands()->addCommand(&move, "Move over a distance", "d",
-					"Distance to move");
-			this->events()->addEvent(&atposition, "Emited when the position is reached", "p", "The position reached.");
+			this->addOperation( move ).doc("Move over a distance").arg("d", "Distance to move");
+            this->addOperation( moveDone ).doc("Is the current move command done ?");
+			this->ports()->addPort(&atposition, "Written when the position is reached");
 			this->ports()->addPort(&output,"Sends the interpolated target position.");
 			this->ports()->addPort(&input, "Reads in the current position.");
 		}
@@ -110,11 +110,11 @@ namespace UseCase
 		void updateHook() {
             current += step;
 			output.write( current );
-			if ( atpos_impl(target) && !target_reached) {
+			if ( atpos_impl() && !target_reached) {
 				output.write( target );
                 current = target;
 				log(Info) << "Position reached at " << target <<endlog();
-				atposition(target);
+				atposition.write(target);
 				step = 0.0;
 				target_reached = true;
 			}

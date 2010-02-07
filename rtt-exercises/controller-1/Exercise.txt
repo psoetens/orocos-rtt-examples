@@ -10,7 +10,7 @@ for a global overview of the application architecture.
 
 * Requirements:
  - Orocos RTT and OCL are installed in /usr/local. If not, modify
- the import statements in deployment/application.cpf to point to 
+ the import statements in Deployer-site.cpf and deployment/application.cpf to point to 
  the correct location.
  - This example requires the 'CMake' tool v2.4 or newer.
  - Eclipse is the prefered development environment. Install the 

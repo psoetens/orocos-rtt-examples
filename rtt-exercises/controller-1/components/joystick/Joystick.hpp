@@ -23,10 +23,9 @@ namespace UseCase
 	protected:
 		double jog_value;
 		Property<double> scale;
-		Method<void(double)> setPosition;
 		OutputPort<double> output;
 
-		void methodimpl(double d) {
+		void setPosition(double d) {
 			jog_value = d;
 		}
 	public:
@@ -34,11 +33,10 @@ namespace UseCase
 			TaskContext(name, PreOperational),
 			jog_value(0.0),
 			scale("scale", "Description", 1.0),
-			setPosition("setPosition", &Joystick::methodimpl, this),
 			output("output", 0.0)
 		{
-			this->properties()->addProperty(&scale);
-			this->methods()->addMethod(&setPosition, "Method Description", "d", "Argument");
+			this->addProperty(&scale);
+			this->addOperation( "setPosition", &Joystick::setPosition, this ).doc("Set new joystick position.").arg("d", "Argument");
 			this->ports()->addPort(&output);
             output.keepLastWrittenValue(true);
 		}

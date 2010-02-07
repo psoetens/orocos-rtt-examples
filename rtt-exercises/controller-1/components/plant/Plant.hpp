@@ -13,8 +13,6 @@
 #include <rtt/Port.hpp>
 #include <rtt/extras/Properties.hpp>
 #include <rtt/Method.hpp>
-#include <rtt/Command.hpp>
-#include <rtt/Event.hpp>
 
 namespace UseCase
 {

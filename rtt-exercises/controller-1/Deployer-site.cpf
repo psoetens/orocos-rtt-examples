@@ -5,7 +5,7 @@
        the Orocos Component Library, OCL. -->
   <struct name="Deployer" type="PropertyBag">
     <struct name="Properties" type="PropertyBag">
-      <simple name="ComponentPath" type="string"><value>/opt/2.0/lib</value></simple>
+      <simple name="ComponentPath" type="string"><value>/usr/local</value></simple>
     </struct>
   </struct>
 </properties>

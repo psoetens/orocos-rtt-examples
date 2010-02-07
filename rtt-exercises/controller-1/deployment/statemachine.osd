@@ -9,7 +9,7 @@ StateMachine OurStateMachineType
 {
 
     /*
-     * Exercise: (do this one last)
+     * Exercise: (complete first the other exercises in this file)
      * INIT goes immediately to Automatic. Change this by
      * adding an intermediate state 'Waiting' which
      * waits for 5 seconds before making the transition
@@ -66,7 +66,7 @@ StateMachine OurStateMachineType
 
         /*
          * Exercise: go to automatic mode when
-         * the joystick component is in an error state.
+         * the joystick component is in a run-time error state.
          */
 
         /*

@@ -3,7 +3,6 @@
 
 #include <rtt/TaskContext.hpp>
 #include <rtt/Attribute.hpp>
-#include <rtt/Event.hpp>
 
 namespace UseCase
 {
@@ -15,9 +14,9 @@ namespace UseCase
     class ModeSwitch
         : public TaskContext
     {
-        /* Exercise: Add an event 'switchMode' which takes a
+        /* Exercise: Add an output port 'switchMode' which takes a
          * string as argument. The string can be "Automatic"
-         * or "Manual". You will emit this event from the
+         * or "Manual". You will write this port from the
          * TaskBrowser console.
          */
 
@@ -37,13 +36,13 @@ namespace UseCase
         /**
          * Exercise: Implement startHook() and stopHook()
          * which activate, start and stop the state machine loaded in
-         * this component.
+         * this component, using the Scripting service.
          */
 
         /**
          * Exercise: Write an updateHook() function that
          * checks the status of the safety switch. If it isn't
-         * true, emit the mode switch event with the value "manual".
+         * true, write the mode switch port with the value "manual".
          */
 };
 
