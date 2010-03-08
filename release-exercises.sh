@@ -50,7 +50,7 @@ read -s -n1
   USER=orocos
   SERVER=ftp.mech.kuleuven.be
   SPREFIX=pub_html/pub
-  BRANCH=stable
+  BRANCH=devel
 
 # Orocos Examples
 ssh -l$USER $SERVER "mkdir -p $SPREFIX/$BRANCH/examples/rtt/tutorial" || exit 1
