@@ -1,4 +1,4 @@
-                      OROCOS RTT Tutorial
+                      OROCOS RTT 2.0 Tutorial
 
 This directory contains exercises for exploring the Orocos Real-Time
 Toolkit in order to learn how to create Orocos components.
@@ -15,7 +15,7 @@ controller-1 example, which has instructions in its Exercise.txt file.
 
 Requirements: 
 
-Orocos Real-Time Toolkit and the Orocos Component Library's
+Orocos Real-Time Toolkit 2.0 or later and the Orocos Component Library's
 DeploymentComponent and TaskBrowser component are installed in
 /usr/local for the 'gnulinux' target. Edit the Makefile and change the
 OROPATH value if this is not the case in your setup.
