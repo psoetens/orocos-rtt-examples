@@ -33,10 +33,10 @@ namespace UseCase
 			target("Target"),
 			sense("Sense")
 		{
-			this->properties()->addProperty(&Kp);
-			this->ports()->addPort(&steer);
-			this->ports()->addPort(&target);
-			this->ports()->addPort(&sense);
+			this->properties()->addProperty( Kp);
+			this->ports()->addPort( steer );
+			this->ports()->addPort( target );
+			this->ports()->addPort( sense );
 		}
 
 		bool configureHook() {

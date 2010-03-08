@@ -81,11 +81,11 @@ namespace Example
             assert( property.ready() );
 
             // Now add it to the interface:
-            this->addProperty(&property);
-            this->addAlias("counter",counter);
+            this->addProperty( property);
+            this->addAttribute("counter",counter);
 
-            this->ports()->addPort(&outport);
-            this->ports()->addEventPort(&inport);
+            this->ports()->addPort( outport );
+            this->ports()->addEventPort( inport );
 
             this->requires()->addMethod(mymethod);
             this->requires()->addMethod(sayWorld);

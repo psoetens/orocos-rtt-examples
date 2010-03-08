@@ -108,9 +108,9 @@ namespace Example
               // Name
               inputport("the_input_port")
         {
-            this->addAlias("read_helper", read_helper);
-            this->ports()->addPort(&outputport, "Shared output Port");
-            this->ports()->addPort(&inputport, "inputed Data Port");
+            this->addAttribute("read_helper", read_helper);
+            this->ports()->addPort( outputport ).doc("Data producing port.");
+            this->ports()->addPort( inputport ).doc("Data consuming port.");
         }
 
         void updateHook()
@@ -141,7 +141,7 @@ namespace Example
 		my_port("world_port"),
 		value( 0.0 )
 		{
-            this->ports()->addPort(&my_port, "World's data producing port.");
+            this->ports()->addPort( my_port ).doc("World's data producing port.");
 		}
 
 		void updateHook() {
@@ -194,7 +194,7 @@ int ORO_main(int argc, char** argv)
     log(Info) << "**** Creating the 'Data Flow' connection ****" <<endlog();
 
     // This uses the default connection policy.
-    world.ports()->getPort("world_port")->connectTo( *hello.ports()->getPort("the_input_port") );
+    world.ports()->getPort("world_port")->connectTo( hello.ports()->getPort("the_input_port") );
 
     log(Info) << "**** Starting the TaskBrowser       ****" <<endlog();
     // Switch to user-interactive mode.

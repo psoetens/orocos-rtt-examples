@@ -86,10 +86,10 @@ namespace Example
             assert( property.ready() );
 
             // Now add it to the interface:
-            this->properties()->addProperty(&property);
+            this->addProperty( property);
 
-            this->addAlias("the_attribute", attribute);
-            this->addConstAlias("the_constant", constant);
+            this->addAttribute("the_attribute", attribute);
+            this->addConstant("the_constant", constant);
         }
     };
 }
@@ -124,7 +124,7 @@ int ORO_main(int argc, char** argv)
 
     // Do some 'client' calls :
     log(Info) << "**** Reading a Property:            ****" <<endlog();
-    Property<std::string> p = hello.properties()->getProperty<std::string>("the_property");
+    Property<std::string> p = hello.getProperty("the_property");
     assert( p.ready() );
     log(Info) << "     "<<p.getName() << " = " << p.value() <<endlog();
 

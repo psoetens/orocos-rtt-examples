@@ -35,9 +35,9 @@ namespace UseCase
 			scale("scale", "Description", 1.0),
 			output("output", 0.0)
 		{
-			this->addProperty(&scale);
+			this->addProperty( scale);
 			this->addOperation( "setPosition", &Joystick::setPosition, this ).doc("Set new joystick position.").arg("d", "Argument");
-			this->ports()->addPort(&output);
+			this->ports()->addPort( output );
             output.keepLastWrittenValue(true);
 		}
 

@@ -98,12 +98,12 @@ namespace Example
             addOperation("say", &Hello::say, this).doc("Logs to cout.")
                     .arg("sender","Who's saying it.").arg("message","The message.");
 
-            ports()->addPort(&input);
-            ports()->addPort(&output);
+            ports()->addPort( input );
+            ports()->addPort( output );
 
-            addProperty(&gain);
-            addProperty(&gains);
-            addProperty(&max_data);
+            addProperty( gain);
+            addProperty( gains);
+            addProperty( max_data);
         }
 
         bool configureHook() {

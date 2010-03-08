@@ -119,12 +119,12 @@ namespace Example
             assert( property.ready() );
 
             // Now add it to the interface:
-            this->addProperty(&property);
-            this->addAlias("the_attribute", attribute);
-            this->addConstAlias("the_constant", constant);
+            this->addProperty( property);
+            this->addAttribute("the_attribute", attribute);
+            this->addConstant("the_constant", constant);
 
-            this->ports()->addPort(&outport);
-            this->ports()->addPort(&inport);
+            this->ports()->addPort( outport );
+            this->ports()->addPort( inport );
 
             this->addOperation( "the_method", &HelloWorld::mymethod, this, ClientThread ).doc("'the_method' Description");
 
@@ -162,17 +162,17 @@ int ORO_main(int argc, char** argv)
 
     // Do some 'client' calls :
     log(Info) << "**** Reading a Property:            ****" <<endlog();
-    Property<std::string> p = hello.properties()->getProperty<std::string>("the_property");
+    Property<std::string> p = hello.getProperty("the_property");
     assert( p.ready() );
     log(Info) << "     "<<p.getName() << " = " << p.value() <<endlog();
 
     log(Info) << "**** Sending a Method:             ****" <<endlog();
-    Method<bool(std::string)> c = hello.getOperation<bool(std::string)>("the_command");
+    Method<bool(std::string)> c = hello.getOperation("the_command");
     assert( c.ready() );
     log(Info) << "     Sending Method : " << c.send("World")<<endlog();
 
     log(Info) << "**** Calling a Method:              ****" <<endlog();
-    Method<std::string(void)> m = hello.getOperation<std::string(void)>("the_method");
+    Method<std::string(void)> m = hello.getOperation("the_method");
     assert( m.ready() );
     log(Info) << "     Calling Method : " << m() << endlog();
 

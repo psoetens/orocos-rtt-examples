@@ -112,7 +112,7 @@ namespace Example
 
     	    // It is best practice to lookup methods of peers in
     	    // your configureHook.
-    	    hello_method = peer->getOperation<string(void)>("themethod");
+    	    hello_method = peer->getOperation("themethod");
     	    if ( !hello_method.ready() ) {
     	    	log(Error) << "Could not find Hello.the_method Operation!"<<endlog();
     	    	return false;

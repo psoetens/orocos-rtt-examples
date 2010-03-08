@@ -75,9 +75,9 @@ namespace UseCase
 		{
 			this->addOperation( move ).doc("Move over a distance").arg("d", "Distance to move");
             this->addOperation( moveDone ).doc("Is the current move command done ?");
-			this->ports()->addPort(&atposition, "Written when the position is reached");
-			this->ports()->addPort(&output,"Sends the interpolated target position.");
-			this->ports()->addPort(&input, "Reads in the current position.");
+			this->ports()->addPort( atposition ).doc("Written when the position is reached");
+			this->ports()->addPort( output ).doc("Sends the interpolated target position.");
+			this->ports()->addPort( input ).doc("Reads in the current position.");
 		}
 
 		bool configureHook() {

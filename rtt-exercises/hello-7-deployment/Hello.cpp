@@ -117,12 +117,12 @@ namespace Example
             assert( property.ready() );
 
             // Now add it to the interface:
-            this->addProperty(&property);
-            this->addAlias("the_attribute", attribute);
-            this->addConstAlias("the_constant", constant);
+            this->addProperty( property);
+            this->addAttribute("the_attribute", attribute);
+            this->addConstant("the_constant", constant);
 
-            this->ports()->addPort(&outport);
-            this->ports()->addPort(&inport);
+            this->ports()->addPort( outport );
+            this->ports()->addPort( inport );
 
             this->addOperation( "the_method", &Hello::mymethod, this, ClientThread ).doc("'the_method' Description");
 

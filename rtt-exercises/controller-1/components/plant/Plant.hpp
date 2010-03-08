@@ -33,9 +33,9 @@ namespace UseCase
 			input("Input"),
 			output("Output")
 		{
-			this->properties()->addProperty(&inertia);
-			this->ports()->addPort(&input);
-			this->ports()->addPort(&output);
+			this->properties()->addProperty( inertia);
+			this->ports()->addPort( input );
+			this->ports()->addPort( output );
 		}
 
 		bool configureHook() {
