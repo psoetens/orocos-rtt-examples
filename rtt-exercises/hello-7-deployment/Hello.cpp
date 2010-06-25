@@ -46,7 +46,7 @@ namespace Example
          * Properties take a name, a value and a description
          * and are suitable for XML.
          */
-        Property<std::string> property;
+        std::string property;
         /**
          * Attributes are aliased to class variables.
          */
@@ -104,8 +104,8 @@ namespace Example
          */
         Hello(std::string name)
             : TaskContext(name),
-              // Name, description, value
-              property("the_property", "the_property Description", "Hello World"),
+              // initial values
+              property("Hello World"),
               attribute("Hello World"),
               constant("Hello World"),
               // Name, keep_last_written_value
@@ -113,11 +113,8 @@ namespace Example
               // Name, policy
               inport("inport",ConnPolicy::buffer(13,ConnPolicy::LOCK_FREE,true) )
         {
-            // Check if all initialisation was ok:
-            assert( property.ready() );
-
             // Now add it to the interface:
-            this->addProperty( property);
+            this->addProperty("the_property", property).doc("Nice Description");
             this->addAttribute("the_attribute", attribute);
             this->addConstant("the_constant", constant);
 

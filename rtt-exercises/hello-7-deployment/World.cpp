@@ -39,7 +39,7 @@ namespace Example
          * Properties take a name, a value and a description
          * and are suitable for XML.
          */
-        Property<std::string> property;
+        std::string property;
         /** @} */
 
         /**
@@ -68,7 +68,7 @@ namespace Example
         World(std::string name)
             : TaskContext(name, PreOperational),
               // Name, description, value
-              property("world_property", "the_property Description", "Example"),
+              property("Example"),
               // Name, initial value
               outport("outport"),
               // Name, buffer size, initial value
@@ -77,11 +77,8 @@ namespace Example
               sayWorld("the_command"),
               counter(0)
         {
-            // Check if all initialisation was ok:
-            assert( property.ready() );
-
             // Now add it to the interface:
-            this->addProperty( property);
+            this->addProperty("world_property", property);
             this->addAttribute("counter",counter);
 
             this->ports()->addPort( outport );

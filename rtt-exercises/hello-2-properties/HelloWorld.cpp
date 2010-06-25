@@ -61,7 +61,7 @@ namespace Example
          * Properties take a name, a value and a description
          * and are suitable for XML.
          */
-        Property<std::string> property;
+        std::string property;
         /**
          * Attributes are C++ variables exported to the interface.
          */
@@ -80,13 +80,10 @@ namespace Example
         Hello(std::string name)
             : TaskContext(name),
               // Name, description, value
-              property("the_property", "the_property Description", "Hello World")
+              property("Hello World")
         {
-            // Check if all initialization was OK:
-            assert( property.ready() );
-
             // Now add it to the interface:
-            this->addProperty( property);
+            this->addProperty("the_property", property).doc("This property can contain any friendly string.");
 
             this->addAttribute("the_attribute", attribute);
             this->addConstant("the_constant", constant);
@@ -124,9 +121,11 @@ int ORO_main(int argc, char** argv)
 
     // Do some 'client' calls :
     log(Info) << "**** Reading a Property:            ****" <<endlog();
-    Property<std::string> p = hello.getProperty("the_property");
-    assert( p.ready() );
-    log(Info) << "     "<<p.getName() << " = " << p.value() <<endlog();
+    Property<std::string> p = hello.provides()->getProperty("the_property");
+    if ( p.ready() )
+        log(Info) << "     "<<p.getName() << " = " << p.value() <<endlog();
+    else
+        log(Error) << "Property 'the_property' was not found !" <<endlog();
 
     log(Info) << "**** Starting the TaskBrowser       ****" <<endlog();
     // Switch to user-interactive mode.

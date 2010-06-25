@@ -42,7 +42,7 @@ namespace Example
          * Properties take a name, a value and a description
          * and are suitable for XML.
          */
-        Property<std::string> property;
+        std::string property;
         /**
          * Attributes are aliased to class variables.
          */
@@ -97,7 +97,7 @@ namespace Example
         HelloWorld(std::string name)
             : TaskContext(name),
               // Name, description, value
-              property("the_property", "the_property Description", "Hello World"),
+              property("Hello World"),
               attribute("Hello World"),
               constant("Hello World"),
               // Name, initial value
@@ -115,11 +115,8 @@ namespace Example
                 log(Info) << "HelloWorld manually raises LogLevel to 'Info' (5). See also file 'orocos.log'."<<endlog();
             }
 
-            // Check if all initialisation was ok:
-            assert( property.ready() );
-
             // Now add it to the interface:
-            this->addProperty( property);
+            this->addProperty("the_property", property).doc("the_property Description");
             this->addAttribute("the_attribute", attribute);
             this->addConstant("the_constant", constant);
 
@@ -163,18 +160,24 @@ int ORO_main(int argc, char** argv)
     // Do some 'client' calls :
     log(Info) << "**** Reading a Property:            ****" <<endlog();
     Property<std::string> p = hello.getProperty("the_property");
-    assert( p.ready() );
-    log(Info) << "     "<<p.getName() << " = " << p.value() <<endlog();
+    if ( p.ready() )
+        log(Info) << "     "<<p.getName() << " = " << p.value() <<endlog();
+    else
+        log(Error) << "Property 'the_property' not found !"<<endlog();
 
     log(Info) << "**** Sending a Method:             ****" <<endlog();
     Method<bool(std::string)> c = hello.getOperation("the_command");
-    assert( c.ready() );
-    log(Info) << "     Sending Method : " << c.send("World")<<endlog();
+    if( c.ready() )
+        log(Info) << "     Sending Method : " << c.send("World")<<endlog();
+    else
+        log(Error) << "Method 'the_command' not found !"<<endlog();
 
     log(Info) << "**** Calling a Method:              ****" <<endlog();
     Method<std::string(void)> m = hello.getOperation("the_method");
-    assert( m.ready() );
-    log(Info) << "     Calling Method : " << m() << endlog();
+    if ( m.ready() )
+        log(Info) << "     Calling Method : " << m() << endlog();
+    else
+        log(Error) << "Method 'the_method' not found !"<<endlog();
 
     log(Info) << "**** Starting the TaskBrowser       ****" <<endlog();
     // Switch to user-interactive mode.
