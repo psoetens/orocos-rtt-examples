@@ -133,6 +133,6 @@ namespace Example
  * Exercise: Add the necessary OCL header include and C macro such that the
  * Example::Hello class becomes a loadable Orocos component.
  */
-#include <ocl/ComponentLoader.hpp>
+#include <ocl/Component.hpp>
 ORO_CREATE_COMPONENT( Example::Hello );
 
