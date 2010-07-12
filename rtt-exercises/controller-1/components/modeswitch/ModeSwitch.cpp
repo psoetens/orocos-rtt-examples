@@ -6,6 +6,6 @@
  * to make the ModeSwitch component an Orocos loadable
  * component.
  */
-#include <ocl/ComponentLoader.hpp>
+#include <ocl/Component.hpp>
 
 ORO_CREATE_COMPONENT(UseCase::ModeSwitch)
