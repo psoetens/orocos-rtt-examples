@@ -37,7 +37,7 @@ cp -a controller-1 controller-1-solution
 cd controller-1-solution
 git diff rtt-$RELEASE-examples..rtt-$RELEASE-solution | patch -p3 || exit 1
 #rename Eclipse project files.
-sed -i ",s/controller-1/controller-1-solution/g" .project .cproject
+sed -i -e "s/controller-1/controller-1-solution/g" .project .cproject || exit 1
 cd ../..
 
 tar -cvzf rtt-exercises-$VERSION.tar.gz rtt-exercises-$VERSION
