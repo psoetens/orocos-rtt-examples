@@ -7,6 +7,6 @@
 
 
 #include "Controller.hpp"
-#include <ocl/ComponentLoader.hpp>
+#include <ocl/Component.hpp>
 
 ORO_CREATE_COMPONENT( UseCase::Controller )
