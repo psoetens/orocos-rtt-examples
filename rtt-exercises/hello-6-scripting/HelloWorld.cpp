@@ -13,6 +13,7 @@
 
 #include <rtt/Method.hpp>
 #include <rtt/Port.hpp>
+#include <rtt/scripting/Scripting.hpp>
 
 #include <ocl/OCL.hpp>
 #include <ocl/TaskBrowser.hpp>
@@ -104,6 +105,9 @@ namespace Example
             addProperty( gain);
             addProperty( gains);
             addProperty( max_data);
+
+            // Installs the scripting service from C++ code:
+            this->getProvider<Scripting>("scripting");
         }
 
         bool configureHook() {

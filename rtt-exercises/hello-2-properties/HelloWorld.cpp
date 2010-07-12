@@ -30,7 +30,19 @@ using namespace Orocos;
  * First, compile and run this application and use 'the_property' and 'the_attribute':
  * Change and print their values.
  *
- * Next save the properties of this component to a hello.xml file.
+ * Next save the properties of this component to a hello.xml file:
+ * You will need to install the 'marshalling' service using the TaskBrowser
+ * at runtime:
+ * ** TaskBrowser: type '.provides marshalling'
+ *
+ * (note: To make this permanent for your component, 
+ *    in C++ you need to #include <rtt/marsh/Marshalling.hpp> 
+ *    and add to the constructor: this->getProvider<Marshalling>("marshalling");
+ *    and in the Makefile: link with rtt-marshalling-<target> found in lib/orocos/plugins
+ *    and also add the lib/orocos/plugins  directory to the RPATH.
+ * endnote)
+ *
+ * When marshalling is loaded:
  * In order to find out how to write the property to a file using 'marshalling',
  * type 'marshalling' (without quotes) to see the interface of the marshalling
  * task object.
@@ -38,7 +50,8 @@ using namespace Orocos;
  * Next Open and modify the XML file and read it back in using the marshalling object.
  *
  * For the optional exercises, reead Chap 2, sect 6.1
- * Optional : read the property file from configureHook() and log it's value.
+ * Optional : read the property file from configureHook() and log it's value. You need
+ * to make the modifications detailed above in the note.
  * Optional : write the property file in cleanupHook().
  */
 namespace Example

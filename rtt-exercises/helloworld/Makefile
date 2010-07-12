@@ -1,7 +1,7 @@
 TARGET=gnulinux
 OROPATH=/opt/2.0
 CXXFLAGS=-I${OROPATH}/include -DOROCOS_TARGET=${TARGET} -Wall
-LDFLAGS=-L${OROPATH}/lib -Wl,-rpath ${OROPATH}/lib -lorocos-taskbrowser-${TARGET} -lorocos-rtt-${TARGET} -lrt -lpthread
+LDFLAGS=-L${OROPATH}/lib -L${OROPATH}/lib/orocos -L${OROPATH}/lib/orocos/plugins -Wl,-rpath ${OROPATH}/lib -Wl,-rpath ${OROPATH}/lib/orocos -Wl,-rpath ${OROPATH}/lib/orocos/plugins -lrtt-scripting-${TARGET} -lorocos-taskbrowser-${TARGET} -lorocos-rtt-${TARGET} -lrt -lpthread
 
 all: helloworld
 
