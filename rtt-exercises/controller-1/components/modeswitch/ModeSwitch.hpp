@@ -4,7 +4,7 @@
 #include <rtt/TaskContext.hpp>
 #include <rtt/Attribute.hpp>
 #include <rtt/Port.hpp>
-#include <rtt/scripting/ScriptingAccess.hpp>
+#include <rtt/scripting/ScriptingService.hpp>
 #include <ocl/TimerComponent.hpp>
 
 namespace UseCase
@@ -39,12 +39,12 @@ namespace UseCase
               time_event("timeout"),
               safetySwitch(true)
         {
-        	this->ports()->addPort(&switchMode, "Signals a mode switch.");
-        	this->ports()->addEventPort(&time_event);
-        	this->ports()->addEventPort(&switchModeCatcher);
-        	this->addAlias("safetySwitch",safetySwitch);
+        	this->ports()->addPort( switchMode ).doc("Signals a mode switch.");
+        	this->ports()->addEventPort( time_event );
+        	this->ports()->addEventPort( switchModeCatcher );
+        	this->addAttribute("safetySwitch",safetySwitch);
 
-        	switchMode.connectTo(switchModeCatcher,ConnPolicy::buffer(10,ConnPolicy::BUFFER,true));
+        	switchMode.connectTo( &switchModeCatcher,ConnPolicy::buffer(10,ConnPolicy::BUFFER,true));
         }
 
         ~ModeSwitch()
@@ -54,10 +54,10 @@ namespace UseCase
         /**
          * Exercise: Implement startHook() and stopHook()
          * which activate, start and stop the state machine loaded in
-         * this component, using the Scripting service.
+         * this component, using the scripting::Scripting service.
          */
         bool startHook() {
-            scripting::ScriptingAccess* sa = dynamic_cast<scripting::ScriptingAccess*>(getService("scripting"));
+            scripting::ScriptingService::shared_ptr sa = boost::dynamic_pointer_cast<scripting::ScriptingService>(provides()->getService("scripting"));
             scripting::StateMachinePtr sm = sa->getStateMachine("the_statemachine");
         	if (!sm) {
         		log(Error) << "State Machine the_statemachine not loaded in ModeSwitch."<< endlog();
@@ -67,7 +67,7 @@ namespace UseCase
         }
 
         void stopHook() {
-            scripting::ScriptingAccess* sa = dynamic_cast<scripting::ScriptingAccess*>(getService("scripting"));
+            scripting::ScriptingService::shared_ptr sa = boost::dynamic_pointer_cast<scripting::ScriptingService>(provides()->getService("scripting"));
             scripting::StateMachinePtr sm = sa->getStateMachine("the_statemachine");
         	if (!sm) {
         		log(Error) << "State Machine the_statemachine not loaded in ModeSwitch."<< endlog();
