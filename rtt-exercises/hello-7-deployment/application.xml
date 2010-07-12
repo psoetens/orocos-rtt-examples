@@ -51,28 +51,7 @@
        a property file 'Hello.cpf'
 
        -->
-  <struct name="HelloDataConnection" type="ConnPolicy">
-  </struct>
-  <struct name="HelloBufferConnection" type="ConnPolicy">
-  </struct>
 
-
-  <struct name="Hello" type="Example::Hello">
-    <struct name="Activity" type="Activity">
-      <simple name="Priority" type="short"><value>0</value></simple>
-      <simple name="Period" type="double"><value>0.1</value></simple>
-      <simple name="Scheduler" type="string"><value>ORO_SCHED_RT</value></simple>
-    </struct>
-    <struct name="Peers" type="PropertyBag">
-      <simple type="string"><value>World</value></simple>
-    </struct>
-    <struct name="Ports" type="PropertyBag">
-      <simple name="outport" type="string"><value>HelloDataConnection</value></simple>
-      <simple name="inport" type="string"><value>HelloBufferConnection</value></simple>
-    </struct>
-    <simple name="AutoConf" type="boolean"><value>1</value></simple>
-    <simple name="AutoStart" type="boolean"><value>1</value></simple>
-  </struct>
   <!-- Exercise: Give the World component a SequentialActivity. -->
        
   <!-- You must extend the World component likewise as the Hello component
@@ -83,14 +62,4 @@
       <simple name="Priority" type="short"><value>0</value></simple>
       <simple name="Scheduler" type="string"><value>ORO_SCHED_RT</value></simple>
     </struct>
-  <simple name="AutoConf" type="boolean"><value>1</value></simple>
-  <simple name="AutoStart" type="boolean"><value>1</value></simple>
-    <struct name="Peers" type="PropertyBag">
-      <simple type="string"><value>Hello</value></simple>
-    </struct>
-    <struct name="Ports" type="PropertyBag">
-      <simple name="outport" type="string"><value>HelloBufferConnection</value></simple>
-      <simple name="inport" type="string"><value>HelloDataConnection</value></simple>
-    </struct>
-  </struct>
 </properties>
