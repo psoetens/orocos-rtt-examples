@@ -29,6 +29,7 @@
        Also, you should then notice that a 'World' component is loaded but unconfigured.
        If this works, you can continue with the exercise below.
   -->
+  <simple name="Import" type="string"><value>.</value></simple>
 
   <!-- Exercise: Create an instance of the "Example::Hello" type of component
        and name it "Hello". Assign it an "Activity" of type "PeriodicActivity"

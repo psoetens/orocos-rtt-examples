@@ -12,7 +12,9 @@
  * application.
  *
  * NOTE: See the bottom of this file for the first exercise.
- * NOTE: See the hello.xml file for the rest of the exercise.
+ * NOTE: See the application.xml file for the rest of the exercise.
+ * If you're stuck, you can look at solution.xml to see the expected
+ * result.
  */
 
 #include <rtt/os/main.h>
@@ -130,9 +132,8 @@ namespace Example
 
 /**
  * See Orocos Deployment Component Manual (An OCL component).
- * Exercise: Add the necessary OCL header include and C macro such that the
- * Example::Hello class becomes a loadable Orocos component.
+ * Exercise: Include the necessary OCL header and add the C macro such that the
+ * Example::Hello class becomes a loadable Orocos component. See World.cpp
+ * for inspiration.
  */
-#include <ocl/Component.hpp>
-ORO_CREATE_COMPONENT( Example::Hello );
 
