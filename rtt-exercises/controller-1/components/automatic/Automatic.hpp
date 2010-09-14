@@ -11,7 +11,7 @@
 #include <rtt/TaskContext.hpp>
 
 #include <rtt/Port.hpp>
-#include <rtt/Method.hpp>
+#include <rtt/OperationCaller.hpp>
 
 namespace UseCase
 {

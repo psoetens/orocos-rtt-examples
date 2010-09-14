@@ -12,7 +12,7 @@
 
 #include <rtt/Port.hpp>
 #include <rtt/extras/Properties.hpp>
-#include <rtt/Method.hpp>
+#include <rtt/OperationCaller.hpp>
 
 namespace UseCase
 {
