@@ -1,7 +1,7 @@
 
 /**
  * @file HelloWorld.cpp
- * This file demonstrates the Orocos 'Method/Operation' primitive with
+ * This file demonstrates the Orocos 'Operation/OperationCaller' primitive with
  * a 'hello world' example.
  */
 
@@ -12,7 +12,7 @@
 #include <rtt/Activity.hpp>
 
 /**
- * Include this header in order to use methods.
+ * Include this header in order to call component operations.
  */
 #include <rtt/OperationCaller.hpp>
 
