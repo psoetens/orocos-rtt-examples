@@ -14,7 +14,7 @@
 /**
  * Include this header in order to use methods.
  */
-#include <rtt/Method.hpp>
+#include <rtt/OperationCaller.hpp>
 
 #include <ocl/OCL.hpp>
 #include <ocl/TaskBrowser.hpp>
@@ -114,9 +114,9 @@ namespace Example
     	 * It is best practice to have this object as
     	 * a member variable of your class.
     	 */
-    	Method< string(void) > mymethod;
+    	OperationCaller< string(void) > mymethod;
 
-        Method< bool(string, string&) > sayIt;
+        OperationCaller< bool(string, string&) > sayIt;
     	/** @} */
 
     public:
@@ -124,8 +124,8 @@ namespace Example
 			: TaskContext(name, PreOperational),
 			  mymethod("mymethod"), sayIt("sayIt")
     	{
-    	    this->requires("robot")->addMethod(mymethod);
-    	    this->requires("robot")->addMethod(sayIt);
+    	    this->requires("robot")->addOperationCaller(mymethod);
+    	    this->requires("robot")->addOperationCaller(sayIt);
     	}
 
     	bool configureHook() {

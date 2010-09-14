@@ -24,7 +24,7 @@
 #include <rtt/Activity.hpp>
 #include <rtt/Property.hpp>
 #include <rtt/Attribute.hpp>
-#include <rtt/Method.hpp>
+#include <rtt/OperationCaller.hpp>
 #include <rtt/Port.hpp>
 
 using namespace std;

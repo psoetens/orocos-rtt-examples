@@ -56,8 +56,8 @@ namespace Example
         InputPort<std::string> inport;
         /** @} */
 
-        Method <string(void)> mymethod;
-        Method <bool(string)> sayWorld;
+        OperationCaller<string(void)> mymethod;
+        OperationCaller<bool(string)> sayWorld;
 
         int counter;
     public:
@@ -84,8 +84,8 @@ namespace Example
             this->ports()->addPort( outport );
             this->ports()->addEventPort( inport );
 
-            this->requires()->addMethod(mymethod);
-            this->requires()->addMethod(sayWorld);
+            this->requires()->addOperationCaller(mymethod);
+            this->requires()->addOperationCaller(sayWorld);
         }
 
         bool configureHook() {

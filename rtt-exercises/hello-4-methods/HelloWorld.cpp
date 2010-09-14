@@ -14,7 +14,7 @@
 /**
  * Include this header in order to use methods.
  */
-#include <rtt/Method.hpp>
+#include <rtt/OperationCaller.hpp>
 
 #include <ocl/OCL.hpp>
 #include <ocl/TaskBrowser.hpp>
@@ -91,7 +91,7 @@ namespace Example
     	 * It is best practice to have this object as
     	 * a member variable of your class.
     	 */
-    	Method< string(void) > hello_method;
+    	OperationCaller< string(void) > hello_method;
 
     	/** @} */
 

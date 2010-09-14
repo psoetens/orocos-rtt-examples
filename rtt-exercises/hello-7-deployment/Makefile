@@ -1,6 +1,6 @@
 TARGET=gnulinux
 OROPATH=/opt/2.0
-CXXFLAGS=-I${OROPATH}/include -DOROCOS_TARGET=${TARGET} -fPIC -DOCL_DLL_EXPORT
+CXXFLAGS=-I${OROPATH}/include -DOROCOS_TARGET=${TARGET} -fPIC -DRTT_COMPONENT
 LDFLAGS=-shared -L${OROPATH}/lib -Wl,-rpath ${OROPATH}/lib -lorocos-rtt-${TARGET}
 
 all: libhello-${TARGET}.so libworld-${TARGET}.so

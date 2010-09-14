@@ -11,7 +11,7 @@
 #include <rtt/TaskContext.hpp>
 #include <rtt/Activity.hpp>
 
-#include <rtt/Method.hpp>
+#include <rtt/OperationCaller.hpp>
 #include <rtt/Port.hpp>
 #include <rtt/scripting/Scripting.hpp>
 

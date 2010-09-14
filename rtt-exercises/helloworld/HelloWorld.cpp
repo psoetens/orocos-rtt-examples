@@ -12,7 +12,7 @@
 #include <rtt/Logger.hpp>
 #include <rtt/Property.hpp>
 #include <rtt/Attribute.hpp>
-#include <rtt/Method.hpp>
+#include <rtt/OperationCaller.hpp>
 #include <rtt/Port.hpp>
 #include <rtt/Activity.hpp>
 
@@ -166,14 +166,14 @@ int ORO_main(int argc, char** argv)
         log(Error) << "Property 'the_property' not found !"<<endlog();
 
     log(Info) << "**** Sending a Method:             ****" <<endlog();
-    Method<bool(std::string)> c = hello.getOperation("the_command");
+    OperationCaller<bool(std::string)> c = hello.getOperation("the_command");
     if( c.ready() )
         log(Info) << "     Sending Method : " << c.send("World")<<endlog();
     else
         log(Error) << "Method 'the_command' not found !"<<endlog();
 
     log(Info) << "**** Calling a Method:              ****" <<endlog();
-    Method<std::string(void)> m = hello.getOperation("the_method");
+    OperationCaller<std::string(void)> m = hello.getOperation("the_method");
     if ( m.ready() )
         log(Info) << "     Calling Method : " << m() << endlog();
     else
@@ -191,7 +191,7 @@ int ORO_main(int argc, char** argv)
 
 #else
 
-#include "ocl/ComponentLoader.hpp"
+#include "ocl/Component.hpp"
 ORO_CREATE_COMPONENT( Example::HelloWorld )
 
 #endif
