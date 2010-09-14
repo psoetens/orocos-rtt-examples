@@ -1,5 +1,5 @@
 TARGET=gnulinux
-OROPATH=/opt/orocos
+OROPATH=/usr/local
 CXXFLAGS=-I${OROPATH}/include -DOROCOS_TARGET=${TARGET} -Wall
 LDFLAGS=-L${OROPATH}/lib -L${OROPATH}/lib/orocos -L${OROPATH}/lib/orocos/plugins -Wl,-rpath ${OROPATH}/lib -Wl,-rpath ${OROPATH}/lib/orocos -Wl,-rpath ${OROPATH}/lib/orocos/plugins -lrtt-scripting-${TARGET} -lorocos-taskbrowser-${TARGET} -lorocos-rtt-${TARGET} -lrt -lpthread
 

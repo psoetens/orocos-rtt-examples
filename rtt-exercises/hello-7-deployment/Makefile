@@ -1,5 +1,5 @@
 TARGET=gnulinux
-OROPATH=/opt/2.0
+OROPATH=/usr/local
 CXXFLAGS=-I${OROPATH}/include -DOROCOS_TARGET=${TARGET} -fPIC -DRTT_COMPONENT
 LDFLAGS=-shared -L${OROPATH}/lib -Wl,-rpath ${OROPATH}/lib -lorocos-rtt-${TARGET}
 
