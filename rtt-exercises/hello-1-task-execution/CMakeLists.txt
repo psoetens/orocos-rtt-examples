@@ -1,0 +1,102 @@
+#
+# The find_package macro for Orocos-RTT works best with
+# cmake >= 2.6.3
+#
+cmake_minimum_required(VERSION 2.6.3)
+
+#
+# This creates a standard cmake project. You may extend this file with
+# any cmake macro you see fit.
+#
+# The CMake 'target' names are identical to the first argument of the
+# macro, except for orocos_typekit, where the target is fully
+# controlled by generated code of 'typegen'.
+#
+project(hello-1-task-execution)
+
+#
+# Do setup in case of ros package, If ROS_ROOT is set, it is
+# recommended to use RTT/OCL through the ros packages.
+#
+set (ROS_ROOT $ENV{ROS_ROOT} )
+if (ROS_ROOT)
+  include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
+  rosbuild_init()
+  rosbuild_find_ros_package( rtt )
+  rosbuild_find_ros_package( ocl )
+  set( RTT_HINTS HINTS ${rtt_PACKAGE_PATH}/install )
+  set( OCL_HINTS HINTS ${ocl_PACKAGE_PATH}/install )
+endif()
+
+# Set the CMAKE_PREFIX_PATH in case you're not using Orocos through ROS
+# for helping these find commands find RTT.
+find_package(Orocos-RTT REQUIRED ${RTT_HINTS})
+
+# Defines the orocos_* cmake macros. See that file for additional
+# documentation.
+include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
+
+# Creates a component library libhello-1-task-execution-<target>.so
+# and installs in the directory lib/orocos/hello-1-task-execution/
+#
+orocos_executable(hello-1-task-execution HelloWorld.cpp) # ...you may add multiple source files
+#
+# You may add multiple orocos_component statements.
+
+#
+# Building a typekit (recommended):
+#
+# Creates a typekit library libhello-1-task-execution-types-<target>.so
+# and installs in the directory lib/orocos/hello-1-task-execution/types/
+#
+#orocos_typegen_headers(hello-1-task-execution-types.hpp) # ...you may add multiple header files
+#
+# You may only have *ONE* orocos_typekit statement !
+
+
+#
+# Building a normal library (optional):
+#
+# Creates a library libsupport-<target>.so and installs it in
+# lib/
+#
+#orocos_library(support support.cpp) # ...you may add multiple source files
+#
+# You may add multiple orocos_library statements.
+
+
+#
+# Building a Plugin or Service (optional):
+#
+# Creates a plugin library libhello-1-task-execution-service-<target>.so or libhello-1-task-execution-plugin-<target>.so
+# and installs in the directory lib/orocos/hello-1-task-execution/plugins/
+#
+# Be aware that a plugin may only have the loadRTTPlugin() function once defined in a .cpp file.
+# This function is defined by the plugin and service CPP macros.
+#
+#orocos_service(hello-1-task-execution-service hello-1-task-execution-service.cpp) # ...only one service per library !
+#orocos_plugin(hello-1-task-execution-plugin hello-1-task-execution-plugin.cpp) # ...only one plugin function per library !
+#
+# You may add multiple orocos_plugin statements.
+
+
+#
+# Additional headers (not in typekit):
+#
+# Installs in the include/orocos/hello-1-task-execution/ directory
+#
+orocos_install_headers( hello-1-task-execution-component.hpp ) # ...you may add multiple header files
+#
+# You may add multiple orocos_install_headers statements.
+
+#
+# Generates and installs our orocos-hello-1-task-execution-<target>.pc and manifest.xml file
+#
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/orocos-hello-1-task-execution.pc.in ${CMAKE_CURRENT_BINARY_DIR}/orocos-hello-1-task-execution-${OROCOS_TARGET}.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/orocos-hello-1-task-execution-${OROCOS_TARGET}.pc DESTINATION  lib/pkgconfig )
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/manifest.xml DESTINATION  lib/orocos/hello-1-task-execution )
+
+#
+# Provided 'uninstall' target
+#
+orocos_uninstall_target()
