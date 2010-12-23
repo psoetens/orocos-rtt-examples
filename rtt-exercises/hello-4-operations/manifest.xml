@@ -1,0 +1,8 @@
+<package>
+    <description brief="Orocos hello-4-operations Component package">
+        This package contains the components of the hello-4-operations package
+    </description>
+    <depend package="rtt" />
+    <depend package="ocl" />
+</package>
+

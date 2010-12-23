@@ -1,0 +1,8 @@
+<package>
+    <description brief="Orocos hello-3-dataports Component package">
+        This package contains the components of the hello-3-dataports package
+    </description>
+    <depend package="rtt" />
+    <depend package="ocl" />
+</package>
+

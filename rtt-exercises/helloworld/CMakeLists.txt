@@ -12,7 +12,7 @@ cmake_minimum_required(VERSION 2.6.3)
 # macro, except for orocos_typekit, where the target is fully
 # controlled by generated code of 'typegen'.
 #
-project(hello-1-task-execution)
+project(helloworld)
 
 #
 # Do setup in case of ros package, If ROS_ROOT is set, it is
@@ -40,11 +40,11 @@ include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
 orocos_executable(HelloWorld HelloWorld.cpp) # ...you may add multiple source files
 
 #
-# Generates and installs our orocos-hello-1-task-execution-<target>.pc and manifest.xml file
+# Generates and installs our orocos-helloworld-<target>.pc and manifest.xml file
 #
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/orocos-hello-1-task-execution.pc.in ${CMAKE_CURRENT_BINARY_DIR}/orocos-hello-1-task-execution-${OROCOS_TARGET}.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/orocos-hello-1-task-execution-${OROCOS_TARGET}.pc DESTINATION  lib/pkgconfig )
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/manifest.xml DESTINATION  lib/orocos/hello-1-task-execution )
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/orocos-helloworld.pc.in ${CMAKE_CURRENT_BINARY_DIR}/orocos-helloworld-${OROCOS_TARGET}.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/orocos-helloworld-${OROCOS_TARGET}.pc DESTINATION  lib/pkgconfig )
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/manifest.xml DESTINATION  lib/orocos/helloworld )
 
 #
 # Provided 'uninstall' target

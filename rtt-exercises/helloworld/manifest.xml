@@ -1,0 +1,8 @@
+<package>
+    <description brief="Orocos helloworld Component package">
+        This package contains the components of the helloworld package
+    </description>
+    <depend package="rtt" />
+    <depend package="ocl" />
+</package>
+

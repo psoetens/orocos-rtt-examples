@@ -1,17 +1,14 @@
-TARGET=gnulinux
-OROPATH=/usr/local
-CXXFLAGS=-I${OROPATH}/include -DOROCOS_TARGET=${TARGET} -fPIC -DRTT_COMPONENT
-LDFLAGS=-shared -L${OROPATH}/lib -Wl,-rpath ${OROPATH}/lib -lorocos-rtt-${TARGET}
-
-all: libhello-${TARGET}.so libworld-${TARGET}.so
-	@echo "success."
-
-libhello-${TARGET}.so: Hello.cpp
-	$(CXX) -g -o libhello-${TARGET}.so Hello.cpp $(CXXFLAGS) $(LDFLAGS)
-
-libworld-${TARGET}.so: World.cpp
-	$(CXX) -g -o libworld-${TARGET}.so World.cpp $(CXXFLAGS) $(LDFLAGS)
-
-clean:
-	rm -f libhello-${TARGET}.so libworld-${TARGET}.so orocos.log .tb_history
-	@echo "clean."
+# This Makefile is here for 'rosmake' like systems. In case you don't use
+# ROS, it will create a build directory for you and build the package with
+# default settings. It will install it at the same location as the RTT is installed.
+ifdef ROS_ROOT
+include $(shell rospack find mk)/cmake.mk
+else
+$(warning This Makefile builds this package with default settings)
+all:
+	mkdir -p build
+	cd build ; cmake .. -DINSTALL_PATH=orocos && make
+	echo -e "\n Now do 'make install' to install this package.\n"
+install: all
+	cd build ; make install
+endif
