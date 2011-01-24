@@ -1,1 +1,1 @@
-ADD_LIBRARY( usecase-automatic-${OROCOS_TARGET} SHARED Automatic.cpp )
+orocos_component( usecase-automatic Automatic.cpp )

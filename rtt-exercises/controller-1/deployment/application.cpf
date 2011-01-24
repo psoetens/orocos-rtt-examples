@@ -20,16 +20,9 @@
      ...
   -->
 
-  <!-- These component libraries are probably installed in some system path. 
+  <!-- This package is probably installed in some system path. 
        Edit the Deployer-site.cpf file to point the Deployer to this path -->
-  <simple name="Import" type="string"><value>liborocos-reporting</value></simple>
-  <simple name="Import" type="string"><value>liborocos-timer</value></simple>
-
-  <simple name="Import" type="string"><value>components/joystick</value></simple>
-  <simple name="Import" type="string"><value>components/automatic</value></simple>
-  <simple name="Import" type="string"><value>components/controller</value></simple>
-  <simple name="Import" type="string"><value>components/plant</value></simple>
-  <simple name="Import" type="string"><value>components/modeswitch</value></simple>
+  <simple name="Import" type="string"><value>controller-1</value></simple>
 
   <!-- Exercise: Create a 'ModeSwitch' component which can execute a state machine at 50Hz. 
   	See statemachine.osd to see which peers this component requires.

@@ -20,8 +20,7 @@
      ...
   -->
  
-  <simple name="Import" type="string"><value>components/plant</value></simple> 
-  <simple name="Import" type="string"><value>components/controller</value></simple>
+  <simple name="Import" type="string"><value>controller-1</value></simple> 
 
   <struct name="Controller" type="RTW::controller">
     <struct name="Activity" type="PeriodicActivity">

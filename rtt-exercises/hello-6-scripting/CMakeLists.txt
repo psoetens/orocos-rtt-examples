@@ -30,7 +30,7 @@ endif()
 
 # Set the CMAKE_PREFIX_PATH in case you're not using Orocos through ROS
 # for helping these find commands find RTT.
-find_package(Orocos-RTT REQUIRED ${RTT_HINTS})
+find_package(Orocos-RTT REQUIRED rtt-scripting ${RTT_HINTS})
 
 # Defines the orocos_* cmake macros. See that file for additional
 # documentation.
@@ -38,6 +38,7 @@ include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
 
 # Creates an orocos executable HelloWorld
 orocos_executable(HelloWorld HelloWorld.cpp) # ...you may add multiple source files
+target_link_libraries( HelloWorld orocos-taskbrowser-${OROCOS_TARGET} ${OROCOS-RTT_RTT-SCRIPTING_LIBRARY})
 
 #
 # Generates and installs our orocos-hello-6-scripting-<target>.pc and manifest.xml file

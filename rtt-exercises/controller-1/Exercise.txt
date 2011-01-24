@@ -9,16 +9,26 @@ write scripts and extend the application XML file. See UseCase.txt
 for a global overview of the application architecture.
 
 * Requirements:
+
+ROS users:
+ - All exercises are valid ROS packages, compatible with rosmake. Make sure
+   the exercises are present in your ROS_PACAKAGE_PATH
+ - Use 'rosrun ocl deployer-gnulinux -s deployment/application.cpf -linfo' 
+   to run the deployer application
+
+Non-ROS users: 
  - Orocos RTT and OCL are installed in /usr/local. If not, modify
  the import statements in Deployer-site.cpf and deployment/application.cpf to point to 
- the correct location.
- - This example requires the 'CMake' tool v2.4 or newer.
+ the correct location
+ - The OCL 'deployer-...' application must be in your path such that
+ the application can be started.
+
+All:
+ - This example requires the 'CMake' tool v2.6.3 or newer.
  - Eclipse is the prefered development environment. Install the 
  'CMake Editor' plugin and the 'Rinzo XML Editor' plugin. In order to have
  auto-completion, make sure that the Orocos install path is in your Eclipse
  include path (Project->Properties->C/C++ General->Paths)
- - The OCL 'deployer-...' application must be in your path such that
- the application can be started.
  
 * Documentation
  - By now you should have read the first chapters of the Component
@@ -30,11 +40,10 @@ for a global overview of the application architecture.
  this example. 
 
 * First steps
- - Create a build directory: mkdir build ; cd build
- - Run 'cmake ..' in this directory and verify that the Orocos headers
- and libraries could be found. If not, run 'ccmake ..' and edit the
- OROCOS_INSTALL path.
- - Run 'make'
+ - run 'make'
+ - Verify that the Orocos headers
+ and libraries could be found. If not, run 'ccmake ..' from 'build/' and set the
+ CMAKE_PREFIX_PATH path.
  - Run 'deployer-gnulinux --start deployment/application.cpf -linfo'
  The TaskBrowser should pop up and the DeploymentComponent should load
  your application.

@@ -25,7 +25,7 @@ using namespace Orocos;
  * from the TaskBrowser console. How often is updateHook() executed ? Why ?
  *
  * Tip: In order to find out which functions this component has, type 'ls', and
- * for detailed information, type 'this' (i.e. print the interface of the 'this'
+ * for detailed information, type 'help this' (i.e. print the interface of the 'this'
  * task object).
  *
  * Next, Set the period of the component in configureHook to 0.5 seconds and
