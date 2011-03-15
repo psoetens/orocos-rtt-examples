@@ -26,10 +26,12 @@ rm -f rtt-exercises-$VERSION.tar.gz
 #copy over and make sure it's clean.
 cp -a rtt-exercises export/rtt-exercises-$VERSION
 cd export/rtt-exercises-$VERSION
-for i in hello*; do
-    make -C $i clean
+for i in hello* controller-1; do
+    cd $i; make clean ; cd ..
 done
 rm -rf controller-1/build
+rm -rf controller-1/lib
+rm -rf controller-1-solution
 
 #create solution dir.
 #hacky, need to improve this
