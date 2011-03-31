@@ -17,7 +17,9 @@
   -->
  
   <!-- Exercise: Add an 'Import' statement such that the deployer
-       looks for components in the current ('.') directory.
+       looks for components of the current ("hello-7-deployment") package.
+       NOTE: in non-ROS environments, a "make install" is required before
+			 the current package can be imported.
 
        Then start the deployer with ('gnulinux'):
        $ deployer-gnulinux -linfo -s application.xml
