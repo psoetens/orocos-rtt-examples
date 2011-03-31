@@ -27,7 +27,7 @@ rm -f rtt-exercises-$VERSION.tar.gz
 cp -a rtt-exercises export/rtt-exercises-$VERSION
 cd export/rtt-exercises-$VERSION
 for i in hello* controller-1; do
-    cd $i; rm -rf build bin lib HelloWorld-*; cd ..
+    cd $i; rm -rf build bin lib HelloWorld-* orocos.log *~ .tb_history; cd ..
 done
 rm -rf controller-1/build
 rm -rf controller-1/lib
