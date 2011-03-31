@@ -36,18 +36,11 @@ find_package(Orocos-RTT REQUIRED ${RTT_HINTS})
 # documentation.
 include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
 
+orocos_use_package(ocl-taskbrowser)
 # Creates an orocos executable HelloWorld
 orocos_executable(HelloWorld HelloWorld.cpp) # ...you may add multiple source files
-target_link_libraries( HelloWorld orocos-ocl-taskbrowser-${OROCOS_TARGET} )
 
 #
-# Generates and installs our orocos-hello-1-task-execution-<target>.pc and manifest.xml file
+# Makes this an installable/usable package for other packages.
 #
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/orocos-hello-1-task-execution.pc.in ${CMAKE_CURRENT_BINARY_DIR}/orocos-hello-1-task-execution-${OROCOS_TARGET}.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/orocos-hello-1-task-execution-${OROCOS_TARGET}.pc DESTINATION  lib/pkgconfig )
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/manifest.xml DESTINATION  lib/orocos/hello-1-task-execution )
-
-#
-# Provided 'uninstall' target
-#
-orocos_uninstall_target()
+orocos_generate_package()

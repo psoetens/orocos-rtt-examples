@@ -37,17 +37,10 @@ find_package(Orocos-RTT REQUIRED rtt-scripting ${RTT_HINTS})
 include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
 
 # Creates an orocos executable HelloWorld
+orocos_use_package(ocl-taskbrowser)
 orocos_executable(HelloWorld HelloWorld.cpp) # ...you may add multiple source files
-target_link_libraries( HelloWorld orocos-ocl-taskbrowser-${OROCOS_TARGET} ${OROCOS-RTT_RTT-SCRIPTING_LIBRARY})
 
 #
-# Generates and installs our orocos-hello-6-scripting-<target>.pc and manifest.xml file
+# Makes this an installable/usable package for other packages.
 #
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/orocos-hello-6-scripting.pc.in ${CMAKE_CURRENT_BINARY_DIR}/orocos-hello-6-scripting-${OROCOS_TARGET}.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/orocos-hello-6-scripting-${OROCOS_TARGET}.pc DESTINATION  lib/pkgconfig )
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/manifest.xml DESTINATION  lib/orocos/hello-6-scripting )
-
-#
-# Provided 'uninstall' target
-#
-orocos_uninstall_target()
+orocos_generate_package()

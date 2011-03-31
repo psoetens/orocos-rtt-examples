@@ -45,13 +45,6 @@ orocos_component(world World.cpp) # ...you may add multiple source files
 # You may add multiple orocos_component statements.
 
 #
-# Generates and installs our orocos-hello-7-deployment-<target>.pc and manifest.xml file
+# Makes this an installable/usable package for other packages.
 #
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/orocos-hello-7-deployment.pc.in ${CMAKE_CURRENT_BINARY_DIR}/orocos-hello-7-deployment-${OROCOS_TARGET}.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/orocos-hello-7-deployment-${OROCOS_TARGET}.pc DESTINATION  lib/pkgconfig )
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/manifest.xml DESTINATION  lib/orocos/hello-7-deployment )
-
-#
-# Provided 'uninstall' target
-#
-orocos_uninstall_target()
+orocos_generate_package()
