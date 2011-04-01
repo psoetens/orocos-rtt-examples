@@ -38,8 +38,9 @@ using namespace Orocos;
  * (note: To make this permanent for your component, 
  *    in C++ you need to #include <rtt/marsh/Marshalling.hpp> 
  *    and add to the constructor: this->getProvider<Marshalling>("marshalling");
- *    and in the Makefile: link with rtt-marshalling-<target> found in lib/orocos/plugins
- *    and also add the lib/orocos/plugins  directory to the RPATH.
+ *    and in the CMakeLists.txt: add rtt-marshalling to the list of components to look for in
+ *    find_package(Orocos-RTT REQUIRED) macro.
+ *    See also: http://www.orocos.org/wiki/orocos/toolchain/getting-started/cmake-and-building
  * endnote)
  *
  * When marshalling is loaded:

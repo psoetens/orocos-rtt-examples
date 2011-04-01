@@ -30,6 +30,9 @@ endif()
 
 # Set the CMAKE_PREFIX_PATH in case you're not using Orocos through ROS
 # for helping these find commands find RTT.
+# Exercise: add the dependency on rtt-marshalling in the find_package macro below
+# See: http://www.orocos.org/wiki/orocos/toolchain/getting-started/cmake-and-building
+# for syntax.
 find_package(Orocos-RTT REQUIRED ${RTT_HINTS})
 
 # Defines the orocos_* cmake macros. See that file for additional
