@@ -58,7 +58,7 @@ namespace UseCase
 		}
 
 		void errorHook() {
-            double steer = scale.value() * jog_value ;
+            double steer = scale * jog_value ;
 	          if ( steer < 10.0 && steer > -10.0 ) {
 	                 this->recover();
 	            }

@@ -44,7 +44,7 @@ namespace UseCase
 			 * Check here if it contains a valid value.
 			 * If Kp is smaller or equal to zero, return false, otherwise true.
 			 */
-			if (Kp.value() <= 0.0)
+			if (Kp <= 0.0)
 				return false;
 			return true;
 		}
