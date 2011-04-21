@@ -20,7 +20,7 @@ namespace UseCase
 		: public RTT::TaskContext {
 	protected:
 
-		Property<double> Kp;
+		double Kp;
 		OutputPort<double> steer;
 		InputPort<double> target;
 		InputPort<double> sense;
@@ -28,15 +28,12 @@ namespace UseCase
 	public:
 		Controller(const std::string& name) :
 			TaskContext(name, PreOperational),
-			Kp("Kp", "Proportional Gain", 50.0),
-			steer("Steer",0.0),
-			target("Target"),
-			sense("Sense")
+			Kp(50.0)
 		{
-			this->properties()->addProperty( Kp);
-			this->ports()->addPort( steer );
-			this->ports()->addPort( target );
-			this->ports()->addPort( sense );
+			this->provides()->addProperty("Kp", Kp).doc("Proportional Gain");
+			this->provides()->addPort( "Steer", steer ).doc("The output signal of this component.");
+			this->provides()->addPort( "Target", target ).doc("Target signal");
+			this->provides()->addPort( "Sense", sense ).doc("Measurement signal");
 		}
 
 		bool configureHook() {
@@ -57,7 +54,7 @@ namespace UseCase
 		void updateHook() {
             double target_sample, sense_sample;
             if ( target.read(target_sample) && sense.read(sense_sample) )
-                steer.write( Kp.value() * (target_sample - sense_sample ) );
+                steer.write( Kp * (target_sample - sense_sample ) );
 		}
 
 		void stopHook() {
