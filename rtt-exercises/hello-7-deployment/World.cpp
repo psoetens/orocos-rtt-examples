@@ -116,5 +116,5 @@ namespace Example
     };
 }
 
-#include <ocl/Component.hpp>
+#include <rtt/Component.hpp>
 ORO_CREATE_COMPONENT( Example::World );

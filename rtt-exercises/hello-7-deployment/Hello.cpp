@@ -132,7 +132,7 @@ namespace Example
 
 /**
  * See Orocos Deployment Component Manual (An OCL component).
- * Exercise: Include the necessary OCL header and add the C macro such that the
+ * Exercise: Include the necessary RTT header and add the C macro such that the
  * Example::Hello class becomes a loadable Orocos component. See World.cpp
  * for inspiration.
  */
