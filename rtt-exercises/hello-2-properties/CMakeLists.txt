@@ -43,6 +43,10 @@ include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
 orocos_use_package(ocl-taskbrowser)
 orocos_executable(HelloWorld HelloWorld.cpp) # ...you may add multiple source files
 
+# Exercise:
+# See : http://www.orocos.org/wiki/orocos/toolchain/getting-started/cmake-and-building
+# for adding the target_link_libraries directive here.
+
 #
 # Makes this an installable/usable package for other packages.
 #
