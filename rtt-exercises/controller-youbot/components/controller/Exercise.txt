@@ -1,0 +1,5 @@
+The Controller is largely written. We just need the
+radius to be a property, which is checked in
+configureHook to be positive and smaller than 10.
+
+The property needs to come from a Controller.cpf file !

@@ -1,0 +1,9 @@
+We're going to write the whole supervisor in Lua.
+
+1. Create a LuaComponent during deployment
+2. Create a .lua state machine script 
+   a. having the state layout as in Supervisor.png
+   b. having the state transitions as in Supervisor.png (i.e. event responses)
+3. Start/stop the controller in/out circling mode
+4. Start/stop the joystick in/out manual mode
+

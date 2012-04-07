@@ -1,0 +1,8 @@
+
+Modify AreaDetection such that it raises 3 events:
+ - e_safe
+ - e_slow
+ - e_unsafe
+
+depending on if the safe zone, slow zone or unsafe zone
+is entered by the youbot.
