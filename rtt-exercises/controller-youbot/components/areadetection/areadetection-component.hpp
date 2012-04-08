@@ -32,6 +32,16 @@ class Areadetection
         addProperty("saferight", saferightcorner).doc("Safe bottom right corner.");
         addProperty("slowleft", slowleftcorner).doc("Slow top left corner.");
         addProperty("slowright", slowrightcorner).doc("Slow bottom right corner.");
+
+        safeleftcorner.x = -10;
+        safeleftcorner.y = -10;
+        saferightcorner.x = 10;
+        saferightcorner.y = 10;
+
+        slowleftcorner.x = -15;
+        slowleftcorner.y = -15;
+        slowrightcorner.x = 15;
+        slowrightcorner.y = 15;
     }
 
     bool configureHook() {
@@ -56,7 +66,23 @@ class Areadetection
 
     void updateHook() {
         // Exercise: Emit events when curlocation is traversing zones.
+        // You can do this by caching the previous location of the robot
+        // and compare it with the current location. Use the utility functions
+        // below to ease your work.
+    }
 
+    bool isSafe(geometry_msgs::Pose2D pos) {
+        return pos.x < saferightcorner.x && pos.x > safeleftcorner.x 
+            && pos.y < saferightcorner.y && pos.y > safeleftcorner.y;
+    }
+
+    bool isSlow(geometry_msgs::Pose2D pos) {
+        return !isSafe(pos) && pos.x < slowrightcorner.x && pos.x > slowleftcorner.x 
+            && pos.y < slowrightcorner.y && pos.y > slowleftcorner.y;
+    }
+
+    bool isOut(geometry_msgs::Pose2D pos) {
+        return !isSafe(pos);
     }
 
     void stopHook() {

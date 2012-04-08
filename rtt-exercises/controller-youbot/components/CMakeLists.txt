@@ -1,3 +1,4 @@
 add_subdirectory( areadetection )
 add_subdirectory( controller )
+add_subdirectory( teleop )
 add_subdirectory( nobot )
