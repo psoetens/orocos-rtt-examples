@@ -1,0 +1,34 @@
+- git:
+    local-name: rFSM
+    uri: https://github.com/kmarkus/rFSM.git
+    version: ERF
+
+- git:
+    local-name: rfsm-rtt-example
+    uri: git://gitorious.org/orocos-toolchain/rfsm-rtt-example.git
+    version: master
+
+- git:
+    local-name: rttlua_completion
+    uri: git://gitorious.org/orocos-toolchain/rttlua_completion.git
+    version: master
+
+- git:
+    local-name: youbot-ros-pkg
+    uri: http://github.com/psoetens/youbot-ros-pkg.git
+    version: master
+
+- git:
+    local-name: cob_common
+    uri: https://github.com/psoetens/cob_common.git
+    version: master
+
+- git:
+    local-name: rtt_dot_service
+    uri: git://gitorious.org/rtt_dot_service/rtt_dot_service.git
+    version: master
+
+- git:
+    local-name: orocos-rtt-examples
+    uri: https://github.com/psoetens/orocos-rtt-examples.git
+    version: rtt-2.0-examples
