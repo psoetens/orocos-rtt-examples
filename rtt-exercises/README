@@ -1,4 +1,4 @@
-                      OROCOS RTT 2.0 Tutorial
+                      OROCOS RTT >= 2.4 Tutorial
 
 This directory contains exercises for exploring the Orocos Real-Time
 Toolkit in order to learn how to create Orocos components.
@@ -15,10 +15,11 @@ controller-1 example, which has instructions in its Exercise.txt file.
 
 Requirements: 
 
-Orocos Real-Time Toolkit 2.0 or later and the Orocos Component Library's
-DeploymentComponent and TaskBrowser component are installed in
-/usr/local for the 'gnulinux' target. Edit the Makefile and change the
-OROPATH value if this is not the case in your setup.
+Orocos Real-Time Toolkit 2.4 or later and the Orocos Component Library's
+DeploymentComponent and TaskBrowser component are installed. Use ROS
+for automatic dependency resolution, or set your CMAKE_MODULE_PATH
+to the lib/cmake/orocos-rtt directory where the FindOrocos-RTT.cmake file
+was installed.
 
 Eclipse users:
 
@@ -30,6 +31,9 @@ Start Eclipse, select the C/C++ perspective (right top) Use
 'File'->'Import...'->'Existing projects into Workspace' and point it
 to this directory or this archive. It will see that all examples are
 Eclipse projects.  Select them all and press Finish.
+
+ROS users can just use 'make eclipse-project' in their build directory
+and import that generated project.
 
 Feel free to contribute other examples on Orocos.org.
 

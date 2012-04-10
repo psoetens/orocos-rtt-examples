@@ -5,14 +5,8 @@
  * a 'hello world' example.
  */
 
-#include <rtt/os/main.h>
-
-#include <rtt/Logger.hpp>
-#include <rtt/TaskContext.hpp>
-#include <rtt/Activity.hpp>
-
-#include <ocl/OCL.hpp>
-#include <ocl/TaskBrowser.hpp>
+#include <rtt/RTT.hpp>
+#include <rtt/Component.hpp>
 
 using namespace std;
 using namespace RTT;
@@ -41,8 +35,6 @@ using namespace Orocos;
  * Optional: Let the Hello component be created in the 'PreOperational' mode.
  * What effect does this have on the acceptance of the start() method ?
  * Optional: Replace the Activity with a SlaveActivity. What are
- * the effects of trigger and update in comparison with the other activity types ?
- * Optional: Replace the Activity with a SequentialActivity. What are
  * the effects of trigger and update in comparison with the other activity types ?
  */
 namespace Example
@@ -77,29 +69,4 @@ namespace Example
     };
 }
 
-using namespace Example;
-
-int ORO_main(int argc, char** argv)
-{
-    Logger::In in("main()");
-
-    // Set log level more verbose than default,
-    // such that we can see output :
-    if ( log().getLogLevel() < Logger::Info ) {
-        log().setLogLevel( Logger::Info );
-        log(Info) << argv[0] << " manually raises LogLevel to 'Info' (5). See also file 'orocos.log'."<<endlog();
-    }
-
-    log(Info) << "**** Creating the 'Hello' component ****" <<endlog();
-    // Create the task:
-    Hello hello("Hello");
-
-    log(Info) << "**** Starting the TaskBrowser       ****" <<endlog();
-    // Switch to user-interactive mode.
-    TaskBrowser browser( &hello );
-
-    // Accept user commands from console.
-    browser.loop();
-
-    return 0;
-}
+ORO_CREATE_COMPONENT( Example::Hello )

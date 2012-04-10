@@ -39,9 +39,8 @@ find_package(Orocos-RTT REQUIRED ${RTT_HINTS})
 # documentation.
 include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
 
-# Creates an orocos executable HelloWorld
-orocos_use_package(ocl-taskbrowser)
-orocos_executable(HelloWorld HelloWorld.cpp) # ...you may add multiple source files
+# Creates an orocos component HelloWorld
+orocos_component(HelloWorld HelloWorld.cpp) # ...you may add multiple source files
 
 # Exercise:
 # See : http://www.orocos.org/wiki/orocos/toolchain/getting-started/cmake-and-building

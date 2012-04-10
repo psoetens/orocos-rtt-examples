@@ -5,29 +5,23 @@
  * a 'hello world' example.
  */
 
-#include <rtt/os/main.h>
-
 #include <rtt/Logger.hpp>
 #include <rtt/TaskContext.hpp>
-#include <rtt/Activity.hpp>
 
 /**
  * Include this header in order to call component operations.
  */
 #include <rtt/OperationCaller.hpp>
-
-#include <ocl/OCL.hpp>
-#include <ocl/TaskBrowser.hpp>
+#include <rtt/Component.hpp>
 
 using namespace std;
 using namespace RTT;
-using namespace Orocos;
 
 /**
  * Exercise 4: Read Orocos Component Builder's Manual, Chap 2 sect 3.5
  *
  * First, compile and run this application and use 'the_method'.
- * Configure and start the World component ('World.start()') and see
+ * Configure and start the World component ('world.start()') and see
  * how it uses the_method. Fix any bugs :-)
  *
  * Next, add to Hello a second method 'bool sayIt(string sentence, string& answer)'
@@ -104,7 +98,7 @@ namespace Example
     	bool configureHook() {
 
     		// Lookup the Hello component.
-    	    TaskContext* peer = this->getPeer("Hello");
+    	    TaskContext* peer = this->getPeer("hello");
     	    if ( !peer ) {
     	    	log(Error) << "Could not find Hello component!"<<endlog();
     	    	return false;
@@ -121,54 +115,12 @@ namespace Example
     	}
 
     	void updateHook() {
-    		log(Info) << "Receiving from 'Hello': " << hello_method() <<endlog();
+    		log(Info) << "Receiving from 'hello': " << hello_method() <<endlog();
     	}
     };
 }
 
-using namespace Example;
+ORO_CREATE_COMPONENT_LIBRARY()
+ORO_LIST_COMPONENT_TYPE( Example::Hello )
+ORO_LIST_COMPONENT_TYPE( Example::World )
 
-int ORO_main(int argc, char** argv)
-{
-    Logger::In in("main()");
-
-    // Set log level more verbose than default,
-    // such that we can see output :
-    if ( log().getLogLevel() < Logger::Info ) {
-        log().setLogLevel( Logger::Info );
-        log(Info) << argv[0] << " manually raises LogLevel to 'Info' (5). See also file 'orocos.log'."<<endlog();
-    }
-
-    log(Info) << "**** Creating the 'Hello' component ****" <<endlog();
-    // Create the task:
-    Hello hello("Hello");
-    // Create the activity which runs the task's engine:
-    // 1: Priority
-    // 0.5: Period (2Hz)
-    // hello.engine(): is being executed.
-    hello.setActivity( new Activity(1, 0.5 ) );
-    log(Info) << "**** Starting the 'hello' component ****" <<endlog();
-    // Start the component:
-    hello.start();
-
-    log(Info) << "**** Creating the 'World' component ****" <<endlog();
-    World world("World");
-    // Create the activity which runs the task's engine:
-    // 1: Priority
-    // 0.5: Period (2Hz)
-    // world.engine(): is being executed.
-    world.setActivity( new Activity(1, 0.5 ) );
-
-    log(Info) << "**** Creating the 'Peer' connection ****" <<endlog();
-    // This is a bidirectional connection.
-    connectPeers(&world, &hello );
-
-    log(Info) << "**** Starting the TaskBrowser       ****" <<endlog();
-    // Switch to user-interactive mode.
-    TaskBrowser browser( &hello );
-
-    // Accept user commands from console.
-    browser.loop();
-
-    return 0;
-}

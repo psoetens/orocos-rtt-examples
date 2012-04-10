@@ -16,13 +16,10 @@
  */
 #include <rtt/Property.hpp>
 #include <rtt/Attribute.hpp>
-
-#include <ocl/OCL.hpp>
-#include <ocl/TaskBrowser.hpp>
+#include <rtt/Component.hpp>
 
 using namespace std;
 using namespace RTT;
-using namespace Orocos;
 
 /**
  * Exercise 2: Read Orocos Component Builder's Manual, Chap 2 sect. 3.6
@@ -33,7 +30,7 @@ using namespace Orocos;
  * Next save the properties of this component to a hello.xml file:
  * You will need to install the 'marshalling' service using the TaskBrowser
  * at runtime:
- * ** TaskBrowser: type '.provides marshalling'
+ * ** TaskBrowser: type '.provide marshalling'
  *
  * (note: To make this permanent for your component:
  *    In C++ you need to #include <rtt/marsh/Marshalling.hpp> 
@@ -56,6 +53,14 @@ using namespace Orocos;
  * Optional : read the property file from configureHook() and log it's value. You need
  * to make the modifications detailed above in the note.
  * Optional : write the property file in cleanupHook().
+ *
+ * For ROS users: load the rtt_rosparam service as well and send the properties to the
+ * ROS master server instead of to the XML file. 
+ * At runtime:
+ * ** TaskBrowser: type 'import("rtt_rosnode")' and '.provide rosparam' in "hello"
+ *
+ * Open question: Would you prefer to hard-code this property reading/writing or would
+ * you prefer to script it ?
  */
 namespace Example
 {
@@ -107,48 +112,4 @@ namespace Example
     };
 }
 
-using namespace Example;
-
-int ORO_main(int argc, char** argv)
-{
-    Logger::In in("main()");
-
-    // Set log level more verbose than default,
-    // such that we can see output :
-    if ( log().getLogLevel() < Logger::Info ) {
-        log().setLogLevel( Logger::Info );
-        log(Info) << argv[0] << " manually raises LogLevel to 'Info' (5). See also file 'orocos.log'."<<endlog();
-    }
-
-    log(Info) << "**** Creating the 'Hello' component ****" <<endlog();
-    // Create the task:
-    Hello hello("Hello");
-    // Create the activity which runs the task's engine:
-    // 1: Priority
-    // 0.5: Period (2Hz)
-    // hello.engine(): is being executed.
-    hello.setActivity( new Activity(1, 0.5) );
-
-    log(Info) << "**** Starting the 'Hello' component ****" <<endlog();
-    // Start the component:
-    hello.start();
-
-    log(Info) << "**** Using the 'Hello' component    ****" <<endlog();
-
-    // Do some 'client' calls :
-    log(Info) << "**** Reading a Property:            ****" <<endlog();
-    Property<std::string> p = hello.provides()->getProperty("the_property");
-    if ( p.ready() )
-        log(Info) << "     "<<p.getName() << " = " << p.value() <<endlog();
-    else
-        log(Error) << "Property 'the_property' was not found !" <<endlog();
-
-    log(Info) << "**** Starting the TaskBrowser       ****" <<endlog();
-    // Switch to user-interactive mode.
-    TaskBrowser browser( &hello );
-
-    // Accept user commands from console.
-    browser.loop();
-
-    return 0;
-}
+ORO_CREATE_COMPONENT( Example::Hello )

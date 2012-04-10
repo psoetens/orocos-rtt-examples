@@ -1,0 +1,12 @@
+// Start this script by using:
+// deployer-gnulinux -s start.ops -linfo
+
+// For ROS builds, we could also import using the package name.
+import("lib/orocos")
+
+loadComponent("hello","Example::Hello")
+
+var double period = 0.5
+setActivity("hello", period, LowestPriority , ORO_SCHED_OTHER )
+
+hello.start()

@@ -5,18 +5,13 @@
  * a 'hello world' example.
  */
 
-#include <rtt/os/main.h>
-
 #include <rtt/Logger.hpp>
 #include <rtt/TaskContext.hpp>
-#include <rtt/Activity.hpp>
 
 #include <rtt/OperationCaller.hpp>
 #include <rtt/Port.hpp>
 #include <rtt/scripting/Scripting.hpp>
-
-#include <ocl/OCL.hpp>
-#include <ocl/TaskBrowser.hpp>
+#include <rtt/Component.hpp>
 
 #include <boost/lambda/lambda.hpp>
 #include <algorithm>
@@ -25,7 +20,6 @@
 using namespace std;
 using namespace boost;
 using namespace RTT;
-using namespace Orocos;
 
 /**
  * Exercise 6: Read Orocos Component Builder's Manual, Chap 3
@@ -146,47 +140,6 @@ namespace Example
     };
 }
 
-using namespace Example;
-
-int ORO_main(int argc, char** argv)
-{
-    Logger::In in("main()");
-
-    // Set log level more verbose than default,
-    // such that we can see output :
-    if ( log().getLogLevel() < Logger::Info ) {
-        log().setLogLevel( Logger::Info );
-        log(Info) << argv[0] << " manually raises LogLevel to 'Info' (5). See also file 'orocos.log'."<<endlog();
-    }
-
-    log(Info) << "**** Creating the 'Hello' component ****" <<endlog();
-    // Create the task:
-    Hello hello("Hello");
-    // Create the activity which runs the task's engine:
-    // 1: Priority
-    // 0.5: Period (2Hz)
-    hello.setActivity( new Activity(1, 0.5 ) );
-    log(Info) << "**** Starting the 'hello' component ****" <<endlog();
-    // Start the component:
-    hello.start();
-
-    log(Info) << "**** Creating the 'World' component ****" <<endlog();
-    World world("World");
-    // Create the activity which runs the task's engine:
-    // 1: Priority
-    // 0.5: Period (2Hz)
-    world.setActivity( new Activity(1, 0.5 ) );
-
-    log(Info) << "**** Creating the 'Peer' connection ****" <<endlog();
-    // This is a bidirectional connection.
-    connectPeers(&world, &hello );
-
-    log(Info) << "**** Starting the TaskBrowser       ****" <<endlog();
-    // Switch to user-interactive mode.
-    TaskBrowser browser( &hello );
-
-    // Accept user commands from console.
-    browser.loop();
-
-    return 0;
-}
+ORO_CREATE_COMPONENT_LIBRARY()
+ORO_LIST_COMPONENT_TYPE( Example::Hello )
+ORO_LIST_COMPONENT_TYPE( Example::World )
