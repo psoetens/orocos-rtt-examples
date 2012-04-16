@@ -25,7 +25,7 @@ depl:loadComponent("teleop","Teleop")
 cp=rtt.Variable("ConnPolicy")
 cp.transport=3 -- 3 is ROS -- NOTE: set transport back to zero for local connections ! 
 
-cp.name_id="/cmdvel" -- topic name
+cp.name_id="/cmd_vel" -- topic name
 depl:stream("controller.cmdvel", cp )
 depl:stream("teleop.cmdvel", cp )
 
