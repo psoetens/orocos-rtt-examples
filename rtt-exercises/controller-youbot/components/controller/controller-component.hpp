@@ -18,10 +18,10 @@ class Controller
     geometry_msgs::Pose2D startpos;
  public:
     Controller(std::string const& name)
-        : TaskContext(name), radius(5.0f), steps(100.0f), curstep(0), gain(10.0)
+        : TaskContext(name), radius(1.0f), steps(100.0f), curstep(0), gain(1.0)
     {
         std::cout << "Controller constructed !" <<std::endl;
-        addPort("curlocation", curlocation);
+        addEventPort("curlocation", curlocation);
         addPort("cmdvel", cmdvel);
     }
 

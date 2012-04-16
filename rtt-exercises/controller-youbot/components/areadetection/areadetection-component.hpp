@@ -14,6 +14,7 @@ class Areadetection
     : public RTT::TaskContext
 {
     RTT::InputPort<geometry_msgs::Pose2D> curlocation;
+    RTT::OutputPort<std::string> events;
     /**
      * The safe area.
      */
@@ -22,12 +23,15 @@ class Areadetection
      * The slow area.
      */
     geometry_msgs::Pose2D slowleftcorner, slowrightcorner;
+
+    geometry_msgs::Pose2D oldlocation;
  public:
     Areadetection(std::string const& name)
         : TaskContext(name)
     {
         std::cout << "Areadetection constructed !" <<std::endl;
-        addPort("curlocation", curlocation).doc("Receives the current location.");
+        addEventPort("curlocation", curlocation).doc("Receives the current location.");
+        addPort("events", events);
         addProperty("safeleft", safeleftcorner).doc("Safe top left corner.");
         addProperty("saferight", saferightcorner).doc("Safe bottom right corner.");
         addProperty("slowleft", slowleftcorner).doc("Slow top left corner.");
@@ -77,6 +81,18 @@ class Areadetection
         // You can do this by caching the previous location of the robot
         // and compare it with the current location. Use the utility functions
         // below to ease your work.
+        geometry_msgs::Pose2D loc;
+        if ( curlocation.read(loc) == RTT::NewData ) {
+            if (isSafe(loc) && isSlow(oldlocation) )
+                events.write("e_safe");
+            if (isSlow(loc) && isOut(oldlocation) )
+                events.write("e_slow");
+            if (isSlow(loc) && isSafe(oldlocation) )
+                events.write("e_slow");
+            if (isOut(loc) && isSlow(oldlocation) )
+                events.write("e_out");
+            oldlocation = loc;
+        }
     }
 
     bool isSafe(geometry_msgs::Pose2D pos) {
