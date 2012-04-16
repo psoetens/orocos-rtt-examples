@@ -1,0 +1,60 @@
+                Orocos Youbot/Lua Exercise
+
+Note: Make sure you understand the basic principles of building
+Orocos components by reading the Component Builder's Manual
+and making the 'hello world' exercises.
+
+In this complex exercise, you'll need to extend existing components,
+write Lua scripts and rFSM state machines. See UseCase.txt
+for a global overview of the application architecture.
+
+See http://www.orocos.org/wiki/main-page/toolchain/getting-started/toolchain-tutorials/setting-rtt-24-exercises-ubuntu
+for setting your Ubuntu system up (depends on ROS).
+
+ROS users:
+ - Source $(rosstack find orocos_toolchain)/env.sh
+ - Use 'rttlua-gnulinux -i deployment/youbot.lua' 
+   to run the Lua deployer application
+ - Use 'make eclipse-project' in 'build' in order to
+   create a correctly configured Eclipse project
+
+Non-ROS users: 
+ - Source orocos-toolchain/env.sh
+ - Use 'rttlua-gnulinux -i deployment/youbot.lua' 
+   to run the Lua deployer application
+
+All:
+ - This example requires the 'CMake' tool v2.6.3 or newer.
+ - Eclipse is the prefered development environment. Install the 
+ 'CMake Editor' plugin. In order to have
+ auto-completion, make sure that the Orocos install path is in your Eclipse
+ include path (Project->Properties->C/C++ General->Paths)
+ 
+* Recommended:
+ - Gazebo for visualisation
+ - A PS3 Joystick for free control of the robot base
+
+* Documentation
+ - By now you should have read the first chapters of the Component
+ Builder's Manual. Lua scripting basics and rFSM basics will
+ be necessary too.
+ - Read the Deployment Component Manual. It contains instructions
+ for the XML format and how an Orocos application is created.
+ - The UseCase.txt file contains the application architecture of
+ this example. 
+
+* First steps
+ - run 'make'
+ - Verify that the Orocos headers
+ and libraries could be found. If not, run 'ccmake ..' from 'build/' and set the
+ CMAKE_PREFIX_PATH path.
+ - Run rttlua-gnulinux -i deployment/youbot.lua'
+ The Lua prompt should pop up and the DeploymentComponent should load
+ your application.
+ 
+* Exercises
+  See components/controller/Exercise.txt, components/area_detection/Exercise.txt,
+  components/supervisor/Exercise.txt, components/teleop/CMakeLists.txt
+ 
+ However simple this looks, most people need about 3 hours to finish all aspects
+ of this task (after having made the hello world examples.)

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+	<include file="$(find youbot_description)/launch/youbot_publisher.launch" />
+</launch>

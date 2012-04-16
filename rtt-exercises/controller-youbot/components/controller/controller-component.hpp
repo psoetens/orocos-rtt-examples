@@ -17,7 +17,7 @@ class Controller
     RTT::OutputPort<geometry_msgs::Twist> cmdvel;
     geometry_msgs::Pose2D startpos;
  public:
-    Controller(string const& name)
+    Controller(std::string const& name)
         : TaskContext(name), radius(5.0f), steps(100.0f), curstep(0), gain(10.0)
     {
         std::cout << "Controller constructed !" <<std::endl;

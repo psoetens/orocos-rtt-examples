@@ -17,7 +17,7 @@ class Nobot
     geometry_msgs::Pose2D mcurpos;
     double inertia;
  public:
-    Nobot(string const& name)
+    Nobot(std::string const& name)
         : TaskContext(name), inertia(1.0)
     {
         std::cout << "Nobot constructed !" <<std::endl;

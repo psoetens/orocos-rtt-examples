@@ -23,7 +23,7 @@ class Areadetection
      */
     geometry_msgs::Pose2D slowleftcorner, slowrightcorner;
  public:
-    Areadetection(string const& name)
+    Areadetection(std::string const& name)
         : TaskContext(name)
     {
         std::cout << "Areadetection constructed !" <<std::endl;
@@ -48,13 +48,13 @@ class Areadetection
         std::cout << "Areadetection configured !" <<std::endl;
         bool status = true;
         if ( (status &= safeleftcorner.x >= saferightcorner.x) )
-            cout << "Error: safeleft must be left of saferight." << endl;
+            std::cout << "Error: safeleft must be left of saferight." << std::endl;
         if ( (status &= slowleftcorner.x >= slowrightcorner.x) )
-            cout << "Error: slowleft must be left of slowright." << endl;
+            std::cout << "Error: slowleft must be left of slowright." << std::endl;
         if ( (status &= safeleftcorner.y >= saferightcorner.y) )
-            cout << "Error: safeleft must be above saferight." << endl;
+            std::cout << "Error: safeleft must be above saferight." << std::endl;
         if ( (status &= slowleftcorner.y >= slowrightcorner.y) )
-            cout << "Error: slowleft must be above slowright." << endl;
+            std::cout << "Error: slowleft must be above slowright." << std::endl;
         
         return status;
     }

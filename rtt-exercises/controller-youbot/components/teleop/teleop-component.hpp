@@ -17,7 +17,7 @@ class Teleop
     RTT::InputPort<sensor_msgs::Joy> joystick;
     RTT::OutputPort<geometry_msgs::Twist> cmdvel;
  public:
-    Teleop(string const& name)
+    Teleop(std::string const& name)
         : TaskContext(name),
           linear_x(1),linear_y(0),
           angular_z(2), l_scale_(1), a_scale_(1), 
