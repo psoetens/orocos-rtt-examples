@@ -33,15 +33,15 @@ class Areadetection
         addProperty("slowleft", slowleftcorner).doc("Slow top left corner.");
         addProperty("slowright", slowrightcorner).doc("Slow bottom right corner.");
 
-        safeleftcorner.x = -10;
-        safeleftcorner.y = -10;
-        saferightcorner.x = 10;
-        saferightcorner.y = 10;
+        safeleftcorner.x = -5;
+        safeleftcorner.y = -5;
+        saferightcorner.x = 5;
+        saferightcorner.y = 5;
 
-        slowleftcorner.x = -15;
-        slowleftcorner.y = -15;
-        slowrightcorner.x = 15;
-        slowrightcorner.y = 15;
+        slowleftcorner.x = -10;
+        slowleftcorner.y = -10;
+        slowrightcorner.x = 10;
+        slowrightcorner.y = 10;
     }
 
     bool configureHook() {
@@ -82,7 +82,7 @@ class Areadetection
     }
 
     bool isOut(geometry_msgs::Pose2D pos) {
-        return !isSafe(pos);
+        return !isSafe(pos) && !isSlow(pos);
     }
 
     void stopHook() {

@@ -41,22 +41,24 @@ class Controller
     void updateHook() {
         geometry_msgs::Pose2D outpos = startpos;
         geometry_msgs::Pose2D curpos;
-        curlocation.read(curpos);
+        if ( curlocation.read(curpos) != RTT::NewData)
+            return;
         if (movingout) {
             outpos.x = startpos.x + radius * double(curstep) / steps;
             curstep++;
             if ( outpos.x >= startpos.x + radius) {
+                std::cout << "Moving out done" << std::endl;
                 movingout = false;
                 curstep = 0;
             }
         } else {
-            outpos.x = startpos.x + radius * cos( curstep / (2*M_PI) * 360 );
-            outpos.y = startpos.y + radius * sin( curstep / (2*M_PI) * 360 );
+            outpos.x = startpos.x + radius * cos( curstep / 100 );
+            outpos.y = startpos.y + radius * sin( curstep / 100 );
             curstep++;
         }
         geometry_msgs::Twist outvel;
-        outvel.linear.x = ( curpos.x - outpos.x ) * gain;
-        outvel.linear.y = ( curpos.y - outpos.y ) * gain;
+        outvel.linear.x = ( outpos.x - curpos.x ) * gain;
+        outvel.linear.y = ( outpos.y - curpos.y ) * gain;
         cmdvel.write( outvel );
     }
 

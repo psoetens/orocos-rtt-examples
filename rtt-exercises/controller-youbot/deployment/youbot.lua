@@ -20,6 +20,15 @@ depl:loadComponent("controller","Controller")
 depl:loadComponent("areadetection","Areadetection")
 depl:loadComponent("teleop","Teleop")
 -- Deployment Exercise: Add a supervisor Lua component
+depl:loadComponent("supervisor", "OCL::LuaComponent")
+depl:addPeer("supervisor", "controller")
+depl:addPeer("supervisor", "areadetection")
+depl:addPeer("supervisor", "teleop")
+sup=depl:getPeer("supervisor")
+sup:exec_file("components/supervisor/supervisor.lua")
+sup:configure()
+cmd = rttlib.port_clone_conn(sup:getPort("events"))
+
 
 -- Data Flow connections
 cp=rtt.Variable("ConnPolicy")
@@ -29,7 +38,7 @@ cp.name_id="/cmd_vel" -- topic name
 depl:stream("controller.cmdvel", cp )
 depl:stream("teleop.cmdvel", cp )
 
-cp.name_id="/youbot"
+cp.name_id="/joint_states"
 depl:stream("controller.curlocation", cp)
 depl:stream("areadetection.curlocation", cp)
 
