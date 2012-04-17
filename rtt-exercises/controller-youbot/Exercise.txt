@@ -54,7 +54,8 @@ All:
  
 * Exercises
   See components/controller/Exercise.txt, components/area_detection/Exercise.txt,
-  components/supervisor/Exercise.txt, components/teleop/CMakeLists.txt
+  components/supervisor/Exercise.txt, components/teleop/CMakeLists.txt,
+  components/localisation/Exercise.txt
  
  However simple this looks, most people need about 3 hours to finish all aspects
  of this task (after having made the hello world examples.)

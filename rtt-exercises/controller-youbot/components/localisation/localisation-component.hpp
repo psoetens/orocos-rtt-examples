@@ -10,7 +10,6 @@
 class Localisation
     : public RTT::TaskContext
 {
-    RTT::OperationCaller<geometry_msgs::TransformStamped (const std::string&, const std::string& )> getPose;
     geometry_msgs::TransformStamped tfs;
     RTT::OutputPort<geometry_msgs::Pose2D> outpose;
  public:
@@ -21,15 +20,13 @@ class Localisation
     }
 
     bool configureHook() {
-        if ( getPeer("tf") == 0 )
-            return false;
-        getPose = getPeer("tf")->getOperation("lookupTransform");
-        return getPose.ready();
+        /** Check in here that we can call rtt_tf */
+        return false;
     }
 
     void updateHook() {
         try {
-            tfs = getPose("/odom","/base_footprint");
+            /* tfs = ...call rtt_tf and query the transform /odom to /base_footprint ... ; */
         } catch (...) {
             return;
         }

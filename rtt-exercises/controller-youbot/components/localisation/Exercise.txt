@@ -1,0 +1,4 @@
+Exercise: The localisation component is responsible for
+using rtt_tf and converting the TransformStamped into
+a Pose2D. Setup the code to call the proper Operation
+in order to obtain this transform.
