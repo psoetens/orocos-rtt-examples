@@ -47,10 +47,17 @@ depl:stream("teleop.cmdvel", cp )
 cp.name_id="/joy"
 depl:stream("teleop.joystick",cp)
 
+cp.transport = 0
+cp.name_id=""
+depl:connect("localisation.pose","controller.curlocation", cp)
+depl:connect("localisation.pose","areadetection.curlocation", cp)
+
+
 -- Data Flow Exercise: 
 --  Connect the events of areadetection to the supervisor
 --  Connect the localisation's ports to the controller and areadetection
 --  Check if all components and ports match periodicity or have an event-port 
+depl:connect("areadetection.events","supervisor.events", cp)
 
 -- Only start in case no youbot is present:
 depl:loadComponent("youbot","Nobot")
@@ -65,6 +72,16 @@ depl:connect("youbot.curpos","controller.curlocation", cp);
 --  areadetection, nobot (if applicable), supervisor 
 --  Remember that the supervisor has the authority to
 --  control (start/stop) most components.
+sup:start()
 
 -- Deployment Exercise:
 --  Visualise the current setup with the rtt_dot_service
+import("rtt_dot_service")
+depl:loadService("deployer","dot")
+depl:provides("dot"):generate()
+-- Use rosrun xdot xdot.y orograph.dot to visualize
+-- call generate again to update the graph
+
+-- user/test commands:
+cmd:write("e_circle")
+cmd:write("e_manual")
