@@ -1,5 +1,5 @@
 -- In order to run this script, use:
--- rttlua-gnulinux -i youbot.lua
+-- rttlua-gnulinux -i deployment/youbot.lua
 
 -- See also http://www.orocos.org/wiki/orocos/toolchain/LuaCookbook
 --  in order to set your LUA_PATH correctly, or errors will occur.
@@ -14,21 +14,27 @@ tc = rtt.getTC()
 depl = tc:getPeer("deployer")
 
 -- Start deploying and connecting
+-- We need rtt_tf to get the current 2D position for us
+depl:import("rtt_tf")
+depl:loadComponent("tf","rtt_tf::RTT_TF")
+tf = depl:getPeer("tf")
+tf:configure()
+tf:start()
 
+-- Import our own components
 depl:import("controller-youbot")
+
+depl:loadComponent("localisation","Localisation")
+depl:addPeer("localisation", "tf") -- for lookupTransform
+localisation= depl:getPeer("localisation")
+localisation:setPeriod(0.01)
+localisation:configure()
+localisation:start()
+
 depl:loadComponent("controller","Controller")
 depl:loadComponent("areadetection","Areadetection")
 depl:loadComponent("teleop","Teleop")
 -- Deployment Exercise: Add a supervisor Lua component
-depl:loadComponent("supervisor", "OCL::LuaComponent")
-depl:addPeer("supervisor", "controller")
-depl:addPeer("supervisor", "areadetection")
-depl:addPeer("supervisor", "teleop")
-sup=depl:getPeer("supervisor")
-sup:exec_file("components/supervisor/supervisor.lua")
-sup:configure()
-cmd = rttlib.port_clone_conn(sup:getPort("events"))
-
 
 -- Data Flow connections
 cp=rtt.Variable("ConnPolicy")
@@ -38,15 +44,13 @@ cp.name_id="/cmd_vel" -- topic name
 depl:stream("controller.cmdvel", cp )
 depl:stream("teleop.cmdvel", cp )
 
-cp.name_id="/joint_states"
-depl:stream("controller.curlocation", cp)
-depl:stream("areadetection.curlocation", cp)
-
 cp.name_id="/joy"
 depl:stream("teleop.joystick",cp)
 
 -- Data Flow Exercise: 
 --  Connect the events of areadetection to the supervisor
+--  Connect the localisation's ports to the controller and areadetection
+--  Check if all components and ports match periodicity or have an event-port 
 
 -- Only start in case no youbot is present:
 depl:loadComponent("youbot","Nobot")
@@ -54,7 +58,7 @@ cp.transport = 0
 depl:connect("youbot.cmdvel","controller.cmdvel", cp);
 depl:connect("youbot.cmdvel","teleop.cmdvel", cp);
 depl:connect("youbot.curpos","controller.curlocation", cp);
-depl:connect("youbot.curpos","controller.curlocation", cp);
+
 
 -- Deployment Exercise:
 --  Configure or start the necessary components: 
