@@ -1,0 +1,33 @@
+To prepare for this example, you need to have done the basic 
+Orocos RTT and Lua rFSM examples/tutorials. This one builds
+further on that.
+
+Make sure that:
+ * The ROS desktop packages are installed, including Gazebo (optional).
+ * orocos_toolchain, rtt_ros_integration, rtt_geometry (ROS) stacks are installed
+ * Your LUA_PATH is correctly set. For example, insert or 'source' this code 
+   snippet in your .bashrc (*after* you sourced ROS' setup.bash) :
+
+#!/bin/bash
+RTTLUA_MODULES=`rospack find ocl`/lua/modules/?.lua
+RTTLUA_COMPLETION="$LUA_PATH;`rospack find rttlua_completion`/?.lua"
+
+if [ "x$LUA_PATH" == "x" ]; then
+    LUA_PATH=";;"
+fi
+export LUA_PATH="$LUA_PATH;$RTTLUA_MODULES"
+export LUA_CPATH="$LUA_CPATH;`rospack find rttlua_completion`/?.so"
+
+ * You have installed the youbot-ros-pkg which contains a gazebo
+   simulator script.
+
+ * Start the gazebo simulator or the 'nobot' component:
+   roslaunch youbot_description youbot_publisher.launch
+ OR
+   nobot:start()
+
+Start this tutorial with:
+
+   rosrun ocl rttlua-gnulinux -i deployment/youbot.lua
+
+and check out the 'Exercise.txt' files or the 'Exercise:' tags in the code.

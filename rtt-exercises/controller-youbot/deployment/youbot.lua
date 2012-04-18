@@ -21,6 +21,15 @@ tf = depl:getPeer("tf")
 tf:configure()
 tf:start()
 
+--depl:import("rtt_dot_service")
+--depl:loadService("deployer","dot")
+depl:loadComponent("updater","OCL::LuaComponent")
+depl:addPeer("updater", "deployer")
+updater = depl:getPeer("updater")
+updater:exec_file("deployment/updater.lua")
+updater:configure()
+updater:start()
+
 -- Import our own components
 depl:import("controller-youbot")
 
@@ -34,7 +43,15 @@ localisation:start()
 depl:loadComponent("controller","Controller")
 depl:loadComponent("areadetection","Areadetection")
 depl:loadComponent("teleop","Teleop")
+
 -- Deployment Exercise: Add a supervisor Lua component
+depl:loadComponent("supervisor","OCL::LuaComponent")
+depl:addPeer("supervisor", "teleop")
+depl:addPeer("supervisor", "controller")
+depl:addPeer("supervisor", "areadetection")
+sup = depl:getPeer("supervisor")
+sup:exec_file("components/supervisor/supervisor.lua")
+sup:configure()
 
 -- Data Flow connections
 cp=rtt.Variable("ConnPolicy")
@@ -76,12 +93,11 @@ sup:start()
 
 -- Deployment Exercise:
 --  Visualise the current setup with the rtt_dot_service
-import("rtt_dot_service")
-depl:loadService("deployer","dot")
-depl:provides("dot"):generate()
 -- Use rosrun xdot xdot.y orograph.dot to visualize
 -- call generate again to update the graph
 
 -- user/test commands:
+
+cmd = rttlib.port_clone_conn(sup:getPort("events"))
 cmd:write("e_circle")
 cmd:write("e_manual")
