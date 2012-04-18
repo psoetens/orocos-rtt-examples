@@ -47,14 +47,22 @@ class Areadetection
     bool configureHook() {
         std::cout << "Areadetection configured !" <<std::endl;
         bool status = true;
-        if ( (status &= safeleftcorner.x >= saferightcorner.x) )
+        if ( safeleftcorner.x >= saferightcorner.x ) {
             std::cout << "Error: safeleft must be left of saferight." << std::endl;
-        if ( (status &= slowleftcorner.x >= slowrightcorner.x) )
+            status = false;
+        }
+        if ( slowleftcorner.x >= slowrightcorner.x ) {
             std::cout << "Error: slowleft must be left of slowright." << std::endl;
-        if ( (status &= safeleftcorner.y >= saferightcorner.y) )
+            status = false;
+        }
+        if ( safeleftcorner.y >= saferightcorner.y ) {
             std::cout << "Error: safeleft must be above saferight." << std::endl;
-        if ( (status &= slowleftcorner.y >= slowrightcorner.y) )
+            status = false;
+        }
+        if ( slowleftcorner.y >= slowrightcorner.y ) {
             std::cout << "Error: slowleft must be above slowright." << std::endl;
+            status = false;
+        }
         
         return status;
     }
