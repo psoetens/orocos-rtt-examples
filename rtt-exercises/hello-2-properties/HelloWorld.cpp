@@ -44,12 +44,12 @@ using namespace RTT;
  *
  * When marshalling is loaded:
  * In order to find out how to write the property to a file using 'marshalling',
- * type 'marshalling' (without quotes) to see the interface of the marshalling
+ * type 'help marshalling' (without quotes) to see the interface of the marshalling
  * task object.
  *
  * Next Open and modify the XML file and read it back in using the marshalling object.
  *
- * For the optional exercises, reead Chap 2, sect 6.1
+ * For the optional exercises, read Chap 2, sect 6.1
  * Optional : read the property file from configureHook() and log it's value. You need
  * to make the modifications detailed above in the note.
  * Optional : write the property file in cleanupHook().
