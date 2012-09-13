@@ -20,7 +20,7 @@ using namespace std;
 using namespace RTT;
 
 /**
- * Exercise 3: Read Orocos Component Builder's Manual, Chap 2 sect 3.4; Chap 2 sect 3.1
+ * Exercise 3: Read Orocos Component Builder's Manual, Chap 2 sect 3.3
  *
  * Reading and writing Ports.
  *
