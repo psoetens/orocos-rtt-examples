@@ -39,7 +39,7 @@ include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
 
 # Creates an orocos executable HelloWorld
 orocos_use_package(ocl-taskbrowser)
-orocos_executable(HelloWorld HelloWorld.cpp) # ...you may add multiple source files
+orocos_component(HelloWorld HelloWorld.cpp) # ...you may add multiple source files
 
 # Link with the rtt-scripting plugin, since we include a header of it (rtt/scripting/Scripting.hpp):
 target_link_libraries(HelloWorld ${OROCOS-RTT_RTT-SCRIPTING_LIBRARY})
