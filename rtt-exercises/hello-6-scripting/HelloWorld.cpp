@@ -27,7 +27,8 @@ using namespace RTT;
  * In this exercise, we will write some basic Orocos program scripts and
  * state machines. The details for the exercise are in program.ops and
  * statemachine.osd. This file contains the almost-ready-to-be-used components
- * in which our scripts will run.
+ * in which our scripts will run. Also check the World class below for a small
+ * required addition.
  *
  * Optional 1: Modify Hello and World such that they load the program.ops
  * and statemachine.osd scripts respectively in their configureHook() and fail if they
@@ -37,10 +38,10 @@ namespace Example
 {
     typedef std::vector<double> Data;
 
-	/**
-	 * This component offers some operations,
-	 * an input port and an output port. We'll implement
-	 * the behaviour of this component in a program script.
+    /**
+     * This component offers some operations,
+     * an input port and an output port. We'll implement
+     * the behaviour of this component in a program script.
      */
     class Hello
         : public TaskContext
@@ -135,7 +136,7 @@ namespace Example
 			: TaskContext(name, PreOperational),
 			  input("input"),output("output")
     	{
-    	    // Add input and output as ports, but add input as an event generating port.
+    	    // Exercise: Add input and output as ports, but add input as an event generating port.
     	}
     };
 }

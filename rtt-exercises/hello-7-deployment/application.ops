@@ -6,4 +6,44 @@
  * Load this script in the Deployer with deployer-gnulinux -s application.ops
  */
 
-	
+/*     Exercise: Add an 'import' statement such that the deployer
+       looks for components of the current ("hello-7-deployment") package.
+       NOTE:  "make install" is required before
+	       the current package can be imported.
+
+       Then start the deployer with ('gnulinux'):
+       $ deployer-gnulinux -linfo -s application.xml
+
+       And check with displayComponentTypes() that at least the Example::World
+       component type could be found. If the Example::Hello component was not found,
+       check that Hello.cpp contains the necessary C macro and recompile that file.
+
+       Also, you should then notice that a 'World' component is loaded but unconfigured.
+       If this works, you can continue with the exercise below.
+ */
+
+/*     Exercise: Create an instance of the "Example::Hello" type of component
+       and name it "Hello". Assign it an "Activity"
+       with a "Period" of 0.1, a "Priority" of 10 and as "Scheduler" the
+       real-time ORO_SCHED_RT.
+
+       Add the "World" component as a "Peer" of this component and
+       vice versa.
+
+       Connect the ports of the World Component with this component using
+       connect() or connectPorts() (find out the difference).
+
+       Finally, instruct the deployer to read the properties from 
+       a property file 'Hello.cpf'. Use loadService() to load the "marshalling"
+       service in the "Deployer" and use the marshalling.readProperties() 
+       operation.
+*/
+
+// We've already loaded and configured the activity of World:
+loadComponent("World","Example::World")
+setActivity("World",0.0, LowestPriority, ORO_SCHED_RT )
+
+/* You must configure() and start() the Hello and World components
+   in order to have the application fully functional 
+ */
+

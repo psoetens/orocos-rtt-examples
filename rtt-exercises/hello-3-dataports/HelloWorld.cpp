@@ -24,33 +24,37 @@ using namespace RTT;
  *
  * Reading and writing Ports.
  *
- * First, compile and run this application and use
- * 'the_output_port' and 'the_input_port' of the Hello component.
- * Use the 'read_helper' attribute to store a read value. Clearly, you should
- * notice that no data is consumed or produced. Check the TaskBrowser documentation
- * on how you can create data ports to a live component.
+ * First, compile and run this application and use the
+ * 'output.write("foo")' and 'input.read( read_helper )' of the Hello component in the TaskBrowser.
+ * This uses the 'read_helper' attribute to store a read value. Clearly, you should
+ * notice that no data is consumed or produced.
  *
- * So, write a configureHook() in Hello which checks if the input port is
- * connected and fails if it is not.
+ * Optional : Check the TaskBrowser documentation
+ * on how you can create 'opposite' data ports to a live component in order to
+ * send data to its input ports or read the data out of its output ports.
+ *
+ * Write a configureHook() in Hello which checks if the input port is
+ * connected and returns false if it is not.
  * Question: how did Hello specify it requires a configureHook() call ?
  *
- * Next, write an updateHook() which reads the_input_port and
- * writes the data to 'the_output_port'. Be careful only to write data
- * when a read from the input was succesful.
+ * Next, write an updateHook() in Hello which reads 'input' and
+ * writes the data to 'output'. Be careful only to write data
+ * when a read from the input was succesful. Do this by checking
+ * the return value of read() (NoData, OldData or NewData ?).
  *
  * Finally start the World component ('world.start()'). See how it uses the
- * input port in C++. Start and stop the Hello component. See how this
- * influences the input's size.
+ * input port in C++.
  *
  * Connection policies.
  *
- * We did not specify yet if connections should be buffered or not. Modify at the
- * bottom of this file the connectTo statement to indicate a buffering policy,
- * buffer size 10 and using locks. Set the period of World's activity to 0.1s
- * and modify updateHook in Hello to keep reading as long as NewData is available
+ * We did not specify yet if connections should be buffered or not. Modify in
+ * start.ops the connect() statement to indicate a buffering policy (use BUFFER as type),
+ * buffer size 10 and using locks (LOCKED). 
+ * Set the period of World's activity to 0.1s
+ * and modify updateHook in Hello to keep reading (using a while loop) as long as NewData is available
  * and print the results.
  *
- * Analysing real-time behaviour:
+ * Optional: Analysing real-time behaviour:
  *
  * Create a struct 'Data' that holds an std::vector<double> and logs in
  * the constructor, destructor, copy constructor and operator=. Replace
@@ -81,11 +85,11 @@ namespace Example
         /**
          * OutputPorts publish data.
          */
-        OutputPort<double> outputport;
+        OutputPort<double> output;
         /**
          * InputPorts read data.
          */
-        InputPort< double > inputport;
+        InputPort< double > input;
         /** @} */
 
         /**
@@ -101,14 +105,14 @@ namespace Example
         Hello(std::string name)
             : TaskContext(name, PreOperational),
               // Name, initial value
-              outputport("the_output_port", 0.0),
+              output("output", 0.0),
               // Name
-              inputport("the_input_port"),
+              input("input"),
               read_helper(0.0)
         {
             this->addAttribute("read_helper", read_helper);
-            this->ports()->addPort( outputport ).doc("Data producing port.");
-            this->ports()->addPort( inputport ).doc("Data consuming port.");
+            this->ports()->addPort( output ).doc("Data producing port.");
+            this->ports()->addPort( input ).doc("Data consuming port.");
         }
 
         void updateHook()
@@ -129,21 +133,21 @@ namespace Example
 		/**
 		 * This port object must be connected to Hello's port.
 		 */
-		OutputPort<double> my_port;
+		OutputPort<double> output;
 		/** @} */
 
 		double value;
 	public:
 		World(std::string name)
 		: TaskContext(name),
-		my_port("world_port"),
+		output("output"),
 		value( 0.0 )
 		{
-            this->ports()->addPort( my_port ).doc("World's data producing port.");
+		  this->ports()->addPort( output ).doc("World's data producing port.");
 		}
 
 		void updateHook() {
-			my_port.write( value );
+			output.write( value );
 			++value;
 		}
 	};

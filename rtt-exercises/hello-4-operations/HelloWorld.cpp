@@ -20,24 +20,31 @@ using namespace RTT;
 /**
  * Exercise 4: Read Orocos Component Builder's Manual, Chap 2 sect 3.5
  *
- * First, compile and run this application and use 'the_method'.
+ * First, compile and run this application and use 'getMessage()' in the TaskBrowser.
  * Configure and start the World component ('world.start()') and see
- * how it uses the_method. Fix any bugs :-)
+ * how it uses getMessage(). Fix any bugs :-)
  *
  * Next, add to Hello a second method 'bool sayIt(string sentence, string& answer)'
  * which uses log(Info) to display a sentence in the thread of the Hello component.
  * When sentence is "Orocos", the answer is "Hello Friend!" and true is returned. Otherwise,
  * false is returned and answer remains untouched.
- * Add this function to the operation interface of this class and document it
- * and its arguments. Test sending and collecting arguments with the TaskBrowser.
+ * Add this function to the default Service of this class and document it
+ * and its arguments. Create in the TaskBrowser a variable 'var string string_result'
+ * and use it as the answer argument when calling sayIt("Orocos",string_result)
  *
- * Next do the same in C++. Send sayIt to Hello in updateHook of the World component, but only
- * check for the results in the next iteration of updateHook.
+ * Optional : Test sending and collecting arguments with the TaskBrowser. You'll
+ *  have to create a 'var SendHandle sh' object in the TaskBrowser and assign to it
+ *  the result of a sayIt.send("Orocos",string_result) call. Collecting the result
+ *  is done using sh.collect( bool_result, string_result). Think about it why !
+ *
+ * Optional : Next do the same in C++. Create an OperationCaller to sayIt
+ *  and call sayIt.send("Orocos", string_result) in updateHook of the World component, then
+ *  collect() the string_result in the next iteration of updateHook().
  */
 namespace Example
 {
 
-	/**
+    /**
      * Every component inherits from the 'TaskContext' class.  This base
      * class allow a user to add a primitive to the interface and contain
      * an ExecutionEngine which executes application code.
@@ -53,7 +60,7 @@ namespace Example
         /**
          * Returns a string.
          */
-        string mymethod() {
+        string getMessage() {
             return "Hello World";
         }
         /** @} */
@@ -66,38 +73,38 @@ namespace Example
         Hello(std::string name)
             : TaskContext(name)
         {
-            this->addOperation("the_method", &Hello::mymethod, this).doc("Returns a friendly word.");
+            this->addOperation("getMessage", &Hello::getMessage, this).doc("Returns a friendly word.");
         }
 
     };
 
     /**
-     * World is the component that shows how to use the interface
-     * of the Hello component.
+     * World is the component that shows how to call an Operation
+     * of the Hello component in C++.
      */
     class World
-		: public TaskContext
+      : public TaskContext
     {
     protected:
     	/**
-    	 * This method object serves to store the
-    	 * call to the Hello component.
+    	 * This OperationCaller serves to store the
+    	 * call to the Hello component's Operation.
     	 * It is best practice to have this object as
     	 * a member variable of your class.
     	 */
-    	OperationCaller< string(void) > hello_method;
+    	OperationCaller< string(void) > getMessage;
 
     	/** @} */
 
     public:
     	World(std::string name)
-			: TaskContext(name, PreOperational)
+	  : TaskContext(name, PreOperational)
     	{
     	}
 
     	bool configureHook() {
 
-    		// Lookup the Hello component.
+	    // Lookup the Hello component.
     	    TaskContext* peer = this->getPeer("hello");
     	    if ( !peer ) {
     	    	log(Error) << "Could not find Hello component!"<<endlog();
@@ -106,16 +113,16 @@ namespace Example
 
     	    // It is best practice to lookup methods of peers in
     	    // your configureHook.
-    	    hello_method = peer->getOperation("themethod");
-    	    if ( !hello_method.ready() ) {
-    	    	log(Error) << "Could not find Hello.the_method Operation!"<<endlog();
+    	    getMessage = peer->getOperation("getmessage");
+    	    if ( !getMessage.ready() ) {
+    	    	log(Error) << "Could not find Hello.getMessage Operation!"<<endlog();
     	    	return false;
     	    }
     	    return true;
     	}
 
     	void updateHook() {
-    		log(Info) << "Receiving from 'hello': " << hello_method() <<endlog();
+    		log(Info) << "Receiving from 'hello': " << getMessage() <<endlog();
     	}
     };
 }

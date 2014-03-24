@@ -1,17 +1,20 @@
 // Start this script by using:
 // deployer-gnulinux -s start.ops -linfo
 
-// For ROS builds, we could also import using the package name.
-import("lib/orocos")
+import("hello-3-dataports")
 
 loadComponent("hello","Example::Hello")
 loadComponent("world","Example::World")
 
 var double period = 0.5
-setActivity("hello", period, LowestPriority , ORO_SCHED_OTHER )
-setActivity("world", period, LowestPriority , ORO_SCHED_OTHER )
+var int priority  = 0
+setActivity("hello", period, priority , ORO_SCHED_OTHER )
+setActivity("world", period, priority , ORO_SCHED_OTHER )
 
-connect("world.world_port","hello.the_input_port", ConnPolicy() )
+// Exercise: Create a ConnPolicy variable and fill in the
+// 'type', 'size' and 'lock_policy' fields to create a locked
+// buffer of size 10.
+connect("world.output","hello.input", ConnPolicy() )
 
 hello.configure()
 hello.start()

@@ -4,7 +4,7 @@
     </description>
     <license></license>
 		<author>OROCOS Development Team</author>
-    <depend package="rtt" />
-    <depend package="ocl" />
+    <depend package="orocos-rtt-gnulinux" />
+    <depend package="orocos-ocl-gnulinux" />
 </package>
 

@@ -1,19 +1,19 @@
 
 /**
  * @file Hello.cpp
- * This file demonstratess the Orocos component loading and XML with
+ * This file demonstratess the Orocos component deployment with
  * a 'hello world' example.
  */
 
 /*
  * Exercise 7: This file contains a fully functional Orocos component.
- * It's your task to extend the hello.xml file in this directory such
+ * It's your task to extend the application.xml or .ops file in this directory such
  * that you can load, configure and start this component from the deployer
  * application.
  *
  * NOTE: See the bottom of this file for the first exercise.
- * NOTE: See the application.xml file for the rest of the exercise.
- * If you're stuck, you can look at solution.xml to see the expected
+ * NOTE: See the application.xml file or application.ops file for the rest of the exercise.
+ * If you're stuck, you can look at solution.xml or solution.ops to see the expected
  * result.
  */
 
@@ -131,7 +131,7 @@ namespace Example
 }
 
 /**
- * See Orocos Deployment Component Manual (An OCL component).
+ * See Orocos Deployment Component Manual (which is an OCL component).
  * Exercise: Include the necessary RTT header and add the C macro such that the
  * Example::Hello class becomes a loadable Orocos component. See World.cpp
  * for inspiration.

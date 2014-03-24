@@ -2,7 +2,7 @@
 // deployer-gnulinux -s start.ops -linfo
 
 // For ROS builds, we could also import using the package name.
-import("lib/orocos")
+import("hello-6-scripting")
 
 loadComponent("hello","Example::Hello")
 loadComponent("world","Example::World")

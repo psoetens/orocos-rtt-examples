@@ -28,7 +28,7 @@ namespace Example
     /**
      * Every component inherits from the 'TaskContext' class.  This base
      * class allow a user to add a primitive to the interface and contain
-     * an ExecutionEngine which executes application code.
+     * an ExecutionEngine which executes user code.
      */
     class HelloWorld
         : public TaskContext

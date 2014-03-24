@@ -24,32 +24,34 @@ using namespace RTT;
 /**
  * Exercise 2: Read Orocos Component Builder's Manual, Chap 2 sect. 3.6
  *
- * First, compile and run this application and use 'the_property' and 'the_attribute':
- * Change and print their values.
+ * First, compile and run this application and use 'property' and 'attribute':
+ * Change and print their values in the TaskBrowser.
  *
  * Next save the properties of this component to a hello.xml file:
  * You will need to install the 'marshalling' service using the TaskBrowser
  * at runtime:
- * ** TaskBrowser: type '.provide marshalling'
+ * ** TaskBrowser: type from the Deployer: loadService("hello", "marshalling")
  *
- * (note: To make this permanent for your component:
+ * To make this permanent for your component, add this statement in the start.ops file.
+ *
+ * Optional: use loadService in C++:
  *    In C++ you need to #include <rtt/marsh/Marshalling.hpp> 
  *    and add to the constructor: this->getProvider<Marshalling>("marshalling");
  *
  *    In the CMakeLists.txt: add rtt-marshalling to the list of components to look for in
- *    find_package(Orocos-RTT REQUIRED) macro.
+ *    find_package(OROCOS-RTT REQUIRED) macro.
  *    See : http://www.orocos.org/wiki/orocos/toolchain/getting-started/cmake-and-building
  *    and use that syntax in the CMakeLists.txt file to link 'HelloWorld' with marshalling.
- * endnote)
+ *
  *
  * When marshalling is loaded:
  * In order to find out how to write the property to a file using 'marshalling',
- * type 'help marshalling' (without quotes) to see the interface of the marshalling
+ * type 'marshalling' (without quotes) to see the interface of the marshalling
  * task object.
  *
  * Next Open and modify the XML file and read it back in using the marshalling object.
  *
- * For the optional exercises, read Chap 2, sect 6.1
+ * For the optional exercises, reead Chap 2, sect 6.1
  * Optional : read the property file from configureHook() and log it's value. You need
  * to make the modifications detailed above in the note.
  * Optional : write the property file in cleanupHook().
@@ -104,10 +106,10 @@ namespace Example
               property("Hello World")
         {
             // Now add it to the interface:
-            this->addProperty("the_property", property).doc("This property can contain any friendly string.");
+            this->addProperty("property", property).doc("This property can contain any friendly string.");
 
-            this->addAttribute("the_attribute", attribute);
-            this->addConstant("the_constant", constant);
+            this->addAttribute("attribute", attribute);
+            this->addConstant("constant", constant);
         }
     };
 }

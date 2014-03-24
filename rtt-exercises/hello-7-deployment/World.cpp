@@ -1,7 +1,7 @@
 
 /**
  * @file World.cpp
- * This file demonstratess the Orocos component loading and XML with
+ * This file demonstrates the Orocos component deployment with
  * a 'hello world' example.
  *
  * Exercise: This file (World.cpp) serves to demonstrate a fully

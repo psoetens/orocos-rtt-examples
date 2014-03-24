@@ -18,8 +18,8 @@
  
   <!-- Exercise: Add an 'Import' statement such that the deployer
        looks for components of the current ("hello-7-deployment") package.
-       NOTE: in non-ROS environments, a "make install" is required before
-			 the current package can be imported.
+       NOTE: a "make install" is required before
+	     the current package can be imported.
 
        Then start the deployer with ('gnulinux'):
        $ deployer-gnulinux -linfo -s application.xml
@@ -33,8 +33,8 @@
   -->
 
   <!-- Exercise: Create an instance of the "Example::Hello" type of component
-       and name it "Hello". Assign it an "Activity" of type "PeriodicActivity"
-       with a "Period" of 0.1, a "Priority" of 0 and as "Scheduler" the
+       and name it "Hello". Assign it an "Activity"
+       with a "Period" of 0.1, a "Priority" of 10 and as "Scheduler" the
        real-time ORO_SCHED_RT.
 
        Next, set "AutoConf" and "AutoStart" to 1 in order to configure and
@@ -54,14 +54,13 @@
 
        -->
 
-  <!-- Exercise: Give the World component a SequentialActivity. -->
-       
   <!-- You must extend the World component likewise as the Hello component
-       above in order to have the application fully functional.
+       above in order to have the application fully functional : AutoStart/AutoConf
+       it and make that it's ports are part of a data flow connection.
        -->
   <struct name="World" type="Example::World">
     <struct name="Activity" type="Activity">
-      <simple name="Priority" type="short"><value>0</value></simple>
+      <simple name="Priority" type="short"><value>1</value></simple>
       <simple name="Scheduler" type="string"><value>ORO_SCHED_RT</value></simple>
     </struct>
   </struct>
