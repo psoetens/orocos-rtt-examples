@@ -23,15 +23,12 @@ git rebase rtt-$RELEASE-examples || exit 1
 rm -rf export/rtt-exercises-$VERSION
 rm -f rtt-exercises-$VERSION.tar.gz 
 #copy over and make sure it's clean.
-cp -a rtt-exercises export/rtt-exercises-$VERSION
-cd export/rtt-exercises-$VERSION
-for i in hello* controller-1; do
-    cd $i; rm -rf build bin lib HelloWorld-* orocos.log *~ .tb_history; cd ..
-done
-rm -rf controller-1/build
-rm -rf controller-1/lib
-rm -rf *-solution
+git archive --format=tar --prefix=orocos-rtt-examples-$VERSION HEAD | (cd export && tar xf -)
 
+cd export
+cp -a orocos-rtt-examples-$VERSION/rtt-exercises rtt-exercises-$VERSION
+
+cd rtt-exercises-$VERSION
 #create solution dir.
 #hacky, need to improve this
 for dirname in controller-1 hello-1-task-execution hello-2-properties hello-3-dataports hello-4-operations hello-6-scripting; do
@@ -39,7 +36,7 @@ cp -a $dirname $dirname-solution
 done
 
 # now remove solution from original dirs:
-git diff rtt-$RELEASE-examples..rtt-$RELEASE-solution | patch -p1 -R || exit 1
+git diff rtt-$RELEASE-examples..rtt-$RELEASE-solution | patch -p2 -R || exit 1
 #rename Eclipse project files.
 for dirname in controller-1 hello-1-task-execution hello-2-properties hello-3-dataports hello-4-operations hello-6-scripting; do
 cd $dirname
