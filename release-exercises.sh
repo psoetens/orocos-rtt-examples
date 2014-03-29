@@ -35,12 +35,18 @@ rm -rf controller-1-solution
 
 #create solution dir.
 #hacky, need to improve this
-cp -a controller-1 controller-1-solution
-cd controller-1-solution
+for dirname in controller-1 hello-1-task-execution hello-2-properties hello-3-dataports hello-4-operations hello-6-scripting; do
+cp -a $dirname $dirname-solution
+done
 git diff rtt-$RELEASE-examples..rtt-$RELEASE-solution | patch -p3 || exit 1
 #rename Eclipse project files.
-sed -i -e "s/controller-1/controller-1-solution/g" .project .cproject || exit 1
-cd ../..
+for dirname in controller-1 hello-1-task-execution hello-2-properties hello-3-dataports hello-4-operations hello-6-scripting; do
+cd $dirname
+sed -i -e "s/$dirname/$dirname-solution/g" .project .cproject || exit 1
+cd ..
+done
+
+cd ..
 
 tar -cvzf rtt-exercises-$VERSION.tar.gz rtt-exercises-$VERSION
 cd ..
