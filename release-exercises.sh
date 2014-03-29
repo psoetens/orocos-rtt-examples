@@ -23,7 +23,7 @@ git rebase rtt-$RELEASE-examples || exit 1
 rm -rf export/rtt-exercises-$VERSION
 rm -f rtt-exercises-$VERSION.tar.gz 
 #copy over and make sure it's clean.
-git archive --format=tar --prefix=orocos-rtt-examples-$VERSION HEAD | (cd export && tar xf -)
+git archive --format=tar --prefix=orocos-rtt-examples-$VERSION/ HEAD | (cd export && tar xf -)
 
 cd export
 cp -a orocos-rtt-examples-$VERSION/rtt-exercises rtt-exercises-$VERSION
