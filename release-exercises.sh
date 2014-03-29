@@ -39,7 +39,7 @@ done
 git diff rtt-$RELEASE-examples..rtt-$RELEASE-solution | patch -p2 -R || exit 1
 #rename Eclipse project files.
 for dirname in controller-1 hello-1-task-execution hello-2-properties hello-3-dataports hello-4-operations hello-6-scripting; do
-cd $dirname
+cd $dirname-solution
 sed -i -e "s/$dirname/$dirname-solution/g" .project .cproject || exit 1
 cd ..
 done
