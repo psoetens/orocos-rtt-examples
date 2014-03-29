@@ -137,6 +137,8 @@ namespace Example
 			  input("input"),output("output")
     	{
     	    // Exercise: Add input and output as ports, but add input as an event generating port.
+            this->addEventPort(input);
+            this->addPort(output);
     	}
     };
 }

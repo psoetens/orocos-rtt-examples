@@ -18,6 +18,9 @@
 #include <rtt/Attribute.hpp>
 #include <rtt/Component.hpp>
 
+// Optional:
+#include <rtt/marsh/Marshalling.hpp>
+
 using namespace std;
 using namespace RTT;
 
@@ -59,7 +62,8 @@ using namespace RTT;
  * For ROS users: load the rtt_rosparam service as well and send the properties to the
  * ROS master server instead of to the XML file. 
  * At runtime:
- * ** TaskBrowser: type 'import("rtt_rosnode")' and '.provide rosparam' in "hello"
+ * ** TaskBrowser: type 'import("rtt_rosnode")' and 'loadService("hello", "rosparam")' in
+ *    the deployer
  *
  * Open question: Would you prefer to hard-code this property reading/writing or would
  * you prefer to script it ?
@@ -110,6 +114,22 @@ namespace Example
 
             this->addAttribute("attribute", attribute);
             this->addConstant("constant", constant);
+
+            // Optional:
+            this->getProvider<Marshalling>("marshalling");
+        }
+
+        bool configureHook() {
+            if ( this->getProvider<Marshalling>("marshalling")->readProperties("hello.xml") == true ) {
+                log(Info) << "The property value is now: " << property << endlog();
+            } else {
+                log(Warning) << "No hello.xml property file present yet !" << endlog();
+            }
+            return true;
+        }
+
+        void cleanupHook() {
+            this->getProvider<Marshalling>("marshalling")->writeProperties("hello.xml");
         }
     };
 }

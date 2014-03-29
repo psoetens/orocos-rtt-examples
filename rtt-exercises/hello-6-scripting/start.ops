@@ -13,5 +13,35 @@ setActivity("world", period, LowestPriority , ORO_SCHED_OTHER )
 
 connectPeers("hello","world")
 
+var ConnPolicy cp; // use default
+connect("hello.input","world.output",cp);
+connect("world.input","hello.output",cp);
+
+// The  C++ code already loaded the scripting service.
+// Loads our program in the scripting service :
+hello.scripting.runScript("program.ops")
+
+// start hooks:
 hello.configure()
 hello.start()
+
+// start script (independent of starting the hooks!):
+hello.App.start()
+
+// The C++ code in World did not load the scripting service, load it here:
+loadService("world","scripting")
+world.scripting.runScript("statemachine.osd")
+
+// start hooks:
+world.configure()
+world.start()
+
+// activate moves to initial state :
+world.StateI.activate()
+// starts evaluating transitions :
+world.StateI.start()
+
+// Finally, initiate the ping-pong by sending a single message in hello's
+// output port:
+
+hello.output.write( hello.gains ) // comment this line to disable printing in the console, or modify statemachine.osd

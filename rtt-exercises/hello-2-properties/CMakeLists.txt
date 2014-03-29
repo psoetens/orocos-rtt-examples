@@ -19,7 +19,7 @@ project(hello-2-properties)
 # Exercise: add the dependency on rtt-marshalling in the find_package macro below
 # See: http://www.orocos.org/wiki/orocos/toolchain/getting-started/cmake-and-building
 # for syntax.
-find_package(OROCOS-RTT REQUIRED ${RTT_HINTS})
+find_package(OROCOS-RTT REQUIRED rtt-marshalling)
 
 # Defines the orocos_* cmake macros. See that file for additional
 # documentation.
@@ -27,6 +27,9 @@ include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
 
 # Creates an orocos component HelloWorld
 orocos_component(HelloWorld HelloWorld.cpp) # ...you may add multiple source files
+
+# Link with marshalling library because we use it in the C++ code:
+target_link_libraries(HelloWorld ${OROCOS-RTT_RTT-MARSHALLING_LIBRARY} )
 
 # Exercise:
 # See : http://www.orocos.org/wiki/orocos/toolchain/getting-started/cmake-and-building

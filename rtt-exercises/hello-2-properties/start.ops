@@ -6,6 +6,15 @@ import("hello-2-properties")
 
 loadComponent("hello","Example::Hello")
 
+// loads the marshalling Service into hello:
+loadService("hello", "marshalling")
+
+// Writes to XML:
+hello.writeProperties("hello.xml")
+
+// Reads from XML:
+hello.readProperties("hello.xml")
+
 var double period = 0.5
 setActivity("hello", period, LowestPriority , ORO_SCHED_OTHER )
 

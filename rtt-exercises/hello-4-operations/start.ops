@@ -15,3 +15,35 @@ connectPeers("hello","world")
 
 hello.configure()
 hello.start()
+
+world.configure()
+//world.start()
+
+ // Solution:
+
+ // We need to require "print" on the top level, not in the program
+ // A program is parsed and then executed, so a plugin/service-loading would
+ // not happen until the program gets executed ( using start() below ).
+require("print")
+
+ // Set the Deployer's period to 0.1 such that it can execute scripts:
+setPeriod(0.1)
+
+program OperationExample 
+{
+	var string string_result
+	var bool result = false;
+
+	var SendHandle sh;
+	hello.sayIt("Orocos",string_result)
+	sh = hello.sayIt.send("Orocos",string_result)
+	sh.collect(result, string_result)
+
+	if (result == true ) then {
+	      print.log(Info, "The result of sayIt was: " + string_result )
+	}
+}
+
+
+ // Execute the program in the Deployer:
+OperationExample.start()

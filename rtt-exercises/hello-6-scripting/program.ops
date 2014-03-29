@@ -17,5 +17,18 @@
  */
 program App {
 
+	// max_data is a property of hello which we read here in
+	// the 'constructor' syntax to provide a size to the array:
+	var array in_data(max_data); // this maps to std::vector<double>
 
+	while ( true ) {
+	      if ( input.read( in_data ) == NewData ) then {
+	      	 
+		for(var int i = 0; i != gains.size ; i = i + 1)
+			in_data[i] = in_data[i] * gains[i];
+
+		output.write( in_data )
+	      }
+	      yield // avoids infinite spinning loop.
+	}
 }

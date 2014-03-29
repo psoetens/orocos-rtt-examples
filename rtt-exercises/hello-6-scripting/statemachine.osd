@@ -18,9 +18,49 @@
  * Then activate and start it. Take a look at the listing using the 'list'
  * command in the TaskBrowser.
  */
+
+require("print")
+
 StateMachine States {
 
+    var array correction(hello.max_data); // reading hello's property here to set array size
+    var array received(hello.max_data); // reading hello's property here to set array size
+
+    initial state Init {
+
+        // initialise the array with some data:
+        entry {
+	    for(var int j =0; j != correction.size; j = j + 1)
+	        correction[j] = j * 0.001
+        }
+
+        transition select Waiting
+
+    }
+
+    state Waiting {
+
+        // remove the print statement below if it clutters your console:
+        transition input(received) { print.log(Info,"Received data in State Machine") } select Processing
+
+    }
+
+    state Processing {
+
+        entry {
+	    for(var int i =0; i != correction.size; i = i + 1) 
+	        received[i] = received[i] * correction[i]
+            output.write(received)
+	}
+
+	transition select Waiting
+    }
+
+    final state End {
+
+    }   
 
 }
 
 // Exercise: instantiate the States statemachine as StateI. 
+RootMachine States StateI

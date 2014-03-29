@@ -63,6 +63,15 @@ namespace Example
         string getMessage() {
             return "Hello World";
         }
+
+        bool sayIt(string sentence, string& answer) {
+            cout <<"Saying Hello '"<< sentence <<"' in own thread." <<endl;
+            if ( sentence == "Orocos") {
+                answer = "Hello Friend!";
+                return true;
+            }
+            return false;
+        }
         /** @} */
 
     public:
@@ -73,7 +82,8 @@ namespace Example
         Hello(std::string name)
             : TaskContext(name)
         {
-            this->addOperation("getMessage", &Hello::getMessage, this).doc("Returns a friendly word.");
+            this->addOperation("getMessage", &Hello::getMessage, this, ClientThread).doc("Returns a friendly word.");
+            this->addOperation("sayIt", &Hello::sayIt, this, OwnThread).doc("Our sayIt method").arg("sentence","Fill in here 'Orocos'").arg("answer", "This is an out parameter, sayIt writes to this argument.");
         }
 
     };
@@ -113,7 +123,7 @@ namespace Example
 
     	    // It is best practice to lookup methods of peers in
     	    // your configureHook.
-    	    getMessage = peer->getOperation("getmessage");
+    	    getMessage = peer->getOperation("getMessage");
     	    if ( !getMessage.ready() ) {
     	    	log(Error) << "Could not find Hello.getMessage Operation!"<<endlog();
     	    	return false;

@@ -115,8 +115,18 @@ namespace Example
             this->ports()->addPort( input ).doc("Data consuming port.");
         }
 
+        bool configureHook()
+        {
+            // configuration fails if input is not connected:
+            return input.connected();
+        }
+
         void updateHook()
         {
+            while ( input.read(read_helper) == NewData ) {
+                log(Info) << "Received data : " << read_helper <<endlog();
+                output.write( read_helper );
+            }
         }
     };
 
@@ -147,6 +157,7 @@ namespace Example
 		}
 
 		void updateHook() {
+            log(Info) << "Writing data : " << value <<endlog();
 			output.write( value );
 			++value;
 		}

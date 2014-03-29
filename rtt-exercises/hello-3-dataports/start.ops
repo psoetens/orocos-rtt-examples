@@ -9,12 +9,18 @@ loadComponent("world","Example::World")
 var double period = 0.5
 var int priority  = 0
 setActivity("hello", period, priority , ORO_SCHED_OTHER )
-setActivity("world", period, priority , ORO_SCHED_OTHER )
+setActivity("world", period / 5, priority , ORO_SCHED_OTHER )
 
 // Exercise: Create a ConnPolicy variable and fill in the
 // 'type', 'size' and 'lock_policy' fields to create a locked
 // buffer of size 10.
-connect("world.output","hello.input", ConnPolicy() )
+ConnPolicy cp
+cp.type = CIRCULAR_BUFFER
+cp.size = 10
+cp.lock_policy = LOCKED
+connect("world.output","hello.input", cp )
 
 hello.configure()
 hello.start()
+
+world.start()

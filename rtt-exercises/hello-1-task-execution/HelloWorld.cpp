@@ -54,7 +54,7 @@ namespace Example
          * of the component.
          */
         Hello(std::string name)
-            : RTT::TaskContext(name)
+            : RTT::TaskContext(name, PreOperational)
         {
         }
 
@@ -64,7 +64,22 @@ namespace Example
         }
         bool configureHook()
         {
+        	log(Info) << "Configure !" <<endlog();
+            this->setPeriod(0.5);
         	return true;
+        }
+        bool startHook()
+        {
+        	log(Info) << "Start !" <<endlog();
+            return this->getPeriod() == 0.5;
+        }
+        void stopHook()
+        {
+        	log(Info) << "Stop !" <<endlog();
+        }
+        void cleanupHook()
+        {
+        	log(Info) << "Cleanup !" <<endlog();
         }
     };
 }
