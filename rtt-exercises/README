@@ -13,27 +13,63 @@ at the top of each HelloWorld.cpp file.
 When you're done with the hello-* examples, proceed with the
 controller-1 example, which has instructions in its Exercise.txt file.
 
-Requirements: 
+Requirements
+------------
 
-Orocos Real-Time Toolkit 2.4 or later and the Orocos Component Library's
-DeploymentComponent and TaskBrowser component are installed. Use ROS
-for automatic dependency resolution, or set your CMAKE_MODULE_PATH
-to the lib/cmake/orocos-rtt directory where the FindOrocos-RTT.cmake file
-was installed.
+Orocos Toolchain 2.4 or later is installed.
 
-Eclipse users:
+Setup & Compile
+---------------
+
+'source' the Orocos Toolchain env.sh script:
+
+$ source /path/to/orocos-toolchain/env.sh
+
+Build the component using cmake:
+
+$ cd hello-1-task-execution
+$ mkdir build ; cd build
+$ cmake .. -DCMAKE_INSTALL_PREFIX=$(pwd)/../../install
+$ make install
+$ cd ..
+
+Running
+-------
+
+If from the exercise directory, set (once) the component path
+to the lib/orocos directory of your install path:
+
+$ export RTT_COMPONENT_PATH=$(pwd)/../install/lib/orocos:$RTT_COMPONENT_PATH
+
+Now run the deployer:
+
+$ deployer-gnulinux -s start.ops
+
+And checkout the .cpp files for instructions.
+
+
+Eclipse Users
+-------------
 
 IMPORTANT: see http://www.orocos.org/wiki/rtt/eclipse for correctly setting up Eclipse.
 
 You need Eclipse Ganymede (3.4) or better with the C/C++ toolkit support.
 
-Start Eclipse, select the C/C++ perspective (right top) Use
-'File'->'Import...'->'Existing projects into Workspace' and point it
-to this directory or this archive. It will see that all examples are
-Eclipse projects.  Select them all and press Finish.
+For each project, you must generate the Eclipse C++ project from the console. For example:
 
-ROS users can just use 'make eclipse-project' in their build directory
-and import that generated project.
+$ cd hello-1-task-execution
+$ mkdir build ; cd build
+$ cmake .. -DCMAKE_GENERATOR="Eclipse CDT4 - Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$(pwd)/../../install
+
+Now import this project in Eclipse using 'File' -> 'Import...' -> 'Existing projects into workspace'.
+
+You'll also need to add the 'automatically discovered' compiler paths in order to get the Eclipse Indexer
+(syntax highlighting) working. Use:
+
+Kepler: Go to project properties, find 'Preprocessor Include Paths', then under the tab 'Providers' 
+you will find 'CDT_GCC Built-in Compiler Settings'. Check it and that's it.
+
+Then build in Eclipose and run as shown above using the RTT_COMPONENT_PATH.
 
 Feel free to contribute other examples on Orocos.org.
 
